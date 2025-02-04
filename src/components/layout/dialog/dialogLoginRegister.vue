@@ -147,8 +147,8 @@ import {
   REGISTER_REQUSER_VALIDATION,
   type ApiErrorResponseDTO,
   type ApiResponseDTO,
+  type AuthResponseDTO,
   type RegisterRequestDTO,
-  type RegisterResponseDTO,
 } from 'pinpin_library'
 import { ref, watch } from 'vue'
 
@@ -270,8 +270,7 @@ const register = async () => {
       password: registerForm.value.password,
     }
 
-    const response: ApiResponseDTO<RegisterResponseDTO> =
-      await authService.register(RegisterRequest)
+    const response: ApiResponseDTO<AuthResponseDTO> = await authService.register(RegisterRequest)
     authStore.setUser(response.data ? response.data.nickname : '')
     emit('showSnackbar', response.message, 'success')
     showDialog.value = false

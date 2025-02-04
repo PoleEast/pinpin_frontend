@@ -2,8 +2,8 @@ import axios, { AxiosError, HttpStatusCode } from 'axios'
 import type {
   ApiErrorResponseDTO,
   ApiResponseDTO,
+  AuthResponseDTO,
   RegisterRequestDTO,
-  RegisterResponseDTO,
 } from 'pinpin_library'
 
 export const authService = {
@@ -13,9 +13,9 @@ export const authService = {
    * @returns {Promise<ApiResponse<RegisterUserResponse>>} - 註冊結果
    * @throws {ApiError} - 註冊失敗的錯誤訊息
    */
-  async register(data: RegisterRequestDTO): Promise<ApiResponseDTO<RegisterResponseDTO>> {
+  async register(data: RegisterRequestDTO): Promise<ApiResponseDTO<AuthResponseDTO>> {
     try {
-      const response: ApiResponseDTO<RegisterResponseDTO> = await axios.post('/auth/register', data)
+      const response: ApiResponseDTO<AuthResponseDTO> = await axios.post('/auth/register', data)
       return response
     } catch (error) {
       const axiosError = error as AxiosError<ApiErrorResponseDTO>
