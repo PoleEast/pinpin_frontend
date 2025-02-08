@@ -15,15 +15,22 @@
       >
       <v-card-text>
         <!-- 登入表單 -->
-        <v-form v-if="isLogin" @submit.prevent="login" v-model="valid">
+        <v-form v-if="isLogin" @submit.prevent="login" v-model="valid" ref="loginForm">
           <v-container>
-            <v-text-field v-model="account" :rules="accountRules" label="帳號" required class="mb-4"
+            <v-text-field
+              v-model="loginFormData.account"
+              :rules="accountRules"
+              :error-messages="loginErrorMessage"
+              label="帳號"
+              required
+              class="mb-4"
               ><template v-slot:prepend
                 ><font-awesome-icon size="2x" icon="person-walking-luggage" /></template
             ></v-text-field>
             <v-text-field
-              v-model="password"
+              v-model="loginFormData.password"
               :rules="passwordRules"
+              :error-messages="loginErrorMessage"
               label="密碼"
               required
               :type="showPassword ? 'text' : 'password'"
@@ -62,10 +69,10 @@
           </v-container>
         </v-form>
         <!-- 註冊表單 -->
-        <v-form v-else @submit.prevent="register" v-model="valid" ref="form">
+        <v-form v-else @submit.prevent="register" v-model="valid" ref="registerForm">
           <v-container>
             <v-text-field
-              v-model="registerForm.account"
+              v-model="registerFormData.account"
               label="帳號"
               :rules="accountRules"
               required
@@ -76,7 +83,7 @@
               /></template>
             </v-text-field>
             <v-text-field
-              v-model="registerForm.nickname"
+              v-model="registerFormData.nickname"
               label="暱稱"
               :rules="nicknameRules"
               required
@@ -87,7 +94,7 @@
             </v-text-field>
             <v-text-field
               :rules="passwordRules"
-              v-model="registerForm.password"
+              v-model="registerFormData.password"
               label="密碼"
               :type="showPassword ? 'text' : 'password'"
               class="mb-4"
@@ -101,7 +108,7 @@
               /></template>
             </v-text-field>
             <v-text-field
-              v-model="registerForm.confirmPassword"
+              v-model="registerFormData.confirmPassword"
               label="確認密碼"
               :rules="confirmPasswordRules"
               :type="showPassword ? 'text' : 'password'"
@@ -142,25 +149,26 @@
 <script setup lang="ts">
 import { authService } from '@/services/auth.service'
 import { useAuthStore } from '@/stores/auth.store'
-import type { RegisterForm } from '@/types/form'
+import type { RegisterFormData } from '@/types/form'
+import { HttpStatusCode } from 'axios'
 import {
   REGISTER_REQUSER_VALIDATION,
   type ApiErrorResponseDTO,
-  type ApiResponseDTO,
-  type AuthResponseDTO,
+  type LoginRequestDTO,
   type RegisterRequestDTO,
 } from 'pinpin_library'
-import { ref, watch } from 'vue'
+import { ref, useTemplateRef, watch } from 'vue'
 
 //變數
-const form = ref()
-const account = ref<string>('')
-const password = ref<string>('')
+const registerFormRef = useTemplateRef('registerForm')
+const loginFormRef = useTemplateRef('loginForm')
 const showPassword = ref<boolean>(false)
 const valid = ref<boolean>(false)
 const loading = ref<boolean>(false)
 const isLogin = ref<boolean>(true)
 const registerErrorMessage = ref<string>('')
+const loginErrorMessage = ref<string>('')
+
 //獲取狀態的引用
 const authStore = useAuthStore()
 
@@ -172,11 +180,16 @@ defineExpose({
   },
 })
 
-const registerForm = ref<RegisterForm>({
+const registerFormData = ref<RegisterFormData>({
   account: '',
   nickname: '',
   password: '',
   confirmPassword: '',
+})
+
+const loginFormData = ref<LoginRequestDTO>({
+  account: '',
+  password: '',
 })
 
 //驗證規則
@@ -215,33 +228,52 @@ const nicknameRules = [
 ]
 const confirmPasswordRules = [
   (v: string) => v.length > 0 || '請輸入確認密碼',
-  (v: string) => v === registerForm.value.password || '密碼不相同',
+  (v: string) => v === registerFormData.value.password || '密碼不相同',
 ]
 
 const emit = defineEmits<{ showSnackbar: [message: string, color: string] }>()
 
 //當dialog切換時清空輸入欄位
 watch(isLogin, () => {
-  account.value = ''
-  password.value = ''
-  registerForm.value.account = ''
-  registerForm.value.nickname = ''
-  registerForm.value.password = ''
-  registerForm.value.confirmPassword = ''
+  registerFormData.value.account = ''
+  registerFormData.value.nickname = ''
+  registerFormData.value.password = ''
+  registerFormData.value.confirmPassword = ''
+  loginFormData.value.account = ''
+  loginFormData.value.password = ''
   registerErrorMessage.value = ''
+  loginErrorMessage.value = ''
 })
 
 //方法
-//TODO : 實作登入
-const login = () => {
+//TODO : 實作第三方登入
+const login = async () => {
+  //清空錯誤訊息
+  loginErrorMessage.value = ''
+
+  const isValid = await loginFormRef.value?.validate()
+
+  if (!isValid?.valid) return
   loading.value = true
-  setTimeout(() => {
+  try {
+    const loginRequest: LoginRequestDTO = {
+      account: loginFormData.value.account,
+      password: loginFormData.value.password,
+    }
+
+    const response = await authService.Login(loginRequest)
+    authStore.setUser(response.data?.data?.nickname || '')
+  } catch (error) {
+    const axiosError = error as ApiErrorResponseDTO
+    loginErrorMessage.value =
+      axiosError.statusCode == HttpStatusCode.Unauthorized ? axiosError.message : ''
+    emit('showSnackbar', axiosError.message, 'error')
+  } finally {
     loading.value = false
-    showDialog.value = false
-  }, 1000)
+  }
 }
 
-//TODO : 實作第三方登入
+//TODO : 實作第三方註冊
 /**
  * 註冊
  * @remarks
@@ -257,26 +289,28 @@ const register = async () => {
   //清空錯誤訊息
   registerErrorMessage.value = ''
 
-  const { valid: isValid } = await form.value.validate()
+  const isValid = await registerFormRef.value?.validate()
 
-  if (!isValid) return
+  if (!isValid?.valid) return
+
+  loading.value = true
 
   try {
-    loading.value = true
-
-    const RegisterRequest: RegisterRequestDTO = {
-      account: registerForm.value.account,
-      nickname: registerForm.value.nickname,
-      password: registerForm.value.password,
+    const registerRequest: RegisterRequestDTO = {
+      account: registerFormData.value.account,
+      nickname: registerFormData.value.nickname,
+      password: registerFormData.value.password,
     }
 
-    const response: ApiResponseDTO<AuthResponseDTO> = await authService.register(RegisterRequest)
-    authStore.setUser(response.data ? response.data.nickname : '')
-    emit('showSnackbar', response.message, 'success')
+    const response = await authService.Register(registerRequest)
+    authStore.setUser(response.data.data?.nickname ?? '')
+    emit('showSnackbar', response.data.message, 'success')
     showDialog.value = false
   } catch (error) {
-    registerErrorMessage.value = (error as ApiErrorResponseDTO).message
-    emit('showSnackbar', registerErrorMessage.value, 'error')
+    const axiosError = error as ApiErrorResponseDTO
+    registerErrorMessage.value =
+      axiosError.statusCode == HttpStatusCode.Conflict ? axiosError.message : ''
+    emit('showSnackbar', axiosError.message, 'error')
   } finally {
     loading.value = false
   }

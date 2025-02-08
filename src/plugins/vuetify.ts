@@ -11,7 +11,7 @@ export default createVuetify({
           primary: '#435A4F', // 原 bs-primary
           secondary: '#C38154', // 原 bs-secondary
           success: '#198754', // 原 bs-success
-          info: '#0DCAF0', // 原 bs-info
+          info: '#8B4513', // 原 bs-info
           warning: '#FFC107', // 原 bs-warning
           error: '#DC3545', // 原 bs-danger (Vuetify 使用 error 替代 danger)
 

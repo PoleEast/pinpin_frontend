@@ -11,6 +11,23 @@
 <script setup lang="ts">
 import webHeader from './components/layout/webHeader.vue'
 import webFooter from './components/layout/webFooter.vue'
+import axios, { type AxiosResponse } from 'axios'
+import { useAuthStore } from './stores/auth.store'
+import type { ApiResponseDTO, AuthResponseDTO } from 'pinpin_library'
+import { onMounted } from 'vue'
+
+onMounted(async () => {
+  await checkToken()
+})
+
+const checkToken = async () => {
+  try {
+    const response: AxiosResponse<ApiResponseDTO<AuthResponseDTO>> = await axios('/auth/checkToken')
+    useAuthStore().setUser(response.data?.data?.nickname || '')
+  } catch {
+    useAuthStore().setUser('')
+  }
+}
 </script>
 
 <style>

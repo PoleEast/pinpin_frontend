@@ -22,10 +22,11 @@
           {{ item.title }}
         </v-btn>
       </div>
-      <!-- TODO: 實作登入後的下拉選單 -->
-      <div class="ml-auto">
+      <div class="ml-auto mr-3">
+        <WebUserBtn v-if="isLoggedIn" class="text-h6 font-weight-bold mr-0 w-100" />
         <v-btn
-          class="text-h6 font-weight-bold mr-4 w-100"
+          v-else
+          class="text-h6 font-weight-bold w-100"
           color="white"
           variant="text"
           @click="showDialogLogin"
@@ -53,7 +54,8 @@
             <v-list-item-title>{{ item.title }}</v-list-item-title>
           </v-list-item>
           <v-divider class="my-2" />
-          <v-btn class="{ text-body-1 font-weight-bold}" variant="text" @click="showDialogLogin"
+          <WebUserBtn v-if="isLoggedIn" />
+          <v-btn v-else class="text-body-1 font-weight-bold" variant="text" @click="showDialogLogin"
             ><template v-slot:append>
               <font-awesome-icon icon="right-to-bracket" />
             </template>
@@ -68,15 +70,18 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import WebSnackbar from './webSnackbar.vue'
 import WebLogin from './dialog/dialogLoginRegister.vue'
+import WebUserBtn from './webUserBtn.vue'
+import { useAuthStore } from '@/stores/auth.store'
 
 const menuItems = [
   { title: '行程規劃', path: '/schdule' },
   { title: '搜尋景點', path: '/search' },
 ]
 
+//登入modal相關
 const showDialog = ref(false)
 const webLoginRef = ref()
 
@@ -85,6 +90,7 @@ const showDialogLogin = () => {
   webLoginRef.value.handleLoginStatus()
 }
 
+//彈出條相關
 const snackbar = ref(false)
 const snackbarMessage = ref('')
 const snackbarColor = ref('')
@@ -94,6 +100,11 @@ const showSnackbar = (message: string, color: string) => {
   snackbarColor.value = color
   snackbar.value = true
 }
+
+//登入狀態
+const isLoggedIn = computed(() => {
+  return useAuthStore().isAuthenticated
+})
 </script>
 
 <style scoped>
