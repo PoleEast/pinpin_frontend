@@ -47,4 +47,17 @@ export const authService = {
       }
     }
   },
+
+  async Logout(): Promise<AxiosResponse<ApiResponseDTO>> {
+    try {
+      const response = await axios.get('/auth/logout')
+      return response
+    } catch (error) {
+      const axiosError = error as AxiosError<ApiErrorResponseDTO>
+      throw {
+        message: axiosError.response?.data?.message || '登出失敗，請稍後再試',
+        HttpStatusCode: axiosError.response?.status || HttpStatusCode.InternalServerError,
+      }
+    }
+  },
 }

@@ -23,18 +23,22 @@
         </v-btn>
       </div>
       <div class="ml-auto mr-3">
-        <WebUserBtn v-if="isLoggedIn" class="text-h6 font-weight-bold mr-0 w-100" />
-        <v-btn
-          v-else
-          class="text-h6 font-weight-bold w-100"
-          color="white"
-          variant="text"
-          @click="showDialogLogin"
-          ><template v-slot:append>
-            <font-awesome-icon icon="right-to-bracket" />
-          </template>
-          登入/註冊
-        </v-btn>
+        <v-fade-transition hide-on-leave>
+          <WebUserBtn v-show="isLoggedIn" @show-snackbar="showSnackbar" />
+        </v-fade-transition>
+        <v-fade-transition hide-on-leave>
+          <v-btn
+            v-show="!isLoggedIn"
+            class="text-h6 font-weight-bold w-100"
+            color="white"
+            variant="text"
+            @click="showDialogLogin"
+            ><template v-slot:append>
+              <font-awesome-icon icon="right-to-bracket" />
+            </template>
+            登入/註冊
+          </v-btn>
+        </v-fade-transition>
       </div>
     </div>
 
@@ -54,13 +58,21 @@
             <v-list-item-title>{{ item.title }}</v-list-item-title>
           </v-list-item>
           <v-divider class="my-2" />
-          <WebUserBtn v-if="isLoggedIn" />
-          <v-btn v-else class="text-body-1 font-weight-bold" variant="text" @click="showDialogLogin"
-            ><template v-slot:append>
-              <font-awesome-icon icon="right-to-bracket" />
-            </template>
-            登入/註冊
-          </v-btn>
+          <v-fade-transition hide-on-leave>
+            <WebUserBtn v-show="isLoggedIn" @show-snackbar="showSnackbar" />
+          </v-fade-transition>
+          <v-fade-transition hide-on-leave>
+            <v-btn
+              v-show="!isLoggedIn"
+              class="text-body-1 font-weight-bold"
+              variant="text"
+              @click="showDialogLogin"
+              ><template v-slot:append>
+                <font-awesome-icon icon="right-to-bracket" />
+              </template>
+              登入/註冊
+            </v-btn>
+          </v-fade-transition>
         </v-list>
       </v-menu>
     </template>
@@ -71,9 +83,9 @@
 
 <script setup lang="ts">
 import { computed, ref } from 'vue'
-import WebSnackbar from './webSnackbar.vue'
-import WebLogin from './dialog/dialogLoginRegister.vue'
-import WebUserBtn from './webUserBtn.vue'
+import WebSnackbar from '@/components/layout/webSnackbar.vue'
+import WebLogin from '@/components/layout/hearder/dialog/dialogLoginRegister.vue'
+import WebUserBtn from '@/components/layout/hearder/webUserBtn.vue'
 import { useAuthStore } from '@/stores/auth.store'
 
 const menuItems = [
@@ -99,6 +111,7 @@ const showSnackbar = (message: string, color: string) => {
   snackbarMessage.value = message
   snackbarColor.value = color
   snackbar.value = true
+  console.log(message, color)
 }
 
 //登入狀態

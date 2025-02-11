@@ -9,7 +9,7 @@
 </template>
 
 <script setup lang="ts">
-import webHeader from './components/layout/webHeader.vue'
+import webHeader from './components/layout/hearder/webHeader.vue'
 import webFooter from './components/layout/webFooter.vue'
 import axios, { type AxiosResponse } from 'axios'
 import { useAuthStore } from './stores/auth.store'

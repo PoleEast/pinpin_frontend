@@ -149,7 +149,7 @@
 <script setup lang="ts">
 import { authService } from '@/services/auth.service'
 import { useAuthStore } from '@/stores/auth.store'
-import type { RegisterFormData } from '@/types/form'
+import type { RegisterFormData } from '@/types/form.type'
 import { HttpStatusCode } from 'axios'
 import {
   REGISTER_REQUSER_VALIDATION,
@@ -263,6 +263,8 @@ const login = async () => {
 
     const response = await authService.Login(loginRequest)
     authStore.setUser(response.data?.data?.nickname || '')
+    emit('showSnackbar', response.data.message, 'success')
+    showDialog.value = false
   } catch (error) {
     const axiosError = error as ApiErrorResponseDTO
     loginErrorMessage.value =
