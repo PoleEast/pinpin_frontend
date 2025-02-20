@@ -1,6 +1,9 @@
 <template>
   <v-app-bar app color="primary" elevation="2">
-    <router-link :to="{ name: 'home' }" class="d-flex align-center ps-3 text-decoration-none">
+    <router-link
+      :to="{ name: 'home' }"
+      class="d-flex align-center ps-3 text-decoration-none"
+    >
       <v-img
         :width="$vuetify.display.mdAndUp ? 150 : 100"
         src="/src/assets/logo.png"
@@ -54,7 +57,11 @@
         </template>
 
         <v-list density="compact">
-          <v-list-item v-for="item in menuItems" :key="item.title" :to="item.path">
+          <v-list-item
+            v-for="item in menuItems"
+            :key="item.title"
+            :to="item.path"
+          >
             <v-list-item-title>{{ item.title }}</v-list-item-title>
           </v-list-item>
           <v-divider class="my-2" />
@@ -77,47 +84,67 @@
       </v-menu>
     </template>
   </v-app-bar>
-  <WebSnackbar :color="snackbarColor" :message="snackbarMessage" v-model:show="snackbar" />
-  <WebLogin ref="webLoginRef" v-model:show-dialog="showDialog" @show-snackbar="showSnackbar" />
+  <WebSnackbar
+    :color="snackbarColor"
+    :message="snackbarMessage"
+    v-model:show="snackbar"
+  />
+  <WebLogin
+    ref="webLoginRef"
+    v-model:show-dialog="showDialog"
+    @show-snackbar="showSnackbar"
+  />
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from 'vue'
-import WebSnackbar from '@/components/layout/webSnackbar.vue'
-import WebLogin from '@/components/layout/hearder/dialog/dialogLoginRegister.vue'
-import WebUserBtn from '@/components/layout/hearder/webUserBtn.vue'
-import { useAuthStore } from '@/stores/auth.store'
+import { computed, ref, watch } from "vue";
+import WebSnackbar from "@/components/layout/hearder/webSnackbar.vue";
+import WebLogin from "@/components/layout/hearder/dialog/dialogLoginRegister.vue";
+import WebUserBtn from "@/components/layout/hearder/webUserBtn.vue";
+import { useAuthStore } from "@/stores/auth.store";
+
+const authStore = useAuthStore();
 
 const menuItems = [
-  { title: '行程規劃', path: '/schdule' },
-  { title: '搜尋景點', path: '/search' },
-]
+  { title: "行程規劃", path: "/schdule" },
+  { title: "搜尋景點", path: "/search" },
+];
 
 //登入modal相關
-const showDialog = ref(false)
-const webLoginRef = ref()
+const showDialog = ref(false);
+const webLoginRef = ref();
 
 const showDialogLogin = () => {
-  showDialog.value = true
-  webLoginRef.value.handleLoginStatus()
-}
+  showDialog.value = true;
+  webLoginRef.value.handleLoginStatus();
+};
 
 //彈出條相關
-const snackbar = ref(false)
-const snackbarMessage = ref('')
-const snackbarColor = ref('')
+const snackbar = ref(false);
+const snackbarMessage = ref("");
+const snackbarColor = ref("");
 
 const showSnackbar = (message: string, color: string) => {
-  snackbarMessage.value = message
-  snackbarColor.value = color
-  snackbar.value = true
-  console.log(message, color)
-}
+  snackbarMessage.value = message;
+  snackbarColor.value = color;
+  snackbar.value = true;
+  console.log(message, color);
+};
 
 //登入狀態
-const isLoggedIn = computed(() => {
-  return useAuthStore().isAuthenticated
-})
+const isLoggedIn = computed((): boolean => {
+  return authStore.UserNickname !== "";
+});
+
+watch(
+  () => authStore.IsForcedNavigation,
+  () => {
+    if (authStore.IsForcedNavigation == true) {
+      showSnackbar("請先登入", "warning");
+      authStore.SetForcedNavigation(false);
+    }
+  },
+);
 </script>
 
 <style scoped>

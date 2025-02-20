@@ -1,6 +1,6 @@
 interface LogoutResult {
-  message: string
-  result: boolean
+  message: string;
+  result: boolean;
 }
 
-export type { LogoutResult }
+export type { LogoutResult };

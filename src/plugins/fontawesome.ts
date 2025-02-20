@@ -1,5 +1,5 @@
-import { library } from '@fortawesome/fontawesome-svg-core'
-import { faGithub } from '@fortawesome/free-brands-svg-icons'
+import { library } from "@fortawesome/fontawesome-svg-core";
+import { faGithub } from "@fortawesome/free-brands-svg-icons";
 import {
   faBars,
   faEye,
@@ -11,8 +11,8 @@ import {
   faPersonWalkingLuggage,
   faRightToBracket,
   faSquareCheck,
-} from '@fortawesome/free-solid-svg-icons'
-import { FontAwesomeIcon as _FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+} from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon as _FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
 library.add(
   faGithub,
@@ -26,7 +26,7 @@ library.add(
   faKey,
   faGhost,
   faMugHot,
-)
+);
 
-export type FontAwesomeIcon = typeof _FontAwesomeIcon
-export default _FontAwesomeIcon
+export type FontAwesomeIcon = typeof _FontAwesomeIcon;
+export default _FontAwesomeIcon;

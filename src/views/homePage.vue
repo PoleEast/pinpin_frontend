@@ -5,7 +5,11 @@
     <!-- 中央區域 -->
     <div class="content-container">
       <!-- Logo -->
-      <img src="../assets/home/homeMainLogo.png" alt="PinPin旅圖Logo" class="logo-image" />
+      <img
+        src="../assets/home/homeMainLogo.png"
+        alt="PinPin旅圖Logo"
+        class="logo-image"
+      />
       <!-- 按鈕區域 -->
       <div class="buttons-container">
         <v-btn
@@ -16,7 +20,11 @@
           :ripple="false"
           class="action-button"
         >
-          <img src="../assets/home/homeMainSchdule.png" alt="行程規劃" class="button-image" />
+          <img
+            src="../assets/home/homeMainSchdule.png"
+            alt="行程規劃"
+            class="button-image"
+          />
         </v-btn>
         <v-btn
           :to="{ name: 'search' }"
@@ -26,7 +34,11 @@
           :ripple="false"
           class="action-button"
         >
-          <img src="../assets/home/homeMainSearch.png" alt="搜尋景點" class="button-image" />
+          <img
+            src="../assets/home/homeMainSearch.png"
+            alt="搜尋景點"
+            class="button-image"
+          />
         </v-btn>
       </div>
     </div>
@@ -64,27 +76,27 @@
 
 @keyframes fadeZoom {
   0% {
-    background-image: url('/src/assets/home/homeMainImg1.jpg');
+    background-image: url("/src/assets/home/homeMainImg1.jpg");
     opacity: 1;
     transform: scale(1);
   }
   25% {
-    background-image: url('/src/assets/home/homeMainImg2.jpg');
+    background-image: url("/src/assets/home/homeMainImg2.jpg");
     opacity: 1;
     transform: scale(1.1);
   }
   50% {
-    background-image: url('/src/assets/home/homeMainImg3.jpg');
+    background-image: url("/src/assets/home/homeMainImg3.jpg");
     opacity: 1;
     transform: scale(1);
   }
   75% {
-    background-image: url('/src/assets/home/homeMainImg4.jpg');
+    background-image: url("/src/assets/home/homeMainImg4.jpg");
     opacity: 1;
     transform: scale(1.1);
   }
   100% {
-    background-image: url('/src/assets/home/homeMainImg1.jpg');
+    background-image: url("/src/assets/home/homeMainImg1.jpg");
     opacity: 1;
     transform: scale(1);
   }

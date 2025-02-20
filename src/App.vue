@@ -9,25 +9,26 @@
 </template>
 
 <script setup lang="ts">
-import webHeader from './components/layout/hearder/webHeader.vue'
-import webFooter from './components/layout/webFooter.vue'
-import axios, { type AxiosResponse } from 'axios'
-import { useAuthStore } from './stores/auth.store'
-import type { ApiResponseDTO, AuthResponseDTO } from 'pinpin_library'
-import { onMounted } from 'vue'
+import webHeader from "./components/layout/hearder/webHeader.vue";
+import webFooter from "./components/layout/webFooter.vue";
+import axios, { type AxiosResponse } from "axios";
+import { useAuthStore } from "./stores/auth.store";
+import type { ApiResponseDTO, UserResponseDTO } from "pinpin_library";
+import { onMounted } from "vue";
 
 onMounted(async () => {
-  await checkToken()
-})
+  await checkToken();
+});
 
 const checkToken = async () => {
   try {
-    const response: AxiosResponse<ApiResponseDTO<AuthResponseDTO>> = await axios('/auth/check-auth')
-    useAuthStore().setUser(response.data?.data?.nickname || '')
+    const response: AxiosResponse<ApiResponseDTO<UserResponseDTO>> =
+      await axios("/auth/check-auth");
+    useAuthStore().SetUser(response.data?.data?.nickname || "");
   } catch {
-    useAuthStore().setUser('')
+    useAuthStore().SetUser("");
   }
-}
+};
 </script>
 
 <style>

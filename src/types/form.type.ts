@@ -1,8 +1,8 @@
 interface RegisterFormData {
-  account: string
-  nickname: string
-  password: string
-  confirmPassword: string
+  account: string;
+  nickname: string;
+  password: string;
+  confirmPassword: string;
 }
 
-export type { RegisterFormData }
+export type { RegisterFormData };
