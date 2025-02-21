@@ -3,7 +3,7 @@ import { createRouter, createWebHistory } from "vue-router";
 import homePage from "@/views/homePage.vue";
 import schdulePage from "@/views/schdulePage.vue";
 import searchPage from "@/views/searchPage.vue";
-import userProfilesPage from "@/views/userProfilesPage.vue";
+import userProfilesPage from "@/views/settingPage.vue";
 import { useAuthStore } from "@/stores/auth.store";
 
 const router = createRouter({

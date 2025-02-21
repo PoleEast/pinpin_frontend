@@ -23,7 +23,7 @@ onMounted(async () => {
 const checkToken = async () => {
   try {
     const response: AxiosResponse<ApiResponseDTO<UserResponseDTO>> =
-      await axios("/auth/check-auth");
+      await axios("/user/check-auth");
     useAuthStore().SetUser(response.data?.data?.nickname || "");
   } catch {
     useAuthStore().SetUser("");

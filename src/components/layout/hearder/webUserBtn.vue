@@ -5,6 +5,7 @@
       activator="parent"
       :location="$vuetify.display.mdAndUp ? 'bottom' : 'start'"
     >
+      <!-- TODO:增加ICON並美化，參考VUIETIFY/LIST/Nav -->
       <v-list>
         <v-list-item
           v-for="(item, index) in items"

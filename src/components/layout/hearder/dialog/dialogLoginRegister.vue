@@ -19,6 +19,7 @@
       >
       <v-card-text>
         <!-- 登入表單 -->
+        <!-- TODO:可以重構為使用component和keepAlive來作為切換手段 -->
         <v-form
           v-if="isLogin"
           @submit.prevent="login"
