@@ -6,9 +6,5 @@ import FontAwesomeIcon from "./fontawesome";
 import "./axios";
 
 export function registerPlugins(app: App) {
-  app
-    .use(createPinia())
-    .use(router)
-    .use(vuetify)
-    .component("font-awesome-icon", FontAwesomeIcon);
+  app.use(createPinia()).use(router).use(vuetify).component("font-awesome-icon", FontAwesomeIcon);
 }

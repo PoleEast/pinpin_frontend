@@ -14,6 +14,7 @@ const router = createRouter({
       name: "home",
       component: homePage,
     },
+    //FIXME: 網頁重新LOAD時變數好像不會先初始化，所以這邊要先檢查是否有值
     {
       path: "/userProfiles",
       name: "userProfiles",

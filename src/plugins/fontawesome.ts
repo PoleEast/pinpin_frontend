@@ -17,22 +17,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon as _FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
-library.add(
-  faGithub,
-  faBars,
-  faRightToBracket,
-  faPersonWalkingLuggage,
-  faEye,
-  faEyeSlash,
-  faSquareCheck,
-  faIdCardClip,
-  faKey,
-  faGhost,
-  faMugHot,
-  faBell,
-  faIdBadge,
-  faUser,
-);
+library.add(faGithub, faBars, faRightToBracket, faPersonWalkingLuggage, faEye, faEyeSlash, faSquareCheck, faIdCardClip, faKey, faGhost, faMugHot, faBell, faIdBadge, faUser);
 
 export type FontAwesomeIcon = typeof _FontAwesomeIcon;
 export default _FontAwesomeIcon;

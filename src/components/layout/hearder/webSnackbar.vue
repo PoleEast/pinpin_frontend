@@ -6,12 +6,11 @@
     v-model="show"
     :text="message"
     :color="color"
-    close
-  >
+    close>
   </v-snackbar>
 </template>
 
 <script setup lang="ts">
-const show = defineModel<boolean>("show");
-const { message, color } = defineProps<{ message: string; color: string }>();
+  const show = defineModel<boolean>("show");
+  const { message, color } = defineProps<{ message: string; color: string }>();
 </script>

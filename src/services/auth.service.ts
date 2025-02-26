@@ -1,11 +1,5 @@
 import axios, { AxiosError, HttpStatusCode, type AxiosResponse } from "axios";
-import type {
-  ApiErrorResponseDTO,
-  ApiResponseDTO,
-  UserResponseDTO,
-  LoginRequestDTO,
-  RegisterRequestDTO,
-} from "pinpin_library";
+import type { ApiErrorResponseDTO, ApiResponseDTO, UserResponseDTO, LoginRequestDTO, RegisterRequestDTO } from "pinpin_library";
 
 export const authService = {
   /**
@@ -14,9 +8,7 @@ export const authService = {
    * @returns {Promise<ApiResponse<RegisterUserResponse>>} - 註冊結果
    * @throws {ApiError} - 註冊失敗的錯誤訊息
    */
-  async Register(
-    data: RegisterRequestDTO,
-  ): Promise<AxiosResponse<ApiResponseDTO<UserResponseDTO>>> {
+  async Register(data: RegisterRequestDTO): Promise<AxiosResponse<ApiResponseDTO<UserResponseDTO>>> {
     try {
       const response = await axios.post("/user/register", data);
       return response;
@@ -24,8 +16,7 @@ export const authService = {
       const axiosError = error as AxiosError<ApiErrorResponseDTO>;
       throw {
         message: axiosError.response?.data?.message || "註冊失敗，請稍後再試",
-        HttpStatusCode:
-          axiosError.response?.status || HttpStatusCode.InternalServerError,
+        HttpStatusCode: axiosError.response?.status || HttpStatusCode.InternalServerError,
       };
     }
   },
@@ -36,9 +27,7 @@ export const authService = {
    * @returns {Promise<ApiResponse<LoginUserResponse>>} - 登入結果
    * @throws {ApiError} - 登入失敗的錯誤訊息
    */
-  async Login(
-    data: LoginRequestDTO,
-  ): Promise<AxiosResponse<ApiResponseDTO<UserResponseDTO>>> {
+  async Login(data: LoginRequestDTO): Promise<AxiosResponse<ApiResponseDTO<UserResponseDTO>>> {
     try {
       const response = await axios.post("/user/login", data);
       return response;
@@ -46,8 +35,7 @@ export const authService = {
       const axiosError = error as AxiosError<ApiErrorResponseDTO>;
       throw {
         message: axiosError.response?.data?.message || "登入失敗，請稍後再試",
-        HttpStatusCode:
-          axiosError.response?.status || HttpStatusCode.InternalServerError,
+        HttpStatusCode: axiosError.response?.status || HttpStatusCode.InternalServerError,
       };
     }
   },
@@ -60,8 +48,7 @@ export const authService = {
       const axiosError = error as AxiosError<ApiErrorResponseDTO>;
       throw {
         message: axiosError.response?.data?.message || "登出失敗，請稍後再試",
-        HttpStatusCode:
-          axiosError.response?.status || HttpStatusCode.InternalServerError,
+        HttpStatusCode: axiosError.response?.status || HttpStatusCode.InternalServerError,
       };
     }
   },

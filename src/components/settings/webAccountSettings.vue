@@ -1,42 +1,43 @@
 <template>
-  <v-container>
-    <v-form @submit.prevent="saveAccountSettings">
+  <v-container fluid>
+    <v-form>
       <v-text-field
-        v-model="account.username"
-        label="使用者名稱"
-        required
-      ></v-text-field>
-      <v-text-field
-        v-model="account.email"
-        label="電子郵件"
-        type="email"
-        required
-      ></v-text-field>
-      <v-text-field
-        v-model="account.password"
-        label="新密碼"
-        type="password"
-      ></v-text-field>
-      <v-text-field
-        v-model="account.confirmPassword"
-        label="確認新密碼"
-        type="password"
-      ></v-text-field>
+        v-for="input in inputList"
+        :key="input.model"
+        :label="input.label"
+        :type="input.type"
+        :required="input.required"
+        outlined
+        dense
+        clearable></v-text-field>
     </v-form>
   </v-container>
 </template>
 
 <script lang="ts" setup>
-import { ref } from "vue";
+  import { ref } from "vue";
 
-const account = ref({
-  username: "",
-  email: "",
-  password: "",
-  confirmPassword: "",
-});
-
-const saveAccountSettings = () => {
-  alert("帳號設定已儲存");
-};
+  const inputList = ref([
+    {
+      label: "使用者名稱",
+      model: "username",
+      required: true,
+    },
+    {
+      label: "電子郵件",
+      model: "email",
+      type: "email",
+      required: true,
+    },
+    {
+      label: "新密碼",
+      model: "password",
+      type: "password",
+    },
+    {
+      label: "確認新密碼",
+      model: "confirmPassword",
+      type: "password",
+    },
+  ]);
 </script>

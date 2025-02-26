@@ -25,8 +25,7 @@ const useAuthStore = defineStore("auth", {
      */
     async Logout(): Promise<LogoutResult> {
       try {
-        const response: AxiosResponse<ApiResponseDTO> =
-          await authService.Logout();
+        const response: AxiosResponse<ApiResponseDTO> = await authService.Logout();
         this.UserNickname = "";
         return {
           message: response.data.message,
