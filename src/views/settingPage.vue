@@ -1,6 +1,6 @@
 <template>
   <v-container class="mt-4">
-    <v-row>
+    <v-row justify="center">
       <v-col cols="3">
         <v-list>
           <v-list-subheader>設定</v-list-subheader>
@@ -19,18 +19,25 @@
           </v-list-item>
         </v-list>
       </v-col>
-      <v-col cols="9">
+      <v-col :cols="$vuetify.display.mdAndUp ? 6 : 9">
         <v-card
           class="mt-4 pa-4"
           elevation="3">
-          <v-card-title class="text-h5 font-weight-bold">{{ currentOption.title }}</v-card-title>
+          <v-card-title class="text-h5 font-weight-bold"
+            ><font-awesome-icon
+              :icon="currentOption.icon"
+              size="lg"
+              class="me-3" />{{ currentOption.title }}</v-card-title
+          >
           <v-card-subtitle>{{ currentOption.description }}</v-card-subtitle>
           <v-expand-transition mode="out-in">
             <keep-alive>
-              <component :is="currentOption.component" />
+              <component
+                :is="currentOption.component"
+                class="mt-2" />
             </keep-alive>
           </v-expand-transition>
-          <v-card-actions>
+          <v-card-actions class="me-1">
             <v-spacer />
             <v-btn
               color="secondary"
@@ -51,12 +58,9 @@
 </template>
 
 <script lang="ts" setup>
-  import { ref } from "vue";
-
   import wevUserProfileSetting from "@/components/settings/webUserProfileSetting.vue";
   import webAccountSetting from "@/components/settings/webAccountSettings.vue";
   import WebNotificationSettings from "@/components/settings/webNotificationSettings.vue";
-
   const settingsOptions = ref([
     {
       title: "個人資料",
@@ -77,6 +81,11 @@
       description: "輕鬆管理通知，讓每則提醒化身旅程中滿滿驚喜與趣味！",
     },
   ]);
+
+  // onMounted(async () => {
+  //   try{    const userProfileResponse = await axios.get("/api/userProfile/getUserProfile");}
+
+  // });
 
   const currentOption = ref(settingsOptions.value[0]);
 </script>

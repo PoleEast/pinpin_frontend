@@ -28,11 +28,11 @@ export default createVuetify({
           "gray-600": "#AA8664", // 原 bs-gray-600
           "gray-700": "#9D744D", // 原 bs-gray-700
           "gray-800": "#906237", // 原 bs-gray-800
-          "gray-900": "#835021", // 原 bs-gray-900
+          "gray-900": "rgb(110, 65, 9)", // 原 bs-gray-900
 
           // 文字相關
           "on-background": "#835021", // 原 bs-body-color
-          "on-surface": "#835021", // 主要文字顏色
+          "on-surface": "rgb(110, 65, 9)", // 主要文字顏色
         },
       },
     },

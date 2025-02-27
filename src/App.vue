@@ -13,8 +13,10 @@
   import webFooter from "./components/layout/webFooter.vue";
   import axios, { type AxiosResponse } from "axios";
   import { useAuthStore } from "./stores/auth.store";
-  import type { ApiResponseDTO, UserResponseDTO } from "pinpin_library";
+  import type { ApiResponseDTO, LoginResponseDTO } from "pinpin_library";
   import { onMounted } from "vue";
+
+  //TODO: 將snackbar移至Pinia在這做控制
 
   onMounted(async () => {
     await checkToken();
@@ -22,7 +24,7 @@
 
   const checkToken = async () => {
     try {
-      const response: AxiosResponse<ApiResponseDTO<UserResponseDTO>> = await axios("/user/check-auth");
+      const response: AxiosResponse<ApiResponseDTO<LoginResponseDTO>> = await axios("/user/check-auth");
       useAuthStore().SetUser(response.data?.data?.nickname || "");
     } catch {
       useAuthStore().SetUser("");

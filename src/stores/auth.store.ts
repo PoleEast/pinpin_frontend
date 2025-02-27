@@ -1,5 +1,5 @@
 import { authService } from "@/services/auth.service";
-import type { LogoutResult } from "@/types/auth.type";
+import type { LogoutResult } from "@/interfaces/auth.interface";
 import { type AxiosResponse } from "axios";
 import { defineStore } from "pinia";
 import type { ApiErrorResponseDTO, ApiResponseDTO } from "pinpin_library";

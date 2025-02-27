@@ -13,7 +13,9 @@
         </span>
       </v-card-title>
       <v-card-subtitle class="text-center pt-3">
-        <span class="font-weight-bold">{{ isLogin ? "歡迎來到PinPin，準備規劃您的旅程了嗎?" : "加入PinPin，開始你的旅程規劃吧！" }}</span></v-card-subtitle
+        <span class="font-weight-bold">{{
+          isLogin ? "歡迎來到PinPin，準備規劃您的旅程了嗎?" : "加入PinPin，開始你的旅程規劃吧！"
+        }}</span></v-card-subtitle
       >
       <v-card-text>
         <!-- 登入表單 -->
@@ -179,7 +181,7 @@
 <script setup lang="ts">
   import { authService } from "@/services/auth.service";
   import { useAuthStore } from "@/stores/auth.store";
-  import type { RegisterFormData } from "@/types/form.type";
+  import type { RegisterFormData } from "@/interfaces/form.interface";
   import { HttpStatusCode } from "axios";
   import { REGISTER_REQUSER_VALIDATION, type ApiErrorResponseDTO, type LoginRequestDTO, type RegisterRequestDTO } from "pinpin_library";
   import { ref, useTemplateRef, watch } from "vue";
@@ -227,16 +229,23 @@
   ];
   const passwordRules = [
     (v: string) => v.length > 0 || "請輸入密碼",
-    (v: string) => v.length >= REGISTER_REQUSER_VALIDATION.PASSWORD.MIN_LENGTH || `密碼至少需要${REGISTER_REQUSER_VALIDATION.PASSWORD.MIN_LENGTH}個字`,
-    (v: string) => v.length <= REGISTER_REQUSER_VALIDATION.PASSWORD.MAX_LENGTH || `密碼最多只能${REGISTER_REQUSER_VALIDATION.PASSWORD.MAX_LENGTH}個字`,
+    (v: string) =>
+      v.length >= REGISTER_REQUSER_VALIDATION.PASSWORD.MIN_LENGTH || `密碼至少需要${REGISTER_REQUSER_VALIDATION.PASSWORD.MIN_LENGTH}個字`,
+    (v: string) =>
+      v.length <= REGISTER_REQUSER_VALIDATION.PASSWORD.MAX_LENGTH || `密碼最多只能${REGISTER_REQUSER_VALIDATION.PASSWORD.MAX_LENGTH}個字`,
     (v: string) => v.match(REGISTER_REQUSER_VALIDATION.PASSWORD.PATTERN) !== null || REGISTER_REQUSER_VALIDATION.PASSWORD.PATTERN_MESSAGE,
   ];
   const nicknameRules = [
     (v: string) => v.length > 0 || "請輸入暱稱",
-    (v: string) => v.length >= REGISTER_REQUSER_VALIDATION.NICKNAME.MIN_LENGTH || `暱稱至少需要${REGISTER_REQUSER_VALIDATION.NICKNAME.MIN_LENGTH}個字`,
-    (v: string) => v.length <= REGISTER_REQUSER_VALIDATION.NICKNAME.MAX_LENGTH || `暱稱最多只能${REGISTER_REQUSER_VALIDATION.NICKNAME.MAX_LENGTH}個字`,
+    (v: string) =>
+      v.length >= REGISTER_REQUSER_VALIDATION.NICKNAME.MIN_LENGTH || `暱稱至少需要${REGISTER_REQUSER_VALIDATION.NICKNAME.MIN_LENGTH}個字`,
+    (v: string) =>
+      v.length <= REGISTER_REQUSER_VALIDATION.NICKNAME.MAX_LENGTH || `暱稱最多只能${REGISTER_REQUSER_VALIDATION.NICKNAME.MAX_LENGTH}個字`,
   ];
-  const confirmPasswordRules = [(v: string) => v.length > 0 || "請輸入確認密碼", (v: string) => v === registerFormData.value.password || "密碼不相同"];
+  const confirmPasswordRules = [
+    (v: string) => v.length > 0 || "請輸入確認密碼",
+    (v: string) => v === registerFormData.value.password || "密碼不相同",
+  ];
 
   const emit = defineEmits<{ showSnackbar: [message: string, color: string] }>();
 
