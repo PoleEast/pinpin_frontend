@@ -43,7 +43,7 @@
 <script setup lang="ts">
   import type { Isnackbar } from "@/interfaces/snackbar.interface";
   import { useAuthStore } from "@/stores/auth.store";
-  import { computed, nextTick, onMounted } from "vue";
+  import { computed } from "vue";
 
   const emit = defineEmits<{
     showSnackbar: [snackbar: Isnackbar];
@@ -57,12 +57,6 @@
 
   const nickname = computed(() => {
     return useAuthStore().UserNickname;
-  });
-
-  onMounted(async () => {
-    await nextTick();
-    console.log("WebUserBtn mounted");
-    emit("test");
   });
 
   const logout = async () => {

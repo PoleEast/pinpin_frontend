@@ -44,11 +44,11 @@
   import { ref, type Ref } from "vue";
 
   const passwordRules = [
-    (v: string) => v.length > 0 || "請輸入密碼",
+    (v: string) => v?.length > 0 || "請輸入密碼",
     (v: string) =>
-      v.length >= REGISTER_REQUSER_VALIDATION.PASSWORD.MIN_LENGTH || `密碼至少需要${REGISTER_REQUSER_VALIDATION.PASSWORD.MIN_LENGTH}個字`,
+      v?.length >= REGISTER_REQUSER_VALIDATION.PASSWORD.MIN_LENGTH || `密碼至少需要${REGISTER_REQUSER_VALIDATION.PASSWORD.MIN_LENGTH}個字`,
     (v: string) =>
-      v.length <= REGISTER_REQUSER_VALIDATION.PASSWORD.MAX_LENGTH || `密碼最多只能${REGISTER_REQUSER_VALIDATION.PASSWORD.MAX_LENGTH}個字`,
+      v?.length <= REGISTER_REQUSER_VALIDATION.PASSWORD.MAX_LENGTH || `密碼最多只能${REGISTER_REQUSER_VALIDATION.PASSWORD.MAX_LENGTH}個字`,
     (v: string) => v.match(REGISTER_REQUSER_VALIDATION.PASSWORD.PATTERN) !== null || REGISTER_REQUSER_VALIDATION.PASSWORD.PATTERN_MESSAGE,
   ];
 
@@ -58,7 +58,7 @@
     password: "",
   });
 
-  const inputList: Ref<IFromBlock[]> = ref([
+  const inputList: IFromBlock[] = [
     {
       title: "帳號資訊",
       textFields: [
@@ -97,5 +97,5 @@
         },
       ],
     },
-  ]);
+  ];
 </script>

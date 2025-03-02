@@ -8,6 +8,7 @@
             v-for="(item, index) in settingsOptions"
             :value="item"
             :key="index"
+            :active="currentOption === item"
             @click="currentOption = item">
             <template v-slot:prepend>
               <font-awesome-icon
@@ -25,15 +26,16 @@
           elevation="3">
           <v-card-title class="text-h5 font-weight-bold"
             ><font-awesome-icon
-              :icon="currentOption.icon"
+              v-if="currentOption"
+              :icon="currentOption?.icon"
               size="lg"
-              class="me-3" />{{ currentOption.title }}</v-card-title
+              class="me-3" />{{ currentOption?.title }}</v-card-title
           >
-          <v-card-subtitle>{{ currentOption.description }}</v-card-subtitle>
+          <v-card-subtitle>{{ currentOption?.description }}</v-card-subtitle>
           <v-expand-transition mode="out-in">
             <keep-alive>
               <component
-                :is="currentOption.component"
+                :is="currentOption?.component"
                 class="mt-2" />
             </keep-alive>
           </v-expand-transition>
@@ -61,31 +63,32 @@
   import wevUserProfileSetting from "@/components/settings/webUserProfileSetting.vue";
   import webAccountSetting from "@/components/settings/webAccountSettings.vue";
   import WebNotificationSettings from "@/components/settings/webNotificationSettings.vue";
-  const settingsOptions = ref([
-    {
-      title: "個人資料",
-      component: wevUserProfileSetting,
-      icon: "id-badge",
-      description: "展示你的人特質，讓旅伴盡情見識幽默獨特的個人風格！",
-    },
+  import { markRaw, onMounted, ref, type Ref } from "vue";
+  import type { ISettingOption } from "@/interfaces/settingOption.interface";
+  const settingsOptions = [
     {
       title: "帳號設定",
-      component: webAccountSetting,
+      component: markRaw(webAccountSetting),
       icon: "user",
       description: "管理你的帳號安全與隱私，包括密碼更新及連結社交平台。",
     },
     {
+      title: "個人資料",
+      component: markRaw(wevUserProfileSetting),
+      icon: "id-badge",
+      description: "展示你的人特質，讓旅伴盡情見識幽默獨特的個人風格！",
+    },
+    {
       title: "通知設定",
-      component: WebNotificationSettings,
+      component: markRaw(WebNotificationSettings),
       icon: "bell",
       description: "輕鬆管理通知，讓每則提醒化身旅程中滿滿驚喜與趣味！",
     },
-  ]);
+  ];
 
-  // onMounted(async () => {
-  //   try{    const userProfileResponse = await axios.get("/api/userProfile/getUserProfile");}
+  const currentOption: Ref<ISettingOption | null> = ref(null);
 
-  // });
-
-  const currentOption = ref(settingsOptions.value[0]);
+  onMounted(() => {
+    currentOption.value = settingsOptions[0];
+  });
 </script>
