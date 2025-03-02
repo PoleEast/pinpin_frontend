@@ -1,6 +1,6 @@
-interface LogoutResult {
+interface ILogoutResult {
   message: string;
   result: boolean;
 }
 
-export type { LogoutResult };
+export type { ILogoutResult };

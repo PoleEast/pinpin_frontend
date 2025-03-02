@@ -41,11 +41,12 @@
 </template>
 
 <script setup lang="ts">
+  import type { Isnackbar } from "@/interfaces/snackbar.interface";
   import { useAuthStore } from "@/stores/auth.store";
   import { computed, nextTick, onMounted } from "vue";
 
   const emit = defineEmits<{
-    showSnackbar: [message: string, color: string];
+    showSnackbar: [snackbar: Isnackbar];
     test: [];
   }>();
 
@@ -66,6 +67,11 @@
 
   const logout = async () => {
     const logoutResult = await useAuthStore().Logout();
-    emit("showSnackbar", logoutResult.message, logoutResult.result ? "success" : "error");
+    const snackbar: Isnackbar = {
+      timeout: 2000,
+      message: logoutResult.message,
+      color: logoutResult.result ? "success" : "error",
+    };
+    emit("showSnackbar", snackbar);
   };
 </script>

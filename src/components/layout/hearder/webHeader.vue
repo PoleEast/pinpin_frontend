@@ -31,7 +31,7 @@
         <v-fade-transition hide-on-leave>
           <WebUserBtn
             v-show="isLoggedIn"
-            @show-snackbar="showSnackbar" />
+            @show-snackbar="pushSnackbar" />
         </v-fade-transition>
         <v-fade-transition hide-on-leave>
           <v-btn
@@ -76,7 +76,7 @@
           <v-fade-transition hide-on-leave>
             <WebUserBtn
               v-show="isLoggedIn"
-              @show-snackbar="showSnackbar" />
+              @show-snackbar="pushSnackbar" />
           </v-fade-transition>
           <v-fade-transition hide-on-leave>
             <v-btn
@@ -94,24 +94,22 @@
       </v-menu>
     </template>
   </v-app-bar>
-  <WebSnackbar
-    :color="snackbarColor"
-    :message="snackbarMessage"
-    v-model:show="snackbar" />
   <WebLogin
     ref="webLoginRef"
     v-model:show-dialog="showDialog"
-    @show-snackbar="showSnackbar" />
+    @show-snackbar="pushSnackbar" />
 </template>
 
 <script setup lang="ts">
   import { computed, ref, watch } from "vue";
-  import WebSnackbar from "@/components/layout/hearder/webSnackbar.vue";
   import WebLogin from "@/components/layout/hearder/dialog/dialogLoginRegister.vue";
   import WebUserBtn from "@/components/layout/hearder/webUserBtn.vue";
   import { useAuthStore } from "@/stores/auth.store";
+  import { useSnackbarStore } from "@/stores/snackbar.store";
+  import type { Isnackbar } from "@/interfaces/snackbar.interface";
 
   const authStore = useAuthStore();
+  const snackbarStore = useSnackbarStore();
 
   const menuItems = [
     { title: "行程規劃", path: "/schdule" },
@@ -127,16 +125,8 @@
     webLoginRef.value.handleLoginStatus();
   };
 
-  //彈出條相關
-  const snackbar = ref(false);
-  const snackbarMessage = ref("");
-  const snackbarColor = ref("");
-
-  const showSnackbar = (message: string, color: string) => {
-    snackbarMessage.value = message;
-    snackbarColor.value = color;
-    snackbar.value = true;
-    console.log(message, color);
+  const pushSnackbar = (snackbar: Isnackbar) => {
+    snackbarStore.PushSnackbar(snackbar);
   };
 
   //登入狀態
@@ -148,7 +138,12 @@
     () => authStore.IsForcedNavigation,
     () => {
       if (authStore.IsForcedNavigation == true) {
-        showSnackbar("請先登入", "warning");
+        const snackbar: Isnackbar = {
+          timeout: 1000,
+          message: "請先登入",
+          color: "warning",
+        };
+        pushSnackbar(snackbar);
         authStore.SetForcedNavigation(false);
       }
     },

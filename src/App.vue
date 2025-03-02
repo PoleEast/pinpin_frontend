@@ -5,16 +5,18 @@
       <router-view></router-view>
     </v-main>
     <webFooter />
+    <WebSnackbar />
   </v-app>
 </template>
 
 <script setup lang="ts">
   import webHeader from "./components/layout/hearder/webHeader.vue";
-  import webFooter from "./components/layout/webFooter.vue";
+  import webFooter from "./components/layout/footer/webFooter.vue";
   import axios, { type AxiosResponse } from "axios";
   import { useAuthStore } from "./stores/auth.store";
   import type { ApiResponseDTO, LoginResponseDTO } from "pinpin_library";
   import { onMounted } from "vue";
+  import WebSnackbar from "./components/common/webSnackbar.vue";
 
   //TODO: 將snackbar移至Pinia在這做控制
 

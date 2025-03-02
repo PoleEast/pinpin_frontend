@@ -1,5 +1,5 @@
 import { authService } from "@/services/auth.service";
-import type { LogoutResult } from "@/interfaces/auth.interface";
+import type { ILogoutResult } from "@/interfaces/auth.interface";
 import { type AxiosResponse } from "axios";
 import { defineStore } from "pinia";
 import type { ApiErrorResponseDTO, ApiResponseDTO } from "pinpin_library";
@@ -20,10 +20,10 @@ const useAuthStore = defineStore("auth", {
 
     /**
      * 登出會員
-     * @returns {Promise<LogoutResult>} - 登出結果
+     * @returns {Promise<ILogoutResult>} - 登出結果
      * @throws {ApiError} - 登出失敗的錯誤訊息
      */
-    async Logout(): Promise<LogoutResult> {
+    async Logout(): Promise<ILogoutResult> {
       try {
         const response: AxiosResponse<ApiResponseDTO> = await authService.Logout();
         this.UserNickname = "";
@@ -50,4 +50,4 @@ const useAuthStore = defineStore("auth", {
   },
 });
 
-export { useAuthStore as useAuthStore };
+export { useAuthStore };

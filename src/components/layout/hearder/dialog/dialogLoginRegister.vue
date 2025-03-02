@@ -181,11 +181,12 @@
 <script setup lang="ts">
   import { authService } from "@/services/auth.service";
   import { useAuthStore } from "@/stores/auth.store";
-  import type { RegisterFormData } from "@/interfaces/form.interface";
+  import type { IRegisterFormData } from "@/interfaces/form.interface";
   import { HttpStatusCode } from "axios";
   import { REGISTER_REQUSER_VALIDATION, type ApiErrorResponseDTO, type LoginRequestDTO, type RegisterRequestDTO } from "pinpin_library";
   import { ref, useTemplateRef, watch } from "vue";
   import type { VForm } from "vuetify/components";
+  import type { Isnackbar } from "@/interfaces/snackbar.interface";
 
   //變數
   const registerFormRef = useTemplateRef<VForm>("registerForm");
@@ -208,7 +209,7 @@
     },
   });
 
-  const registerFormData = ref<RegisterFormData>({
+  const registerFormData = ref<IRegisterFormData>({
     account: "",
     nickname: "",
     password: "",
@@ -247,7 +248,7 @@
     (v: string) => v === registerFormData.value.password || "密碼不相同",
   ];
 
-  const emit = defineEmits<{ showSnackbar: [message: string, color: string] }>();
+  const emit = defineEmits<{ showSnackbar: [snackbar: Isnackbar] }>();
 
   //當dialog切換時清空輸入欄位
   watch(isLogin, () => {
@@ -279,12 +280,22 @@
 
       const response = await authService.Login(loginRequest);
       authStore.SetUser(response.data?.data?.nickname || "");
-      emit("showSnackbar", response.data.message, "success");
+      const snackbar = {
+        timeout: 2000,
+        message: response.data.message,
+        color: "success",
+      };
+      emit("showSnackbar", snackbar);
       showDialog.value = false;
     } catch (error) {
       const axiosError = error as ApiErrorResponseDTO;
       loginErrorMessage.value = axiosError.statusCode == HttpStatusCode.Unauthorized ? axiosError.message : "";
-      emit("showSnackbar", axiosError.message, "error");
+      const snackbar = {
+        timeout: 2000,
+        message: axiosError.message,
+        color: "error",
+      };
+      emit("showSnackbar", snackbar);
     } finally {
       loading.value = false;
     }
@@ -321,12 +332,22 @@
 
       const response = await authService.Register(registerRequest);
       authStore.SetUser(response.data.data?.nickname ?? "");
-      emit("showSnackbar", response.data.message, "success");
+      const snackbar = {
+        timeout: 2000,
+        message: response.data.message,
+        color: "success",
+      };
+      emit("showSnackbar", snackbar);
       showDialog.value = false;
     } catch (error) {
       const axiosError = error as ApiErrorResponseDTO;
       registerErrorMessage.value = axiosError.statusCode == HttpStatusCode.Conflict ? axiosError.message : "";
-      emit("showSnackbar", axiosError.message, "error");
+      const snackbar = {
+        timeout: 2000,
+        message: axiosError.message,
+        color: "error",
+      };
+      emit("showSnackbar", snackbar);
     } finally {
       loading.value = false;
     }

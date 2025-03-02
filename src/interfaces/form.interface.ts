@@ -1,4 +1,4 @@
-interface RegisterFormData {
+interface IRegisterFormData {
   account: string;
   nickname: string;
   password: string;
@@ -22,4 +22,4 @@ interface IFromBlock {
   title: string;
   textFields?: ITextField[];
 }
-export type { RegisterFormData, ITextField, IFromBlock };
+export type { IRegisterFormData, ITextField, IFromBlock };
