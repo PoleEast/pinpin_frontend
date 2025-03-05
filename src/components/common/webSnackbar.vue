@@ -24,7 +24,7 @@
 
   const currentSnackbar = computed(() => (snackbarStore.queue.length > 0 ? snackbarStore.queue[0] : null));
 
-  // 當隊列中有新項目時，顯示 snackbar
+  // 當隊列中有新項目時，顯示snackbar
   watch(
     () => snackbarStore.queue.length,
     (newLength, oldLength) => {
@@ -35,7 +35,7 @@
     { immediate: true },
   );
 
-  // 當 snackbar 關閉時，從隊列移除當前項目
+  // 當snackbar關閉時，從隊列移除當前項目
   function handleVisibilityChange(value: boolean) {
     if (!value && currentSnackbar.value) {
       snackbarStore.ShiftSnackbar();
@@ -44,7 +44,7 @@
       if (snackbarStore.queue.length > 0) {
         setTimeout(() => {
           isVisible.value = true;
-        }, 300); // 短暫延遲以確保動畫順暢
+        }, 300);
       }
     }
   }

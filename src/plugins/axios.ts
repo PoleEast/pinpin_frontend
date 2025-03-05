@@ -1,4 +1,6 @@
+import { useSnackbarStore } from "@/stores/snackbar.store";
 import axios from "axios";
+import type { ApiErrorResponseDTO } from "pinpin_library";
 
 axios.defaults.baseURL = "http://localhost:3000/api";
 axios.defaults.withCredentials = true;
@@ -19,9 +21,27 @@ axios.interceptors.request.use(
 axios.interceptors.response.use(
   (response) => response,
   (error) => {
-    if (error.response?.data?.message) {
-      console.error(error.response.data.message);
+    let errorMessage = "發生未知錯誤";
+
+    if (!error.response) {
+      errorMessage = "網絡連接失敗，請檢查網絡設置";
+    } else if (error.code === "ECONNABORTED") {
+      errorMessage = "請求超時，請稍後再試";
+    } else if (error.response.status >= 500) {
+      errorMessage = "伺服器錯誤，請稍後再試";
+    } else {
+      const axiosError = error as { response: { data: ApiErrorResponseDTO } };
+      errorMessage = axiosError.response.data.message;
     }
+
+    const snackbar = {
+      timeout: 2000,
+      message: errorMessage,
+      color: "error",
+    };
+
+    useSnackbarStore().PushSnackbar(snackbar);
+
     return Promise.reject(error);
   },
 );

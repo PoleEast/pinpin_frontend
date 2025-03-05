@@ -65,6 +65,8 @@
   import WebNotificationSettings from "@/components/settings/webNotificationSettings.vue";
   import { markRaw, onMounted, ref, type Ref } from "vue";
   import type { ISettingOption } from "@/interfaces/settingOption.interface";
+  import { settingService } from "@/services/setting.service";
+
   const settingsOptions = [
     {
       title: "帳號設定",
@@ -88,7 +90,14 @@
 
   const currentOption: Ref<ISettingOption | null> = ref(null);
 
+  const getSettingData = async () => {
+    try {
+      return await settingService.GetSettingData();
+    } catch {}
+  };
+
   onMounted(() => {
     currentOption.value = settingsOptions[0];
+    getSettingData();
   });
 </script>

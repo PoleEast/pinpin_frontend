@@ -290,12 +290,6 @@
     } catch (error) {
       const axiosError = error as ApiErrorResponseDTO;
       loginErrorMessage.value = axiosError.statusCode == HttpStatusCode.Unauthorized ? axiosError.message : "";
-      const snackbar = {
-        timeout: 2000,
-        message: axiosError.message,
-        color: "error",
-      };
-      emit("showSnackbar", snackbar);
     } finally {
       loading.value = false;
     }
@@ -342,12 +336,6 @@
     } catch (error) {
       const axiosError = error as ApiErrorResponseDTO;
       registerErrorMessage.value = axiosError.statusCode == HttpStatusCode.Conflict ? axiosError.message : "";
-      const snackbar = {
-        timeout: 2000,
-        message: axiosError.message,
-        color: "error",
-      };
-      emit("showSnackbar", snackbar);
     } finally {
       loading.value = false;
     }

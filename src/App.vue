@@ -18,8 +18,6 @@
   import { onMounted } from "vue";
   import WebSnackbar from "./components/common/webSnackbar.vue";
 
-  //TODO: 將snackbar移至Pinia在這做控制
-
   onMounted(async () => {
     await checkToken();
   });
