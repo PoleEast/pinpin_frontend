@@ -5,6 +5,7 @@
         v-for="group in inputList"
         :key="group.title"
         variant="flat"
+        :loading="props.isLoading"
         class="mb-4">
         <v-card-title class="px-1">{{ group.title }}</v-card-title>
         <v-card-text class="pa-0">
@@ -34,14 +35,20 @@
           </v-row>
         </v-card-text>
       </v-card>
+      <p class="text-body-2">老碰友，您於{{ userProfile?.user?.createAt }}加入PinPin，我們已經認識{{ daysSinceJoining }}天了</p>
     </v-form>
   </v-container>
 </template>
 
 <script lang="ts" setup>
   import type { IFromBlock } from "@/interfaces/form.interface";
-  import { REGISTER_REQUSER_VALIDATION, type AccountRequestDTO } from "pinpin_library";
-  import { ref, type Ref } from "vue";
+  import { REGISTER_REQUSER_VALIDATION, type UserProfileResponseDTO } from "pinpin_library";
+  import { computed } from "vue";
+
+  const props = defineProps<{
+    isLoading: boolean;
+    userProfile: UserProfileResponseDTO;
+  }>();
 
   const passwordRules = [
     (v: string) => v?.length > 0 || "請輸入密碼",
@@ -52,19 +59,21 @@
     (v: string) => v.match(REGISTER_REQUSER_VALIDATION.PASSWORD.PATTERN) !== null || REGISTER_REQUSER_VALIDATION.PASSWORD.PATTERN_MESSAGE,
   ];
 
-  const accountDto: Ref<AccountRequestDTO> = ref({
-    account: "",
-    email: "",
-    password: "",
+  const daysSinceJoining = computed(() => {
+    if (props.userProfile?.user?.createAt === undefined) return 0;
+
+    const joinTime = new Date(props.userProfile?.user?.createAt).getTime();
+    const currentTime = new Date().getTime();
+    return Math.floor((currentTime - joinTime) / (1000 * 60 * 60 * 24));
   });
 
-  const inputList: IFromBlock[] = [
+  const inputList = computed<IFromBlock[]>(() => [
     {
       title: "帳號資訊",
       textFields: [
         {
           label: "帳號",
-          model: accountDto.value.account,
+          model: props.userProfile?.user?.account,
           required: true,
           icon: "person-walking-luggage",
           readonly: true,
@@ -72,7 +81,7 @@
         },
         {
           label: "電子郵件",
-          model: accountDto.value.email,
+          model: props.userProfile?.user?.email,
           type: "email",
           placeholder: "superman@gmail.com",
           icon: "envelope",
@@ -84,7 +93,7 @@
       textFields: [
         {
           label: "新密碼",
-          model: accountDto.value.password,
+          model: props.userProfile?.user?.password,
           type: "password",
           rule: passwordRules,
           icon: "key",
@@ -97,5 +106,5 @@
         },
       ],
     },
-  ];
+  ]);
 </script>

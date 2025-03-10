@@ -34,9 +34,19 @@
           <v-card-subtitle>{{ currentOption?.description }}</v-card-subtitle>
           <v-expand-transition mode="out-in">
             <keep-alive>
-              <component
-                :is="currentOption?.component"
-                class="mt-2" />
+              <Suspense>
+                <template #default>
+                  <component
+                    :is="currentOption?.component"
+                    v-bind="currentOption?.props"
+                    class="mt-2" />
+                </template>
+                <template #fallback>
+                  <v-skeleton-loader
+                    type="card"
+                    class="mt-4"></v-skeleton-loader>
+                </template>
+              </Suspense>
             </keep-alive>
           </v-expand-transition>
           <v-card-actions class="me-1">
@@ -63,41 +73,71 @@
   import wevUserProfileSetting from "@/components/settings/webUserProfileSetting.vue";
   import webAccountSetting from "@/components/settings/webAccountSettings.vue";
   import WebNotificationSettings from "@/components/settings/webNotificationSettings.vue";
-  import { markRaw, onMounted, ref, type Ref } from "vue";
+  import { computed, markRaw, nextTick, onMounted, ref, type Ref } from "vue";
   import type { ISettingOption } from "@/interfaces/settingOption.interface";
   import { settingService } from "@/services/setting.service";
+  import type { SettingResponseDTO, UserProfileResponseDTO } from "pinpin_library";
 
-  const settingsOptions = [
+  const loading = computed(() => {
+    return settingData.value === undefined || userProfile.value === undefined;
+  });
+  const settingData = ref<SettingResponseDTO>();
+  const userProfile = ref<UserProfileResponseDTO>();
+
+  const settingsOptions = computed((): ISettingOption[] => [
     {
       title: "帳號設定",
       component: markRaw(webAccountSetting),
       icon: "user",
+      props: { isLoading: loading, userProfile: userProfile },
       description: "管理你的帳號安全與隱私，包括密碼更新及連結社交平台。",
     },
     {
       title: "個人資料",
       component: markRaw(wevUserProfileSetting),
       icon: "id-badge",
+      props: { isLoading: loading, settingData: settingData, userProfile: userProfile },
       description: "展示你的人特質，讓旅伴盡情見識幽默獨特的個人風格！",
     },
     {
       title: "通知設定",
       component: markRaw(WebNotificationSettings),
       icon: "bell",
+      props: { isLoading: loading, settingData: settingData },
       description: "輕鬆管理通知，讓每則提醒化身旅程中滿滿驚喜與趣味！",
     },
-  ];
+  ]);
 
   const currentOption: Ref<ISettingOption | null> = ref(null);
 
-  const getSettingData = async () => {
+  const getSettingData = async (): Promise<SettingResponseDTO> => {
     try {
-      return await settingService.GetSettingData();
-    } catch {}
+      return (await settingService.GetSettingData()).data?.data || ({} as SettingResponseDTO);
+    } catch {
+      return {} as SettingResponseDTO;
+    }
   };
 
-  onMounted(() => {
-    currentOption.value = settingsOptions[0];
-    getSettingData();
+  const getUserProfile = async (): Promise<UserProfileResponseDTO> => {
+    try {
+      return (await settingService.GetUserProfile()).data?.data || ({} as UserProfileResponseDTO);
+    } catch {
+      return {} as UserProfileResponseDTO;
+    }
+  };
+
+  onMounted(async () => {
+    try {
+      const [settingResponse, profileResponse] = await Promise.all([getSettingData(), getUserProfile()]);
+
+      settingData.value = settingResponse;
+      userProfile.value = profileResponse;
+    } catch (error) {
+      console.error("加載數據失敗", error);
+    }
+  });
+
+  nextTick(() => {
+    currentOption.value = settingsOptions.value[0];
   });
 </script>
