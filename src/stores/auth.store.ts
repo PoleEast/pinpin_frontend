@@ -3,6 +3,7 @@ import type { ILogoutResult } from "@/interfaces/auth.interface";
 import { type AxiosResponse } from "axios";
 import { defineStore } from "pinia";
 import type { ApiErrorResponseDTO, ApiResponseDTO } from "pinpin_library";
+import router from "@/router";
 
 const useAuthStore = defineStore("auth", {
   state: () => ({
@@ -27,6 +28,7 @@ const useAuthStore = defineStore("auth", {
       try {
         const response: AxiosResponse<ApiResponseDTO> = await authService.Logout();
         this.UserNickname = "";
+        router.push({ name: "home" });
         return {
           message: response.data.message,
           result: true,

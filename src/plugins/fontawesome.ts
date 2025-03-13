@@ -1,5 +1,6 @@
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { faGithub } from "@fortawesome/free-brands-svg-icons";
+import { faSquare } from "@fortawesome/free-regular-svg-icons/faSquare";
 import {
   faBars,
   faBell,
@@ -16,6 +17,17 @@ import {
   faUser,
   faEnvelope,
   faWrench,
+  faCalendarDays,
+  faSignature,
+  faPhone,
+  faVenusMars,
+  faLocationDot,
+  faEarthAsia,
+  faPlus,
+  faHeart,
+  faSuitcase,
+  faLanguage,
+  faCoins,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon as _FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
@@ -36,6 +48,18 @@ library.add(
   faUser,
   faEnvelope,
   faWrench,
+  faSquare,
+  faCalendarDays,
+  faSignature,
+  faPhone,
+  faVenusMars,
+  faLocationDot,
+  faEarthAsia,
+  faPlus,
+  faHeart,
+  faSuitcase,
+  faLanguage,
+  faCoins,
 );
 
 export type FontAwesomeIcon = typeof _FontAwesomeIcon;

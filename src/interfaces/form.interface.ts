@@ -5,9 +5,35 @@ interface IRegisterFormData {
   confirmPassword: string;
 }
 
+interface IAccountSettingFormData {
+  account: string;
+  email: string;
+  password: string;
+  confirmPassword: string;
+}
+
+interface IUserProfileSettingFromData {
+  bio?: string;
+  fullname?: string;
+  nickname?: string;
+  isFullNameVisible?: boolean;
+  avatar?: string;
+  coverPhoto?: string;
+  birthday?: Date;
+  gender?: number;
+  phone?: string;
+  address?: string;
+  originCountry?: number;
+  visited_countries?: number[];
+  language?: number[];
+  currency?: number[];
+  travelInterests?: number[];
+  travelStyles?: number[];
+}
+
 interface ITextField {
   label?: string;
-  model?: unknown;
+  model: string;
   required?: boolean;
   rule?: ((v: string) => boolean | string)[];
   icon?: string;
@@ -22,4 +48,20 @@ interface IFromBlock {
   title: string;
   textFields?: ITextField[];
 }
-export type { IRegisterFormData, ITextField, IFromBlock };
+
+interface ILabel {
+  text: string;
+}
+interface IChip {
+  text: string;
+  color?: string;
+  icon?: string;
+}
+
+interface IInputChips {
+  icon: string;
+  label: ILabel;
+  chips: IChip[];
+}
+
+export type { IRegisterFormData, ITextField, IFromBlock, IAccountSettingFormData, IUserProfileSettingFromData, IInputChips, IChip, ILabel };

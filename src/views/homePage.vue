@@ -1,41 +1,18 @@
 <template>
-  <v-container
-    class="pa-0 ma-0 home-container"
-    fluid>
+  <v-container class="pa-0 ma-0 home-container" fluid>
     <div class="background-slide"></div>
 
     <!-- 中央區域 -->
     <div class="content-container">
       <!-- Logo -->
-      <img
-        src="../assets/home/homeMainLogo.png"
-        alt="PinPin旅圖Logo"
-        class="logo-image" />
+      <img src="../assets/home/homeMainLogo.png" alt="PinPin旅圖Logo" class="logo-image" />
       <!-- 按鈕區域 -->
       <div class="buttons-container">
-        <v-btn
-          :to="{ name: 'schdule' }"
-          rounded="xl"
-          color="success"
-          variant="text"
-          :ripple="false"
-          class="action-button">
-          <img
-            src="../assets/home/homeMainSchdule.png"
-            alt="行程規劃"
-            class="button-image" />
+        <v-btn :to="{ name: 'schdule' }" rounded="xl" color="success" variant="text" :ripple="false" class="action-button">
+          <img src="../assets/home/homeMainSchdule.png" alt="行程規劃" class="button-image" />
         </v-btn>
-        <v-btn
-          :to="{ name: 'search' }"
-          rounded="xl"
-          color="success"
-          variant="text"
-          :ripple="false"
-          class="action-button">
-          <img
-            src="../assets/home/homeMainSearch.png"
-            alt="搜尋景點"
-            class="button-image" />
+        <v-btn :to="{ name: 'search' }" rounded="xl" color="success" variant="text" :ripple="false" class="action-button">
+          <img src="../assets/home/homeMainSearch.png" alt="搜尋景點" class="button-image" />
         </v-btn>
       </div>
     </div>

@@ -1,14 +1,10 @@
 <template>
-  <v-dialog
-    v-model="showDialog"
-    max-width="460px">
+  <v-dialog v-model="showDialog" max-width="460px">
     <!-- Dialog區塊 -->
     <v-card class="rounded-xl">
       <v-card-title class="text-center pt-8">
         <span class="text-h4 font-weight-bold text-primary d-flex align-center justify-center">
-          <font-awesome-icon
-            icon="right-to-bracket"
-            class="mr-3" />
+          <font-awesome-icon icon="right-to-bracket" class="mr-3" />
           {{ isLogin ? "登入" : "加入" }} PinPin
         </span>
       </v-card-title>
@@ -20,23 +16,10 @@
       <v-card-text>
         <!-- 登入表單 -->
         <!-- TODO:可以重構為使用component和keepAlive來作為切換手段 -->
-        <v-form
-          v-if="isLogin"
-          @submit.prevent="login"
-          v-model="valid"
-          ref="loginForm">
+        <v-form v-if="isLogin" @submit.prevent="login" v-model="valid" ref="loginForm">
           <v-container>
-            <v-text-field
-              v-model="loginFormData.account"
-              :rules="accountRules"
-              :error-messages="loginErrorMessage"
-              label="帳號"
-              required
-              class="mb-4"
-              ><template v-slot:prepend
-                ><font-awesome-icon
-                  size="2x"
-                  icon="person-walking-luggage" /></template
+            <v-text-field v-model="loginFormData.account" :rules="accountRules" :error-messages="loginErrorMessage" label="帳號" required class="mb-4"
+              ><template v-slot:prepend><font-awesome-icon size="2x" icon="person-walking-luggage" /></template
             ></v-text-field>
             <v-text-field
               v-model="loginFormData.password"
@@ -46,27 +29,14 @@
               required
               :type="showPassword ? 'text' : 'password'"
               class="mb-4"
-              ><template v-slot:prepend
-                ><font-awesome-icon
-                  icon="key"
-                  size="2x"
-                  class="mx-1" /></template
+              ><template v-slot:prepend><font-awesome-icon icon="key" size="2x" class="mx-1" /></template
               ><template v-slot:append-inner
                 ><font-awesome-icon
                   :icon="showPassword ? 'eye' : 'eye-slash'"
                   @click="showPassword = !showPassword"
                   class="mx-1 cursor-pointer" /></template
             ></v-text-field>
-            <v-btn
-              color="primary"
-              size="large"
-              block
-              :loading="loading"
-              @click="login"
-              class="mb-4"
-              elevation="1">
-              登入
-            </v-btn>
+            <v-btn color="primary" size="large" block :loading="loading" type="submit" class="mb-4" elevation="1"> 登入 </v-btn>
             <div class="d-flex align-center mb-4">
               <v-divider></v-divider>
               <span class="mx-3 text-grey">或</span>
@@ -75,21 +45,12 @@
 
             <div class="text-center justify-center align-center d-flex">
               <span class="text-primary">竟然還沒加入我們？</span>
-              <v-btn
-                color="secondary"
-                class="px-3 mx-2"
-                @click="isLogin = false">
-                立即加入!!
-              </v-btn>
+              <v-btn color="secondary" class="px-3 mx-2" @click="isLogin = false"> 立即加入!! </v-btn>
             </div>
           </v-container>
         </v-form>
         <!-- 註冊表單 -->
-        <v-form
-          v-else
-          @submit.prevent="register"
-          v-model="valid"
-          ref="registerForm">
+        <v-form v-else @submit.prevent="register" v-model="valid" ref="registerForm">
           <v-container>
             <v-text-field
               v-model="registerFormData.account"
@@ -98,23 +59,10 @@
               required
               class="mb-4"
               :error-messages="registerErrorMessage">
-              <template v-slot:prepend
-                ><font-awesome-icon
-                  size="2x"
-                  icon="person-walking-luggage"
-              /></template>
+              <template v-slot:prepend><font-awesome-icon size="2x" icon="person-walking-luggage" /></template>
             </v-text-field>
-            <v-text-field
-              v-model="registerFormData.nickname"
-              label="暱稱"
-              :rules="nicknameRules"
-              required
-              class="mb-4"
-              ><template v-slot:prepend
-                ><font-awesome-icon
-                  size="2x"
-                  icon="id-card-clip"
-              /></template>
+            <v-text-field v-model="registerFormData.nickname" label="暱稱" :rules="nicknameRules" required class="mb-4"
+              ><template v-slot:prepend><font-awesome-icon size="2x" icon="id-card-clip" /></template>
             </v-text-field>
             <v-text-field
               :rules="passwordRules"
@@ -122,16 +70,9 @@
               label="密碼"
               :type="showPassword ? 'text' : 'password'"
               class="mb-4"
-              ><template v-slot:prepend
-                ><font-awesome-icon
-                  icon="key"
-                  size="2x"
-                  class="mx-1" /></template
+              ><template v-slot:prepend><font-awesome-icon icon="key" size="2x" class="mx-1" /></template
               ><template v-slot:append-inner
-                ><font-awesome-icon
-                  :icon="showPassword ? 'eye' : 'eye-slash'"
-                  @click="showPassword = !showPassword"
-                  class="mx-1 cursor-pointer"
+                ><font-awesome-icon :icon="showPassword ? 'eye' : 'eye-slash'" @click="showPassword = !showPassword" class="mx-1 cursor-pointer"
               /></template>
             </v-text-field>
             <v-text-field
@@ -140,22 +81,9 @@
               :rules="confirmPasswordRules"
               :type="showPassword ? 'text' : 'password'"
               class="mb-4"
-              ><template v-slot:prepend
-                ><font-awesome-icon
-                  icon="square-check"
-                  size="2x"
-                  class="mx-1" /></template
+              ><template v-slot:prepend><font-awesome-icon icon="square-check" size="2x" class="mx-1" /></template
             ></v-text-field>
-            <v-btn
-              color="primary"
-              size="large"
-              block
-              :loading="loading"
-              class="mb-4"
-              elevation="1"
-              type="submit">
-              加入
-            </v-btn>
+            <v-btn color="primary" size="large" block :loading="loading" class="mb-4" elevation="1" type="submit"> 加入 </v-btn>
             <div class="d-flex align-center mb-4">
               <v-divider></v-divider>
               <span class="mx-3 text-grey">或</span>
@@ -164,12 +92,7 @@
 
             <div class="text-center justify-center align-center d-flex">
               <span class="text-primary">What!?已經有帳號了？</span>
-              <v-btn
-                color="secondary"
-                class="px-3 mx-2"
-                @click="isLogin = true">
-                立即登入!!
-              </v-btn>
+              <v-btn color="secondary" class="px-3 mx-2" @click="isLogin = true"> 立即登入!! </v-btn>
             </div>
           </v-container>
         </v-form>
@@ -184,7 +107,7 @@
   import type { IRegisterFormData } from "@/interfaces/form.interface";
   import { HttpStatusCode } from "axios";
   import { REGISTER_REQUSER_VALIDATION, type ApiErrorResponseDTO, type LoginRequestDTO, type RegisterRequestDTO } from "pinpin_library";
-  import { ref, useTemplateRef, watch } from "vue";
+  import { reactive, ref, useTemplateRef, watch } from "vue";
   import type { VForm } from "vuetify/components";
   import type { Isnackbar } from "@/interfaces/snackbar.interface";
 
@@ -209,14 +132,14 @@
     },
   });
 
-  const registerFormData = ref<IRegisterFormData>({
+  const registerFormData = reactive<IRegisterFormData>({
     account: "",
     nickname: "",
     password: "",
     confirmPassword: "",
   });
 
-  const loginFormData = ref<LoginRequestDTO>({
+  const loginFormData = reactive<LoginRequestDTO>({
     account: "",
     password: "",
   });
@@ -243,21 +166,18 @@
     (v: string) =>
       v.length <= REGISTER_REQUSER_VALIDATION.NICKNAME.MAX_LENGTH || `暱稱最多只能${REGISTER_REQUSER_VALIDATION.NICKNAME.MAX_LENGTH}個字`,
   ];
-  const confirmPasswordRules = [
-    (v: string) => v.length > 0 || "請輸入確認密碼",
-    (v: string) => v === registerFormData.value.password || "密碼不相同",
-  ];
+  const confirmPasswordRules = [(v: string) => v.length > 0 || "請輸入確認密碼", (v: string) => v === registerFormData.password || "密碼不相同"];
 
   const emit = defineEmits<{ showSnackbar: [snackbar: Isnackbar] }>();
 
   //當dialog切換時清空輸入欄位
   watch(isLogin, () => {
-    registerFormData.value.account = "";
-    registerFormData.value.nickname = "";
-    registerFormData.value.password = "";
-    registerFormData.value.confirmPassword = "";
-    loginFormData.value.account = "";
-    loginFormData.value.password = "";
+    registerFormData.account = "";
+    registerFormData.nickname = "";
+    registerFormData.password = "";
+    registerFormData.confirmPassword = "";
+    loginFormData.account = "";
+    loginFormData.password = "";
     registerErrorMessage.value = "";
     loginErrorMessage.value = "";
   });
@@ -274,8 +194,8 @@
     loading.value = true;
     try {
       const loginRequest: LoginRequestDTO = {
-        account: loginFormData.value.account,
-        password: loginFormData.value.password,
+        account: loginFormData.account,
+        password: loginFormData.password,
       };
 
       const response = await authService.Login(loginRequest);
@@ -319,9 +239,9 @@
 
     try {
       const registerRequest: RegisterRequestDTO = {
-        account: registerFormData.value.account,
-        nickname: registerFormData.value.nickname,
-        password: registerFormData.value.password,
+        account: registerFormData.account,
+        nickname: registerFormData.nickname,
+        password: registerFormData.password,
       };
 
       const response = await authService.Register(registerRequest);
