@@ -13,6 +13,7 @@ interface IAccountSettingFormData {
 }
 
 interface IUserProfileSettingFromData {
+  motto?: string;
   bio?: string;
   fullname?: string;
   nickname?: string;
@@ -24,7 +25,7 @@ interface IUserProfileSettingFromData {
   phone?: string;
   address?: string;
   originCountry?: number;
-  visited_countries?: number[];
+  visitedCountries?: number[];
   language?: number[];
   currency?: number[];
   travelInterests?: number[];

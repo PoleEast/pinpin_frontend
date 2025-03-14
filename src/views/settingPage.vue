@@ -1,7 +1,8 @@
 <template>
-  <v-container class="mt-4">
-    <v-row justify="center">
-      <v-col cols="3">
+  <v-container fluid class="mt-4">
+    <v-row justify="center" no-gutters>
+      <v-spacer />
+      <v-col cols="2">
         <v-list>
           <v-list-subheader>設定</v-list-subheader>
           <v-list-item
@@ -17,8 +18,8 @@
           </v-list-item>
         </v-list>
       </v-col>
-      <v-col :cols="$vuetify.display.mdAndUp ? 6 : 9">
-        <v-card class="mt-4 pa-4" elevation="5">
+      <v-col cols="5">
+        <v-card class="mt-4 pa-4" elevation="3">
           <v-card-title class="text-h5 font-weight-bold"
             ><font-awesome-icon v-if="currentOption" :icon="currentOption?.icon" size="lg" class="me-3" />{{ currentOption?.title }}</v-card-title
           >
@@ -31,6 +32,7 @@
           </v-expand-transition>
         </v-card>
       </v-col>
+      <v-spacer />
     </v-row>
   </v-container>
 </template>
