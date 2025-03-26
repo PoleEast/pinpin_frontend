@@ -65,12 +65,35 @@
                 <div>
                   <v-label :text="inputChip.label.text" class="mb-2 d-block" />
                   <div class="d-flex flex-wrap gap-2">
-                    <v-chip v-for="(chip, index) in inputChip.chips" :text="chip.text" :key="index" closable
-                      ><template v-slot:prepend> <font-awesome-icon :icon="chip.icon" fixed-width class="text-primary mr-1" /> </template
-                    ></v-chip>
-                    <v-chip text="新增" class="mr-1">
-                      <template v-slot:prepend> <font-awesome-icon icon="plus" class="text-primary mr-1" /></template>
-                    </v-chip>
+                    <v-chip-group column>
+                      <v-chip
+                        v-for="(chip, index) in inputChip.choosechips"
+                        v-ripple
+                        :text="chip.text"
+                        :key="index"
+                        variant="tonal"
+                        :close-icon="CloseIcon"
+                        closable
+                        @click:close="removeUserProfile(chip, inputChip.type)"
+                        class="mr-1 mb-1 cursor-default"
+                        ><template v-slot:prepend> <webIconWrapper v-if="chip.icon" :chip="chip" class="text-primary mr-1" /></template
+                      ></v-chip>
+                      <v-chip variant="plain" class="mr-1" v-if="inputChip.nochooseData.length > 0">
+                        <template v-slot:append> <font-awesome-icon icon="plus" class="text-primary mr-1" /></template>
+                        <v-menu activator="parent" transition="scale-transition" offset-y location="right" max-height="400px" min-height="100px">
+                          <v-list density="compact" rounded>
+                            <v-list-item
+                              v-for="(chip, index) in inputChip.nochooseData"
+                              :key="index"
+                              v-ripple
+                              @click="addUserProfile(chip, inputChip.type)">
+                              <template v-slot:prepend> <webIconWrapper v-if="chip.icon" :chip="chip" class="text-primary mr-1" /></template>
+                              <v-list-item-title>{{ chip.text }}</v-list-item-title>
+                            </v-list-item>
+                          </v-list>
+                        </v-menu>
+                      </v-chip>
+                    </v-chip-group>
                   </div>
                 </div>
               </template>
@@ -90,9 +113,12 @@
 
 <script lang="ts" setup>
   import type { IChip, IInputChips, IUserProfileSettingFromData } from "@/interfaces/form.interface";
-  import { RadioFalseIcon, RadioTureIcon } from "@/utils/functionalComponent.utils";
+  import { RadioFalseIcon, RadioTureIcon, CloseIcon } from "@/utils/functionalComponent.utils";
   import type { SettingResponseDTO, UserProfileResponseDTO } from "pinpin_library";
-  import { computed, onMounted, reactive, ref, watch } from "vue";
+  import { computed, onMounted, reactive, ref, unref, watch } from "vue";
+  import webIconWrapper from "../common/webIconWrapper .vue";
+
+  //#region 變數
 
   const props = defineProps<{
     userProfile: UserProfileResponseDTO;
@@ -116,18 +142,24 @@
     address: "",
     originCountry: undefined,
     visitedCountries: [],
-    language: [],
-    currency: [],
+    languages: [],
+    currencies: [],
     travelInterests: [],
     travelStyles: [],
   });
+
+  //#endregion
+
+  //#region 計算屬性
 
   const visitedCountriesChipsData = computed<IChip[]>(() => {
     return props.settingData.country
       .filter((country) => userProfileSettingFromData.visitedCountries?.includes(country.id))
       .map<IChip>((country) => ({
-        text: country.english_name,
+        id: country.id,
+        text: country.local_name,
         icon: country.icon,
+        icon_type: country.icon_type,
       }));
   });
 
@@ -135,8 +167,10 @@
     return props.settingData.travelInterest
       .filter((interest) => userProfileSettingFromData.travelInterests?.includes(interest.id))
       .map<IChip>((interest) => ({
+        id: interest.id,
         text: interest.name,
         icon: interest.icon,
+        icon_type: interest.icon_type,
       }));
   });
 
@@ -144,71 +178,153 @@
     return props.settingData.travelStyle
       .filter((style) => userProfileSettingFromData.travelStyles?.includes(style.id))
       .map<IChip>((style) => ({
+        id: style.id,
         text: style.name,
         icon: style.icon,
+        icon_type: style.icon_type,
       }));
   });
 
   const languageChipsData = computed<IChip[]>(() => {
     return props.settingData.language
-      .filter((language) => userProfileSettingFromData.language?.includes(language.id))
+      .filter((language) => userProfileSettingFromData.languages?.includes(language.id))
       .map<IChip>((language) => ({
+        id: language.id,
         text: language.local_name,
       }));
   });
 
   const currencyChipsData = computed<IChip[]>(() => {
     return props.settingData.currency
-      .filter((currency) => userProfileSettingFromData.currency?.includes(currency.id))
+      .filter((currency) => userProfileSettingFromData.currencies?.includes(currency.id))
       .map<IChip>((currency) => ({
+        id: currency.id,
         text: currency.code,
-        icon: "coins",
+        icon: currency.icon,
+        icon_type: currency.icon_type,
       }));
   });
 
-  const inputChips = reactive<IInputChips[]>([
+  const inputChips = computed((): IInputChips[] => [
     {
       icon: "earth-asia",
       label: {
         text: "走過的國家",
       },
-      chips: visitedCountriesChipsData.value,
+      choosechips: unref(visitedCountriesChipsData),
+      nochooseData: unref(noChooseCountry),
+      type: "country",
     },
     {
       icon: "heart",
       label: {
         text: "偏好的旅遊方式",
       },
-      chips: travelInterestsChipsData.value,
+      choosechips: unref(travelInterestsChipsData),
+      nochooseData: unref(noChooseTravelInterest),
+      type: "travelInterest",
     },
     {
       icon: "suitcase",
       label: {
         text: "旅行的風格",
       },
-      chips: travelStylesChipsData.value,
+      choosechips: unref(travelStylesChipsData),
+      nochooseData: unref(noChooseTravelStyle),
+      type: "travelStyle",
     },
     {
       icon: "language",
       label: {
         text: "使用的語言",
       },
-      chips: languageChipsData.value,
+      choosechips: unref(languageChipsData),
+      nochooseData: unref(noChooseLanguage),
+      type: "language",
     },
     {
       icon: "coins",
       label: {
         text: "使用的貨幣",
       },
-      chips: currencyChipsData.value,
+      choosechips: unref(currencyChipsData),
+      nochooseData: unref(noChooseCurrency),
+      type: "currency",
     },
   ]);
 
-  const resetForm = () => {
-    console.log(props.userProfile);
-    console.log(props.userProfile.travelInterests);
-    console.log(userProfileSettingFromData);
+  const noChooseCountry = computed<IChip[]>(() => {
+    return props.settingData.country
+      .filter((country) => !userProfileSettingFromData.visitedCountries?.includes(country.id))
+      .map<IChip>((country) => ({
+        id: country.id,
+        text: country.local_name,
+        icon: country.icon,
+        icon_type: country.icon_type,
+      }));
+  });
 
+  const noChooseTravelInterest = computed<IChip[]>(() => {
+    return props.settingData.travelInterest
+      .filter((interest) => !userProfileSettingFromData.travelInterests?.includes(interest.id))
+      .map<IChip>((interest) => ({
+        id: interest.id,
+        text: interest.name,
+        icon: interest.icon,
+        icon_type: interest.icon_type,
+      }));
+  });
+
+  const noChooseTravelStyle = computed<IChip[]>(() => {
+    return props.settingData.travelStyle
+      .filter((style) => !userProfileSettingFromData.travelStyles?.includes(style.id))
+      .map<IChip>((style) => ({
+        id: style.id,
+        text: style.name,
+        icon: style.icon,
+        icon_type: style.icon_type,
+      }));
+  });
+
+  const noChooseLanguage = computed<IChip[]>(() => {
+    return props.settingData.language
+      .filter((language) => !userProfileSettingFromData.languages?.includes(language.id))
+      .map<IChip>((language) => ({
+        id: language.id,
+        text: language.local_name,
+      }));
+  });
+
+  const noChooseCurrency = computed<IChip[]>(() => {
+    return props.settingData.currency
+      .filter((currency) => !userProfileSettingFromData.currencies?.includes(currency.id))
+      .map<IChip>((currency) => ({
+        id: currency.id,
+        text: currency.code,
+        icon: currency.icon,
+        icon_type: currency.icon_type,
+      }));
+  });
+
+  watch(
+    () => props.userProfile,
+    () => {
+      resetForm();
+    },
+  );
+
+  //#endregion
+
+  //#region 函數
+
+  /**
+   * 重置用戶個人資料表單數據。
+   *
+   * 此函數將用戶個人資料表單的數據重置為當前屬性中提供的用戶資料。
+   * 它會將 `userProfileSettingFromData` 的每個屬性設置為 `props.userProfile` 中對應的值。
+   */
+
+  const resetForm = () => {
     userProfileSettingFromData.motto = props.userProfile.motto;
     userProfileSettingFromData.bio = props.userProfile.bio;
     userProfileSettingFromData.fullname = props.userProfile.fullname;
@@ -224,16 +340,90 @@
     userProfileSettingFromData.visitedCountries = props.userProfile.visitedCountries;
     userProfileSettingFromData.travelInterests = props.userProfile.travelInterests;
     userProfileSettingFromData.travelStyles = props.userProfile.travelStyles;
-    userProfileSettingFromData.language = props.userProfile.language;
-    userProfileSettingFromData.currency = props.userProfile.currency;
+    userProfileSettingFromData.languages = props.userProfile.languages;
+    userProfileSettingFromData.currencies = props.userProfile.currencies;
   };
 
-  watch(
-    () => props.userProfile,
-    () => {
-      resetForm();
-    },
-  );
+  /**
+   * 將一個Chip加入IInputChips的choosechips中。
+   *
+   * @param {IChip} chip - 要加入的Chip。
+   * @param {IInputChips} inputChip - IInputChips物件。
+   */
+  const addUserProfile = (chip: IChip, inputChipType: string) => {
+    switch (inputChipType) {
+      case "country":
+        if (chip.id !== undefined) {
+          userProfileSettingFromData.visitedCountries?.push(chip.id);
+        }
+        break;
+      case "language":
+        if (chip.id !== undefined) {
+          userProfileSettingFromData.languages?.push(chip.id);
+        }
+        break;
+      case "country":
+        if (chip.id !== undefined) {
+          userProfileSettingFromData.visitedCountries?.push(chip.id);
+        }
+        break;
+      case "currency":
+        if (chip.id !== undefined) {
+          userProfileSettingFromData.currencies?.push(chip.id);
+        }
+        break;
+      case "travelInterest":
+        if (chip.id !== undefined) {
+          userProfileSettingFromData.travelInterests?.push(chip.id);
+        }
+        break;
+      case "travelStyle":
+        if (chip.id !== undefined) {
+          userProfileSettingFromData.travelStyles?.push(chip.id);
+        }
+      default:
+        break;
+    }
+  };
+
+  /**
+   * 刪除用戶個人資料中的一個選擇。
+   *
+   * @param {IChip} chip - 要刪除的Chip。
+   * @param {IInputChips} inputChip - IInputChips物件。
+   */
+  const removeUserProfile = (chip: IChip, inputChipType: string) => {
+    switch (inputChipType) {
+      case "country":
+        if (chip.id !== undefined) {
+          userProfileSettingFromData.visitedCountries = userProfileSettingFromData.visitedCountries?.filter((countryId) => countryId !== chip.id);
+        }
+        break;
+      case "language":
+        if (chip.id !== undefined) {
+          userProfileSettingFromData.languages = userProfileSettingFromData.languages?.filter((languageId) => languageId !== chip.id);
+        }
+        break;
+      case "currency":
+        if (chip.id !== undefined) {
+          userProfileSettingFromData.currencies = userProfileSettingFromData.currencies?.filter((currencyId) => currencyId !== chip.id);
+        }
+        break;
+      case "travelInterest":
+        if (chip.id !== undefined) {
+          userProfileSettingFromData.travelInterests = userProfileSettingFromData.travelInterests?.filter((interestId) => interestId !== chip.id);
+        }
+        break;
+      case "travelStyle":
+        if (chip.id !== undefined) {
+          userProfileSettingFromData.travelStyles = userProfileSettingFromData.travelStyles?.filter((styleId) => styleId !== chip.id);
+        }
+      default:
+        break;
+    }
+  };
+
+  //#endregion
 
   onMounted(() => {
     resetForm();

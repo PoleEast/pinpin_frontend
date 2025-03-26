@@ -9,4 +9,8 @@ const RadioTureIcon: FunctionalComponent = () => {
   return h(FontAwesomeIcon, { icon: "square-check" });
 };
 
-export { RadioFalseIcon, RadioTureIcon };
+const CloseIcon: FunctionalComponent = () => {
+  return h(FontAwesomeIcon, { icon: "xmark" });
+};
+
+export { RadioFalseIcon, RadioTureIcon, CloseIcon };

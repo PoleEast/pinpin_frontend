@@ -4,7 +4,8 @@ import { createPinia } from "pinia";
 import vuetify from "./vuetify";
 import FontAwesomeIcon from "./fontawesome";
 import "./axios";
+import iconify from "./iconify";
 
 export function registerPlugins(app: App) {
-  app.use(createPinia()).use(router).use(vuetify).component("font-awesome-icon", FontAwesomeIcon);
+  app.use(createPinia()).use(router).use(vuetify).use(iconify).component("font-awesome-icon", FontAwesomeIcon);
 }

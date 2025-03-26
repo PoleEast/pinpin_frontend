@@ -26,8 +26,8 @@ interface IUserProfileSettingFromData {
   address?: string;
   originCountry?: number;
   visitedCountries?: number[];
-  language?: number[];
-  currency?: number[];
+  languages?: number[];
+  currencies?: number[];
   travelInterests?: number[];
   travelStyles?: number[];
 }
@@ -54,15 +54,19 @@ interface ILabel {
   text: string;
 }
 interface IChip {
+  id?: number;
   text: string;
   color?: string;
   icon?: string;
+  icon_type?: string;
 }
 
 interface IInputChips {
   icon: string;
   label: ILabel;
-  chips: IChip[];
+  choosechips: IChip[];
+  nochooseData: IChip[];
+  type: "country" | "language" | "currency" | "travelInterest" | "travelStyle";
 }
 
 export type { IRegisterFormData, ITextField, IFromBlock, IAccountSettingFormData, IUserProfileSettingFromData, IInputChips, IChip, ILabel };

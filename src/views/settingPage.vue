@@ -117,6 +117,12 @@
       };
       snackbarStore.PushSnackbar(snackbar);
 
+      if (userProfile.value && userProfile.value.user) {
+        userProfile.value.user.email = response.data?.data?.email;
+      }
+
+      //TODO : 收集全局意料外錯誤處理
+
       return response.data?.data || ({} as AccountRequestDTO);
     } catch {
       return {} as IAccountSettingFormData;
