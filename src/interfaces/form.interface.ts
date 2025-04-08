@@ -16,7 +16,7 @@ interface IUserProfileSettingFromData {
   motto?: string;
   bio?: string;
   fullname?: string;
-  nickname?: string;
+  nickname: string;
   isFullNameVisible?: boolean;
   avatar?: string;
   coverPhoto?: string;
@@ -66,7 +66,7 @@ interface IInputChips {
   label: ILabel;
   choosechips: IChip[];
   nochooseData: IChip[];
-  type: "country" | "language" | "currency" | "travelInterest" | "travelStyle";
+  type: "visitedCountries" | "languages" | "currencies" | "travelInterests" | "travelStyles";
 }
 
 export type { IRegisterFormData, ITextField, IFromBlock, IAccountSettingFormData, IUserProfileSettingFromData, IInputChips, IChip, ILabel };

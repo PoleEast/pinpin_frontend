@@ -78,6 +78,10 @@ import {
   faMapMarkedAlt,
   faRandom,
   faWineGlassAlt,
+  faStreetView,
+  faCaretDown,
+  faCaretLeft,
+  faCaretRight,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon as _FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
@@ -160,6 +164,10 @@ library.add(
   faMapMarkedAlt,
   faRandom,
   faWineGlassAlt,
+  faStreetView,
+  faCaretDown,
+  faCaretLeft,
+  faCaretRight,
 );
 
 export type FontAwesomeIcon = typeof _FontAwesomeIcon;

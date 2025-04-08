@@ -50,7 +50,8 @@
 </template>
 <script lang="ts" setup>
   import type { IAccountSettingFormData, IFromBlock } from "@/interfaces/form.interface";
-  import { REGISTER_REQUSER_VALIDATION, USERPROFILE_REQUSER_VALIDATION, type UserProfileResponseDTO } from "pinpin_library";
+  import { ValidationService } from "@/services/validation.service";
+  import { type UserProfileResponseDTO } from "pinpin_library";
   import { computed, onMounted, reactive, ref, useTemplateRef, watch, type Ref } from "vue";
   import type { VForm } from "vuetify/components";
 
@@ -70,26 +71,10 @@
     confirmPassword: "",
   });
   const show = ref(false);
+  const rules = ValidationService.createRules();
 
   const createAt: Ref<Date | null> = ref(null);
-  const passwordRules = [
-    (v: string) =>
-      !v || v.length >= REGISTER_REQUSER_VALIDATION.PASSWORD.MIN_LENGTH || `密碼至少需要${REGISTER_REQUSER_VALIDATION.PASSWORD.MIN_LENGTH}個字`,
-
-    (v: string) =>
-      !v || v.length <= REGISTER_REQUSER_VALIDATION.PASSWORD.MAX_LENGTH || `密碼最多只能${REGISTER_REQUSER_VALIDATION.PASSWORD.MAX_LENGTH}個字`,
-
-    (v: string) => !v || v.match(REGISTER_REQUSER_VALIDATION.PASSWORD.PATTERN) !== null || REGISTER_REQUSER_VALIDATION.PASSWORD.PATTERN_MESSAGE,
-  ];
   const confirmPasswordRules = [(v: string) => v === accountSettingsFormData.password || "密碼不一致"];
-  const emailRules = [
-    (v: string) => !v || v?.length > 0 || "請輸入電子郵件",
-    (v: string) =>
-      !v || v?.length >= USERPROFILE_REQUSER_VALIDATION.EMAIL.MIN_LENGTH || `電子郵件至少需要${USERPROFILE_REQUSER_VALIDATION.EMAIL.MIN_LENGTH}個字`,
-    (v: string) =>
-      !v || v?.length <= USERPROFILE_REQUSER_VALIDATION.EMAIL.MAX_LENGTH || `電子郵件最多只能${USERPROFILE_REQUSER_VALIDATION.EMAIL.MAX_LENGTH}個字`,
-    (v: string) => !v || v?.match(USERPROFILE_REQUSER_VALIDATION.EMAIL.PATTERN) !== null || USERPROFILE_REQUSER_VALIDATION.EMAIL.PATTERN_MESSAGE,
-  ];
   const inputList: IFromBlock[] = [
     {
       title: "帳號資訊",
@@ -107,7 +92,7 @@
           label: "電子郵件",
           model: "email",
           type: "email",
-          rule: emailRules,
+          rule: rules.email,
           placeholder: "superman@gmail.com",
           icon: "envelope",
         },
@@ -120,7 +105,7 @@
           label: "新密碼",
           model: "password",
           type: "password",
-          rule: passwordRules,
+          rule: rules.password,
           icon: "key",
         },
         {

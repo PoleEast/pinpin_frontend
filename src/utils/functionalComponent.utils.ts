@@ -13,4 +13,16 @@ const CloseIcon: FunctionalComponent = () => {
   return h(FontAwesomeIcon, { icon: "xmark" });
 };
 
-export { RadioFalseIcon, RadioTureIcon, CloseIcon };
+const InvertedTriangleIcon: FunctionalComponent = () => {
+  return h(FontAwesomeIcon, { icon: "caret-down" });
+};
+
+const LeftTriangleIcon: FunctionalComponent = () => {
+  return h(FontAwesomeIcon, { icon: "caret-left" });
+};
+
+const RightTriangleIcon: FunctionalComponent = () => {
+  return h(FontAwesomeIcon, { icon: "caret-right" });
+};
+
+export { RadioFalseIcon, RadioTureIcon, CloseIcon, InvertedTriangleIcon, LeftTriangleIcon, RightTriangleIcon };

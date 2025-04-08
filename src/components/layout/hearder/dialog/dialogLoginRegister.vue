@@ -18,12 +18,18 @@
         <!-- TODO:可以重構為使用component和keepAlive來作為切換手段 -->
         <v-form v-if="isLogin" @submit.prevent="login" v-model="valid" ref="loginForm">
           <v-container>
-            <v-text-field v-model="loginFormData.account" :rules="accountRules" :error-messages="loginErrorMessage" label="帳號" required class="mb-4"
+            <v-text-field
+              v-model="loginFormData.account"
+              :rules="rules.account"
+              :error-messages="loginErrorMessage"
+              label="帳號"
+              required
+              class="mb-4"
               ><template v-slot:prepend><font-awesome-icon size="2x" icon="person-walking-luggage" /></template
             ></v-text-field>
             <v-text-field
               v-model="loginFormData.password"
-              :rules="passwordRules"
+              :rules="rules.password"
               :error-messages="loginErrorMessage"
               label="密碼"
               required
@@ -55,17 +61,17 @@
             <v-text-field
               v-model="registerFormData.account"
               label="帳號"
-              :rules="accountRules"
+              :rules="rules.account"
               required
               class="mb-4"
               :error-messages="registerErrorMessage">
               <template v-slot:prepend><font-awesome-icon size="2x" icon="person-walking-luggage" /></template>
             </v-text-field>
-            <v-text-field v-model="registerFormData.nickname" label="暱稱" :rules="nicknameRules" required class="mb-4"
+            <v-text-field v-model="registerFormData.nickname" label="暱稱" :rules="rules.nickname" required class="mb-4"
               ><template v-slot:prepend><font-awesome-icon size="2x" icon="id-card-clip" /></template>
             </v-text-field>
             <v-text-field
-              :rules="passwordRules"
+              :rules="rules.password"
               v-model="registerFormData.password"
               label="密碼"
               :type="showPassword ? 'text' : 'password'"
@@ -106,10 +112,11 @@
   import { useAuthStore } from "@/stores/auth.store";
   import type { IRegisterFormData } from "@/interfaces/form.interface";
   import { HttpStatusCode } from "axios";
-  import { REGISTER_REQUSER_VALIDATION, type ApiErrorResponseDTO, type LoginRequestDTO, type RegisterRequestDTO } from "pinpin_library";
+  import { type ApiErrorResponseDTO, type LoginRequestDTO, type RegisterRequestDTO } from "pinpin_library";
   import { reactive, ref, useTemplateRef, watch } from "vue";
   import type { VForm } from "vuetify/components";
   import type { Isnackbar } from "@/interfaces/snackbar.interface";
+  import { ValidationService } from "@/services/validation.service";
 
   //變數
   const registerFormRef = useTemplateRef<VForm>("registerForm");
@@ -144,30 +151,12 @@
     password: "",
   });
 
-  //驗證規則
-  const accountRules = [
-    (v: string) => v.length > 0 || "請輸入帳號",
-    (v: string) => v.length >= REGISTER_REQUSER_VALIDATION.ACCOUNT.MIN_LENGTH || `帳號至少需要${REGISTER_REQUSER_VALIDATION.ACCOUNT.MIN_LENGTH}個字`,
-    (v: string) => v.length <= REGISTER_REQUSER_VALIDATION.ACCOUNT.MAX_LENGTH || `帳號最多只能${REGISTER_REQUSER_VALIDATION.ACCOUNT.MAX_LENGTH}個字`,
-    (v: string) => v.match(REGISTER_REQUSER_VALIDATION.ACCOUNT.PATTERN) !== null || REGISTER_REQUSER_VALIDATION.ACCOUNT.PATTERN_MESSAGE,
-  ];
-  const passwordRules = [
-    (v: string) => v.length > 0 || "請輸入密碼",
-    (v: string) =>
-      v.length >= REGISTER_REQUSER_VALIDATION.PASSWORD.MIN_LENGTH || `密碼至少需要${REGISTER_REQUSER_VALIDATION.PASSWORD.MIN_LENGTH}個字`,
-    (v: string) =>
-      v.length <= REGISTER_REQUSER_VALIDATION.PASSWORD.MAX_LENGTH || `密碼最多只能${REGISTER_REQUSER_VALIDATION.PASSWORD.MAX_LENGTH}個字`,
-    (v: string) => v.match(REGISTER_REQUSER_VALIDATION.PASSWORD.PATTERN) !== null || REGISTER_REQUSER_VALIDATION.PASSWORD.PATTERN_MESSAGE,
-  ];
-  const nicknameRules = [
-    (v: string) => v.length > 0 || "請輸入暱稱",
-    (v: string) =>
-      v.length >= REGISTER_REQUSER_VALIDATION.NICKNAME.MIN_LENGTH || `暱稱至少需要${REGISTER_REQUSER_VALIDATION.NICKNAME.MIN_LENGTH}個字`,
-    (v: string) =>
-      v.length <= REGISTER_REQUSER_VALIDATION.NICKNAME.MAX_LENGTH || `暱稱最多只能${REGISTER_REQUSER_VALIDATION.NICKNAME.MAX_LENGTH}個字`,
-  ];
+  //#region 驗證規則
+
+  const rules = ValidationService.createRules();
   const confirmPasswordRules = [(v: string) => v.length > 0 || "請輸入確認密碼", (v: string) => v === registerFormData.password || "密碼不相同"];
 
+  //#endregion 驗證規則
   const emit = defineEmits<{ showSnackbar: [snackbar: Isnackbar] }>();
 
   //當dialog切換時清空輸入欄位

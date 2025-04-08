@@ -45,7 +45,7 @@
   import type { ISettingOption } from "@/interfaces/settingOption.interface";
   import { settingService } from "@/services/setting.service";
   import type { AccountRequestDTO, SettingResponseDTO, UserProfileResponseDTO } from "pinpin_library";
-  import type { IAccountSettingFormData } from "@/interfaces/form.interface";
+  import type { IAccountSettingFormData, IUserProfileSettingFromData } from "@/interfaces/form.interface";
   import { useSnackbarStore } from "@/stores/snackbar.store";
   import type { Isnackbar } from "@/interfaces/snackbar.interface";
 
@@ -71,7 +71,7 @@
       component: markRaw(wevUserProfileSetting),
       icon: "id-badge",
       props: { isLoading: updateLoading, settingData: settingData, userProfile: userProfile },
-      emits: {},
+      emits: { update: updateUserProfile },
       description: "展示你的人特質，讓旅伴盡情見識幽默獨特的個人風格！",
     },
     {
@@ -126,6 +126,30 @@
       return response.data?.data || ({} as AccountRequestDTO);
     } catch {
       return {} as IAccountSettingFormData;
+    } finally {
+      updateLoading.value = false;
+    }
+  };
+
+  const updateUserProfile = async (userProfileSettingFromData: IUserProfileSettingFromData) => {
+    updateLoading.value = true;
+    try {
+      //TODO:更新個人資料功能
+      console.log("更新個人資料", userProfileSettingFromData);
+      // const userProfileRequestDTO: UserProfileRequestDTO = {
+      //   ...userProfileSettingFromData,
+      // };
+
+      // const response = await settingService.UpdateUserProfile(userProfileRequestDTO);
+
+      const snackbar: Isnackbar = {
+        timeout: 2000,
+        message: "個人資料更新成功",
+        color: "success",
+      };
+      snackbarStore.PushSnackbar(snackbar);
+    } catch {
+      return {} as UserProfileResponseDTO;
     } finally {
       updateLoading.value = false;
     }
