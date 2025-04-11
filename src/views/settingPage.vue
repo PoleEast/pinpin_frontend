@@ -44,7 +44,7 @@
   import { computed, markRaw, onMounted, ref, type Ref } from "vue";
   import type { ISettingOption } from "@/interfaces/settingOption.interface";
   import { settingService } from "@/services/setting.service";
-  import type { AccountRequestDTO, SettingResponseDTO, UserProfileResponseDTO } from "pinpin_library";
+  import type { AccountRequestDTO, SettingResponseDTO, UserProfileRequestDTO, UserProfileResponseDTO } from "pinpin_library";
   import type { IAccountSettingFormData, IUserProfileSettingFromData } from "@/interfaces/form.interface";
   import { useSnackbarStore } from "@/stores/snackbar.store";
   import type { Isnackbar } from "@/interfaces/snackbar.interface";
@@ -134,13 +134,11 @@
   const updateUserProfile = async (userProfileSettingFromData: IUserProfileSettingFromData) => {
     updateLoading.value = true;
     try {
-      //TODO:更新個人資料功能
-      console.log("更新個人資料", userProfileSettingFromData);
-      // const userProfileRequestDTO: UserProfileRequestDTO = {
-      //   ...userProfileSettingFromData,
-      // };
+      const userProfileRequestDTO: UserProfileRequestDTO = {
+        ...userProfileSettingFromData,
+      };
 
-      // const response = await settingService.UpdateUserProfile(userProfileRequestDTO);
+      const response = await settingService.UpdateUserProfileSetting(userProfileRequestDTO);
 
       const snackbar: Isnackbar = {
         timeout: 2000,
@@ -148,6 +146,10 @@
         color: "success",
       };
       snackbarStore.PushSnackbar(snackbar);
+
+      if (userProfile.value && userProfile.value.user) {
+        userProfile.value = response.data?.data;
+      }
     } catch {
       return {} as UserProfileResponseDTO;
     } finally {

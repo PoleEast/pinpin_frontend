@@ -17,14 +17,14 @@ export const ValidationService = {
         "帳號",
         USER_VALIDATION.ACCOUNT.MIN_LENGTH,
         USER_VALIDATION.ACCOUNT.MAX_LENGTH,
-        true,
+        false,
         USER_VALIDATION.ACCOUNT.PATTERN,
       ),
       password: createTextFieldRules(
         "密碼",
         USER_VALIDATION.PASSWORD.MIN_LENGTH,
         USER_VALIDATION.PASSWORD.MAX_LENGTH,
-        true,
+        false,
         USER_VALIDATION.PASSWORD.PATTERN,
       ),
       nickname: createTextFieldRules(
