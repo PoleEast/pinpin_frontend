@@ -1,11 +1,15 @@
 # PinPin 旅遊網站 🌍✈️
 
+[![版本](https://img.shields.io/badge/版本-0.1.0-blue)](https://github.com/yourusername/pinpin)
+[![許可證](https://img.shields.io/badge/license-MIT-green)](https://github.com/yourusername/pinpin/blob/main/LICENSE)
+[![開發階段](https://img.shields.io/badge/階段-開發中-yellow)](https://github.com/yourusername/pinpin)
+[![最後更新](https://img.shields.io/badge/最後更新-2025年4月-orange)](https://github.com/yourusername/pinpin/commits)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.6.3-blue?logo=typescript)](https://www.typescriptlang.org/)
+[![Vue.js](https://img.shields.io/badge/Vue.js-3.5-green?logo=vue.js)](https://vuejs.org/)
+[![NestJS](https://img.shields.io/badge/NestJS-10.0-red?logo=nestjs)](https://nestjs.com/)
+[![MySQL](https://img.shields.io/badge/MySQL-8.0-blue?logo=mysql&logoColor=white)](https://www.mysql.com/)
+
 專為多人旅遊設計的全方位規劃平台，提供組團旅遊、喜好清單、行程規劃與分帳功能。
-
-## 📊 專案狀態
-
-![開發階段](https://img.shields.io/badge/階段-開發中-yellow)
-![版本](https://img.shields.io/badge/版本-0.1.0-blue)
 
 ## 📋 核心功能
 
@@ -41,30 +45,32 @@
 
 ### 前端
 
-![Vue.js](https://img.shields.io/badge/Vue.js-4FC08D?style=for-the-badge&logo=vue.js&logoColor=white)
-![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white)
-![Vuetify](https://img.shields.io/badge/Vuetify-1867C0?style=for-the-badge&logo=vuetify&logoColor=white)
-![Pinia](https://img.shields.io/badge/Pinia-yellow?style=for-the-badge&logo=vue.js&logoColor=white)
+[![Vue.js](https://img.shields.io/badge/Vue.js-v3.5-4FC08D?logo=vue.js&logoColor=white)](https://vuejs.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-v5.6-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![Vuetify](https://img.shields.io/badge/Vuetify-v3.7-1867C0?logo=vuetify&logoColor=white)](https://vuetifyjs.com/)
+[![Pinia](https://img.shields.io/badge/Pinia-v2.2-F0C?logo=vue.js&logoColor=white)](https://pinia.vuejs.org/)
+[![Vite](https://img.shields.io/badge/Vite-v6.0-646CFF?logo=vite&logoColor=white)](https://vitejs.dev/)
 
 ### 後端
 
-![NestJS](https://img.shields.io/badge/NestJS-E0234E?style=for-the-badge&logo=nestjs&logoColor=white)
-![MySQL](https://img.shields.io/badge/MySQL-4479A1?style=for-the-badge&logo=mysql&logoColor=white)
-![TypeORM](https://img.shields.io/badge/TypeORM-orange?style=for-the-badge)
-![JWT](https://img.shields.io/badge/JWT-black?style=for-the-badge&logo=JSON%20web%20tokens)
+[![NestJS](https://img.shields.io/badge/NestJS-v10.0-E0234E?logo=nestjs&logoColor=white)](https://nestjs.com/)
+[![MySQL](https://img.shields.io/badge/MySQL-v8.0-4479A1?logo=mysql&logoColor=white)](https://www.mysql.com/)
+[![TypeORM](https://img.shields.io/badge/TypeORM-v0.3.20-orange?logo=typeorm&logoColor=white)](https://typeorm.io/)
+[![JWT](https://img.shields.io/badge/JWT-v10.2.0-black?logo=JSON%20web%20tokens)](https://jwt.io/)
+[![Swagger](https://img.shields.io/badge/Swagger-v8.1.0-85EA2D?logo=swagger&logoColor=black)](https://swagger.io/)
+
+### 整合 API
+
+[![Google Maps](https://img.shields.io/badge/Google_Maps_API-開發中-4285F4?logo=google-maps&logoColor=white)](https://developers.google.com/maps)
+[![OpenWeather](https://img.shields.io/badge/OpenWeather_API-開發中-EB6E4B?logo=openweathermap&logoColor=white)](https://openweathermap.org/api)
+[![ExChangeRate](https://img.shields.io/badge/ExChangeRate_API-開發中-brightgreen?logo=currencyexchange&logoColor=white)](https://exchangerate-api.com/)
+[![Cloudinary](https://img.shields.io/badge/Cloudinary-v2.5-3448C5?logo=cloudinary&logoColor=white)](https://cloudinary.com/)
 
 ### 開發工具
 
-![Vite](https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=vite&logoColor=white)
-![ESLint](https://img.shields.io/badge/ESLint-4B32C3?style=for-the-badge&logo=eslint&logoColor=white)
-![Swagger](https://img.shields.io/badge/Swagger-85EA2D?style=for-the-badge&logo=swagger&logoColor=black)
-
-### 第三方服務
-
-- Google Maps API
-- OpenWeather API
-- ExChangeRate API
-- Cloudinary
+[![ESLint](https://img.shields.io/badge/ESLint-v8.57-4B32C3?logo=eslint&logoColor=white)](https://eslint.org/)
+[![Prettier](https://img.shields.io/badge/Prettier-v3.3-F7B93E?logo=prettier&logoColor=black)](https://prettier.io/)
+[![Husky](https://img.shields.io/badge/Husky-v9.1-000000?logo=git&logoColor=white)](https://typicode.github.io/husky/)
 
 ## 🚀 快速開始
 
