@@ -15,7 +15,6 @@
       >
       <v-card-text>
         <!-- 登入表單 -->
-        <!-- TODO:可以重構為使用component和keepAlive來作為切換手段 -->
         <v-form v-if="isLogin" @submit.prevent="login" v-model="valid" ref="loginForm">
           <v-container>
             <v-text-field
@@ -111,8 +110,8 @@
   import { authService } from "@/services/auth.service";
   import { useAuthStore } from "@/stores/auth.store";
   import type { IRegisterFormData } from "@/interfaces/form.interface";
-  import { HttpStatusCode } from "axios";
-  import { type ApiErrorResponseDTO, type LoginRequestDTO, type RegisterRequestDTO } from "pinpin_library";
+  import { AxiosError, HttpStatusCode } from "axios";
+  import { type ApiResponseDTO, type LoginRequestDTO, type RegisterRequestDTO } from "pinpin_library";
   import { reactive, ref, useTemplateRef, watch } from "vue";
   import type { VForm } from "vuetify/components";
   import type { Isnackbar } from "@/interfaces/snackbar.interface";
@@ -191,8 +190,8 @@
       clearFromData();
       showDialog.value = false;
     } catch (error) {
-      const apiError = error as ApiErrorResponseDTO;
-      loginErrorMessage.value = apiError.statusCode == HttpStatusCode.Unauthorized ? apiError.message : "";
+      const apiError = error as AxiosError<ApiResponseDTO>;
+      loginErrorMessage.value = apiError.status == HttpStatusCode.Unauthorized ? (apiError.response?.data.message ?? "") : "";
     } finally {
       loading.value = false;
     }
@@ -238,8 +237,8 @@
       emit("showSnackbar", snackbar);
       showDialog.value = false;
     } catch (error) {
-      const axiosError = error as ApiErrorResponseDTO;
-      registerErrorMessage.value = axiosError.statusCode == HttpStatusCode.Conflict ? axiosError.message : "";
+      const apiError = error as AxiosError<ApiResponseDTO>;
+      loginErrorMessage.value = apiError.status == HttpStatusCode.Unauthorized ? (apiError.response?.data.message ?? "") : "";
     } finally {
       loading.value = false;
     }

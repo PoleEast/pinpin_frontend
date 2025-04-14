@@ -89,7 +89,6 @@
               v-model="userProfileSettingFromData.phone">
               <template v-slot:prepend><font-awesome-icon icon="phone" size="2x" fixed-width class="text-primary" /></template>
             </v-text-field>
-            <!-- TODO:改成選單並回傳國家id -->
             <v-select
               label="你來自哪個國家?"
               placeholder="美國"

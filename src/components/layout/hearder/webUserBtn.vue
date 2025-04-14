@@ -2,17 +2,19 @@
   <v-btn class="bg-secondary text-none">
     您好，{{ nickname }}
     <v-menu activator="parent" :location="$vuetify.display.mdAndUp ? 'bottom' : 'start'">
-      <!-- TODO:增加ICON並美化，參考VUIETIFY/LIST/Nav -->
       <v-list>
         <v-list-item v-for="(item, index) in items" :key="index" :to="item.path" :value="index">
-          <v-list-item-title>{{ item.title }}</v-list-item-title>
+          <v-list-item-title class="font-weight-bold">{{ item.title }}</v-list-item-title>
+          <template v-slot:prepend>
+            <font-awesome-icon class="text-primary pe-2" :icon="item.icon" />
+          </template>
         </v-list-item>
         <v-list-item class="px-1" key="logout" value="logout">
           <v-divider class="mb-2" />
-          <v-list-item-title class="text-right bg- rounded pa-">
+          <v-list-item-title class="text-right rounded">
             <v-btn class="text-body-1 font-weight-bold" variant="text" @click="logout"
-              ><template v-slot:append>
-                <font-awesome-icon icon="right-to-bracket" />
+              ><template v-slot:prepend>
+                <font-awesome-icon class="text-primary" icon="right-to-bracket" />
               </template>
               登出
             </v-btn></v-list-item-title
@@ -35,8 +37,8 @@
   }>();
 
   const items = [
-    { title: "會員資料", path: "/userProfiles" },
-    { title: "分帳功能", path: "" },
+    { title: "會員資料", icon: "pen-ruler", path: "/userProfiles" },
+    { title: "分帳功能", icon: "coins", path: "" },
   ];
 
   const nickname = computed(() => {

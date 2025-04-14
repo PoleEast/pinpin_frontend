@@ -82,6 +82,7 @@ import {
   faCaretDown,
   faCaretLeft,
   faCaretRight,
+  faPenRuler,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon as _FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
@@ -168,6 +169,7 @@ library.add(
   faCaretDown,
   faCaretLeft,
   faCaretRight,
+  faPenRuler,
 );
 
 export type FontAwesomeIcon = typeof _FontAwesomeIcon;
