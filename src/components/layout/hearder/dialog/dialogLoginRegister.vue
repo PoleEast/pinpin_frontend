@@ -29,7 +29,7 @@
             ></v-text-field>
             <v-text-field
               v-model="loginFormData.password"
-              :rules="rules.password"
+              :rules="rules.password(true)"
               :error-messages="loginErrorMessage"
               label="密碼"
               required
@@ -71,7 +71,7 @@
               ><template v-slot:prepend><font-awesome-icon size="2x" icon="id-card-clip" /></template>
             </v-text-field>
             <v-text-field
-              :rules="rules.password"
+              :rules="rules.password(true)"
               v-model="registerFormData.password"
               label="密碼"
               :type="showPassword ? 'text' : 'password'"
@@ -161,14 +161,7 @@
 
   //當dialog切換時清空輸入欄位
   watch(isLogin, () => {
-    registerFormData.account = "";
-    registerFormData.nickname = "";
-    registerFormData.password = "";
-    registerFormData.confirmPassword = "";
-    loginFormData.account = "";
-    loginFormData.password = "";
-    registerErrorMessage.value = "";
-    loginErrorMessage.value = "";
+    clearFromData();
   });
 
   //方法
@@ -195,10 +188,11 @@
         color: "success",
       };
       emit("showSnackbar", snackbar);
+      clearFromData();
       showDialog.value = false;
     } catch (error) {
-      const axiosError = error as ApiErrorResponseDTO;
-      loginErrorMessage.value = axiosError.statusCode == HttpStatusCode.Unauthorized ? axiosError.message : "";
+      const apiError = error as ApiErrorResponseDTO;
+      loginErrorMessage.value = apiError.statusCode == HttpStatusCode.Unauthorized ? apiError.message : "";
     } finally {
       loading.value = false;
     }
@@ -240,6 +234,7 @@
         message: response.data.message,
         color: "success",
       };
+      clearFromData();
       emit("showSnackbar", snackbar);
       showDialog.value = false;
     } catch (error) {
@@ -248,5 +243,16 @@
     } finally {
       loading.value = false;
     }
+  };
+
+  const clearFromData = () => {
+    registerFormData.account = "";
+    registerFormData.nickname = "";
+    registerFormData.password = "";
+    registerFormData.confirmPassword = "";
+    loginFormData.account = "";
+    loginFormData.password = "";
+    registerErrorMessage.value = "";
+    loginErrorMessage.value = "";
   };
 </script>

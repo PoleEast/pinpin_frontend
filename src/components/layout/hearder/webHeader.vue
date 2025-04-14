@@ -61,7 +61,7 @@
 </template>
 
 <script setup lang="ts">
-  import { computed, ref, watch } from "vue";
+  import { computed, ref } from "vue";
   import WebLogin from "@/components/layout/hearder/dialog/dialogLoginRegister.vue";
   import WebUserBtn from "@/components/layout/hearder/webUserBtn.vue";
   import { useAuthStore } from "@/stores/auth.store";
@@ -93,21 +93,6 @@
   const isLoggedIn = computed((): boolean => {
     return authStore.UserNickname !== "";
   });
-
-  watch(
-    () => authStore.IsForcedNavigation,
-    () => {
-      if (authStore.IsForcedNavigation == true) {
-        const snackbar: Isnackbar = {
-          timeout: 1000,
-          message: "請先登入",
-          color: "warning",
-        };
-        pushSnackbar(snackbar);
-        authStore.SetForcedNavigation(false);
-      }
-    },
-  );
 </script>
 
 <style scoped>

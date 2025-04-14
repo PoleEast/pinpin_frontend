@@ -1,55 +1,42 @@
-import axios, { AxiosError, HttpStatusCode, type AxiosResponse } from "axios";
-import type { ApiErrorResponseDTO, ApiResponseDTO, LoginResponseDTO, LoginRequestDTO, RegisterRequestDTO } from "pinpin_library";
+import axios, { type AxiosResponse } from "axios";
+import type { ApiResponseDTO, LoginResponseDTO, LoginRequestDTO, RegisterRequestDTO } from "pinpin_library";
 
 export const authService = {
   /**
-   * 註冊會員
-   * @param {RegisterUser} data - 註冊資料
-   * @returns {Promise<ApiResponse<RegisterUserResponse>>} - 註冊結果
-   * @throws {ApiError} - 註冊失敗的錯誤訊息
+   * 用戶註冊
+   * @param {RegisterRequestDTO} data - 註冊資料
+   * @returns {Promise<AxiosResponse>} API響應結果
    */
-  async Register(data: RegisterRequestDTO): Promise<AxiosResponse<ApiResponseDTO<LoginResponseDTO>>> {
-    try {
-      const response = await axios.post("/user/register", data);
-      return response;
-    } catch (error) {
-      const axiosError = error as AxiosError<ApiErrorResponseDTO>;
-      throw {
-        message: axiosError.response?.data?.message || "註冊失敗，請稍後再試",
-        HttpStatusCode: axiosError.response?.status || HttpStatusCode.InternalServerError,
-      };
-    }
+  async Register(data: RegisterRequestDTO): Promise<AxiosResponse> {
+    const response = await axios.post("/user/register", data);
+    return response;
   },
 
   /**
-   * 登入會員
-   * @param {LoginUser} data - 登入資料
-   * @returns {Promise<ApiResponse<LoginUserResponse>>} - 登入結果
-   * @throws {ApiError} - 登入失敗的錯誤訊息
+   * 用戶登入
+   * @param {LoginRequestDTO} data - 登入資料
+   * @returns {Promise<AxiosResponse<ApiResponseDTO<LoginResponseDTO>>>} 登入回應結果
    */
   async Login(data: LoginRequestDTO): Promise<AxiosResponse<ApiResponseDTO<LoginResponseDTO>>> {
-    try {
-      const response = await axios.post("/user/login", data);
-      return response;
-    } catch (error) {
-      const axiosError = error as AxiosError<ApiErrorResponseDTO>;
-      throw {
-        message: axiosError.response?.data?.message || "登入失敗，請稍後再試",
-        HttpStatusCode: axiosError.response?.status || HttpStatusCode.InternalServerError,
-      };
-    }
+    const response = await axios.post("/user/login", data);
+    return response;
   },
 
+  /**
+   * 用戶登出
+   * @returns {Promise<AxiosResponse<ApiResponseDTO>>} 登出回應結果
+   */
   async Logout(): Promise<AxiosResponse<ApiResponseDTO>> {
-    try {
-      const response = await axios.get("/user/logout");
-      return response;
-    } catch (error) {
-      const axiosError = error as AxiosError<ApiErrorResponseDTO>;
-      throw {
-        message: axiosError.response?.data?.message || "登出失敗，請稍後再試",
-        HttpStatusCode: axiosError.response?.status || HttpStatusCode.InternalServerError,
-      };
-    }
+    const response = await axios.get("/user/logout");
+    return response;
+  },
+
+  /**
+   * 檢查用戶認證狀態
+   * @returns {Promise<string>} 用戶暱稱，未登入則返回空字串
+   */
+  async checkAuthStatus(): Promise<string> {
+    const response: AxiosResponse<ApiResponseDTO<LoginResponseDTO>> = await axios("/user/check-auth");
+    return response.data?.data?.nickname || "";
   },
 };

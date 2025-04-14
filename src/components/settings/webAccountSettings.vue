@@ -105,7 +105,7 @@
           label: "新密碼",
           model: "password",
           type: "password",
-          rule: rules.password,
+          rule: rules.password(false),
           icon: "key",
         },
         {

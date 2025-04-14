@@ -48,7 +48,7 @@
     const snackbar: Isnackbar = {
       timeout: 2000,
       message: logoutResult.message,
-      color: logoutResult.result ? "success" : "error",
+      color: logoutResult.statusCode == 200 ? "success" : "error",
     };
     emit("showSnackbar", snackbar);
   };

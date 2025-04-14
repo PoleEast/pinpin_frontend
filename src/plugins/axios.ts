@@ -1,3 +1,4 @@
+import { useAuthStore } from "@/stores/auth.store";
 import { useSnackbarStore } from "@/stores/snackbar.store";
 import axios from "axios";
 import type { ApiErrorResponseDTO } from "pinpin_library";
@@ -29,6 +30,13 @@ axios.interceptors.response.use(
       errorMessage = "請求超時，請稍後再試";
     } else if (error.response.status >= 500) {
       errorMessage = "伺服器錯誤，請稍後再試";
+    } else if (error.response.status === 401) {
+      if (useAuthStore().UserNickname !== "") {
+        useAuthStore().Logout();
+        errorMessage = "登入已經過期，請重新登入";
+      } else {
+        return Promise.reject(error);
+      }
     } else {
       const axiosError = error as { response: { data: ApiErrorResponseDTO } };
       errorMessage = axiosError.response.data.message;
