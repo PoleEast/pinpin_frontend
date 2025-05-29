@@ -7,11 +7,13 @@ import router from "@/router";
 const useAuthStore = defineStore("auth", {
   state: () => ({
     UserNickname: "",
+    AvatarPublicId: "",
     IsAuthChecked: false, // 是否已經檢查過驗證狀態
   }),
   actions: {
-    SetUser(nickname: string) {
+    SetUser(nickname: string, avatarPublicId: string) {
       this.UserNickname = nickname;
+      this.AvatarPublicId = avatarPublicId;
       this.IsAuthChecked = true;
     },
 
@@ -24,6 +26,7 @@ const useAuthStore = defineStore("auth", {
       try {
         const response: AxiosResponse<ApiResponseDTO> = await authService.Logout();
         this.UserNickname = "";
+        this.AvatarPublicId = "";
         router.push({ name: "home" });
         return {
           message: response.data.message,
@@ -34,14 +37,23 @@ const useAuthStore = defineStore("auth", {
       }
     },
 
+    /**
+     * 檢查驗證狀態
+     * - 如果已經登入，則將 nickname 和 avatar_public_id 設置到 store
+     * - 如果未登入，則清除 nickname 和 avatar_public_id
+     *
+     * @returns {Promise<void>}
+     */
     async CheckAuthStatus(): Promise<void> {
       if (this.IsAuthChecked) return;
       this.IsAuthChecked = true;
 
       try {
-        this.SetUser(await authService.checkAuthStatus());
+        const response = await authService.checkAuthStatus();
+        this.SetUser(response?.nickname || "", response?.avatar_public_id || "");
       } catch {
         this.UserNickname = "";
+        this.AvatarPublicId = "";
       }
     },
   },

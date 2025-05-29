@@ -9,9 +9,21 @@
             <!-- TODO: 這裡要有上傳頭像和背景 -->
             <!-- TODO: 點擊卡片後可以觀看名片 -->
             <!-- TODO: 實作名片功能 -->
-            <v-card class="text-white" hover image="https://cdn.vuetifyjs.com/docs/images/cards/dark-beach.jpg">
+            <v-card class="text-white" hover image="https://cdn.vuetifyjs.com/images/cards/docks.jpg">
               <template v-slot:prepend>
-                <v-avatar class="mr-1" size="100" image="https://randomuser.me/api/portraits/women/85.jpg"></v-avatar>
+                <v-hover v-slot="{ isHovering, props: hoverProps }">
+                  <div v-bind="hoverProps" class="position-relative mr-1">
+                    <v-avatar size="100" :image="imageUrl"></v-avatar>
+                    <v-overlay
+                      :model-value="!!isHovering"
+                      class="align-center justify-center rounded-circle"
+                      scrim="#000000"
+                      contained
+                      @click="openAvatarEditDialog">
+                      <font-awesome-icon icon="pen" size="lg" fixed-width class="text-white" />
+                    </v-overlay>
+                  </div>
+                </v-hover>
               </template>
               <template v-slot:title>
                 <v-text-field
@@ -26,21 +38,22 @@
                   v-model="userProfileSettingFromData.nickname"
                   placeholder="你的暱稱"></v-text-field>
               </template>
-              <template v-slot:subtitle
-                ><v-text-field
+              <template v-slot:subtitle>
+                <v-text-field
                   base-color="transparent"
                   :variant="bioTextIsFocus ? 'filled' : 'plain'"
                   class="text-no-wrap user-card-subtitle-input zero-padding-input"
+                  label="寫下你的人生信條"
                   auto-grow
                   :rules="mottoRules"
                   density="compact"
                   @update:focused="bioTextIsFocus = $event"
                   v-model="userProfileSettingFromData.motto">
-                </v-text-field
-              ></template>
+                </v-text-field>
+              </template>
               <v-card-text>
                 <v-textarea
-                  label="關於你"
+                  label="讓大家更了解你~"
                   class="text-white"
                   variant="filled"
                   base-color="transparent"
@@ -194,6 +207,7 @@
         </v-col>
       </v-row>
     </v-form>
+    <DialogAvatarEdit v-model:show-dialog="showDialog"></DialogAvatarEdit>
   </v-container>
 </template>
 
@@ -213,6 +227,9 @@
   import type { VForm } from "vuetify/components";
   import { ValidationService } from "@/services/validation.service";
   import { createDateFieldRules, createTextFieldRules, validateArrayField } from "@/utils/validators.untils";
+  import DialogAvatarEdit from "./dialogAvatarEdit.vue";
+  import { useAuthStore } from "@/stores/auth.store";
+  import { cloudinaryUrl } from "@/utils/utils.utils";
 
   //#region 變數
 
@@ -227,11 +244,13 @@
   }>();
 
   const userProfileSettingFormRef = useTemplateRef<VForm>("userProfileSettingForm");
+
   const valid = ref(false);
 
   const mottoTextIsFocus = ref(false);
   const nicknameTextIsFocus = ref(false);
   const bioTextIsFocus = ref(false);
+  const showDialog = ref(false);
 
   const userProfileSettingFromData = reactive<IUserProfileSettingFromData>({
     motto: "",
@@ -239,7 +258,7 @@
     fullname: "",
     nickname: "",
     isFullNameVisible: false,
-    avatar: "",
+    avatar_public_id: "",
     coverPhoto: "",
     birthday: undefined,
     gender: undefined,
@@ -252,6 +271,10 @@
     travelInterests: [],
     travelStyles: [],
   });
+
+  //#endregion
+
+  //#region 驗證
 
   const chipGroupErrorMessages = computed(() => ({
     visitedCountries: validateArrayField(
@@ -290,10 +313,6 @@
       props.settingData.currency.map((currency) => currency.id),
     ),
   }));
-
-  //#endregion
-
-  //#region 驗證
 
   const rules = ValidationService.createRules();
 
@@ -477,6 +496,13 @@
     },
   ]);
 
+  const imageUrl = computed(() => {
+    const avatarPublicId = `${useAuthStore().AvatarPublicId}`;
+    const transformString = "h_100,w_100";
+
+    return cloudinaryUrl(avatarPublicId, transformString);
+  });
+
   watch(
     () => props.userProfile,
     () => {
@@ -501,7 +527,7 @@
     userProfileSettingFromData.fullname = props.userProfile.fullname;
     userProfileSettingFromData.nickname = props.userProfile.nickname;
     userProfileSettingFromData.isFullNameVisible = props.userProfile.isFullNameVisible;
-    userProfileSettingFromData.avatar = props.userProfile.avatar;
+    userProfileSettingFromData.avatar_public_id = props.userProfile.avatar;
     userProfileSettingFromData.coverPhoto = props.userProfile.coverPhoto;
     userProfileSettingFromData.birthday = props.userProfile.birthday;
     userProfileSettingFromData.gender = props.userProfile.gender;
@@ -561,6 +587,10 @@
     if (!valid.value || !chipValidation) return;
 
     emits("update", userProfileSettingFromData);
+  };
+
+  const openAvatarEditDialog = () => {
+    showDialog.value = true;
   };
 
   //#endregion

@@ -1,5 +1,5 @@
 <template>
-  <v-app>
+  <v-app class="app-bg">
     <webHeader />
     <v-main>
       <router-view></router-view>
@@ -12,13 +12,7 @@
 <script setup lang="ts">
   import webHeader from "./components/layout/hearder/webHeader.vue";
   import webFooter from "./components/layout/footer/webFooter.vue";
-  import { useAuthStore } from "./stores/auth.store";
-  import { onMounted } from "vue";
   import WebSnackbar from "./components/common/webSnackbar.vue";
-
-  onMounted(async () => {
-    await useAuthStore().CheckAuthStatus();
-  });
 </script>
 
 <style>
@@ -27,6 +21,11 @@
     margin: 0;
     padding: 0;
     height: 100%;
+  }
+
+  .app-bg {
+    background-image: url("/src/assets/pattern.svg") !important;
+    background-repeat: repeat !important;
   }
 
   #app {

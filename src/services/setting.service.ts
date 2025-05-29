@@ -45,4 +45,14 @@ export const settingService = {
     const response = await axios.patch("/userProfile/updateUserProfile", userProfileRequestDTO);
     return response;
   },
+
+  /**
+   * 上傳用戶頭像
+   * @param {FormData} avatar - 新頭像的FormData
+   * @returns {Promise<AxiosResponse<ApiResponseDTO<UserProfileResponseDTO>>>} 更新結果
+   */
+  async UpdateUserProfileAvatar(avatar: FormData): Promise<AxiosResponse<ApiResponseDTO<UserProfileResponseDTO>>> {
+    const response = await axios.post("/userProfile/updateAvatar", avatar, { headers: { "Content-Type": "multipart/form-data" } });
+    return response;
+  },
 };

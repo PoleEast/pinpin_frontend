@@ -32,11 +32,12 @@ export const authService = {
   },
 
   /**
-   * 檢查用戶認證狀態
-   * @returns {Promise<string>} 用戶暱稱，未登入則返回空字串
+   * 檢查用戶授權狀態
+   * @returns {Promise<LoginResponseDTO | undefined>} 用戶登入回應資料或未定義
    */
-  async checkAuthStatus(): Promise<string> {
+
+  async checkAuthStatus(): Promise<LoginResponseDTO | undefined> {
     const response: AxiosResponse<ApiResponseDTO<LoginResponseDTO>> = await axios("/user/check-auth");
-    return response.data?.data?.nickname || "";
+    return response?.data?.data;
   },
 };

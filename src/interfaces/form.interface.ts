@@ -18,7 +18,7 @@ interface IUserProfileSettingFromData {
   fullname?: string;
   nickname: string;
   isFullNameVisible?: boolean;
-  avatar?: string;
+  avatar_public_id?: string;
   coverPhoto?: string;
   birthday?: Date;
   gender?: number;

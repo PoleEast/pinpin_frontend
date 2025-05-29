@@ -3,7 +3,7 @@
     <v-row justify="center" no-gutters>
       <v-spacer />
       <v-col cols="2">
-        <v-list>
+        <v-list class="mt-4">
           <v-list-subheader>設定</v-list-subheader>
           <v-list-item
             v-for="(item, index) in settingsOptions"
@@ -44,7 +44,7 @@
   import { computed, markRaw, onMounted, ref, type Ref } from "vue";
   import type { ISettingOption } from "@/interfaces/settingOption.interface";
   import { settingService } from "@/services/setting.service";
-  import type { AccountRequestDTO, SettingResponseDTO, UserProfileRequestDTO, UserProfileResponseDTO } from "pinpin_library";
+  import type { AccountRequestDTO, SettingResponseDTO, UserProfileResponseDTO } from "pinpin_library";
   import type { IAccountSettingFormData, IUserProfileSettingFromData } from "@/interfaces/form.interface";
   import { useSnackbarStore } from "@/stores/snackbar.store";
   import type { Isnackbar } from "@/interfaces/snackbar.interface";
@@ -134,8 +134,9 @@
   const updateUserProfile = async (userProfileSettingFromData: IUserProfileSettingFromData) => {
     updateLoading.value = true;
     try {
-      const userProfileRequestDTO: UserProfileRequestDTO = {
+      const userProfileRequestDTO = {
         ...userProfileSettingFromData,
+        avatar: userProfileSettingFromData.avatar_public_id,
       };
 
       const response = await settingService.UpdateUserProfileSetting(userProfileRequestDTO);
@@ -171,3 +172,4 @@
     }
   });
 </script>
+<style scoped></style>

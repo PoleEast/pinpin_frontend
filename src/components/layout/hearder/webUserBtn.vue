@@ -13,7 +13,7 @@
           <v-divider class="mb-2" />
           <v-list-item-title class="text-right rounded">
             <v-btn class="text-body-1 font-weight-bold" variant="text" @click="logout"
-              ><template v-slot:prepend>
+              ><template v-slot:append>
                 <font-awesome-icon class="text-primary" icon="right-to-bracket" />
               </template>
               登出
@@ -22,13 +22,14 @@
         </v-list-item>
       </v-list>
     </v-menu>
-    <template v-slot:append><v-avatar color="white" size="30"></v-avatar></template>
+    <template v-slot:append><v-avatar :image="imageUrl" size="37"></v-avatar></template>
   </v-btn>
 </template>
 
 <script setup lang="ts">
   import type { Isnackbar } from "@/interfaces/snackbar.interface";
   import { useAuthStore } from "@/stores/auth.store";
+  import { cloudinaryUrl } from "@/utils/utils.utils";
   import { computed } from "vue";
 
   const emit = defineEmits<{
@@ -43,6 +44,13 @@
 
   const nickname = computed(() => {
     return useAuthStore().UserNickname;
+  });
+
+  const imageUrl = computed(() => {
+    const avatarPublicId = `${useAuthStore().AvatarPublicId}`;
+    const transformString = "h_100,w_100";
+
+    return cloudinaryUrl(avatarPublicId, transformString);
   });
 
   const logout = async () => {

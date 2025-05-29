@@ -1,10 +1,11 @@
 import "vuetify/styles";
 import { createVuetify } from "vuetify";
-import { VDateInput } from "vuetify/labs/components";
+import { VDateInput, VFileUpload } from "vuetify/labs/components";
 
 export default createVuetify({
   components: {
     VDateInput,
+    VFileUpload,
   },
   theme: {
     defaultTheme: "light",

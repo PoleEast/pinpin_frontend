@@ -17,7 +17,6 @@
                   :hint="input.hint"
                   v-model="accountSettingsFormData[input.model as keyof IAccountSettingFormData]"
                   outlined
-                  clearable
                   color="primary"
                   ><template v-slot:prepend><font-awesome-icon :icon="input.icon" size="2x" class="mx-1 text-primary" /></template
                 ></v-text-field>
@@ -133,6 +132,7 @@
 
     const joinTime = new Date(createAt.value).getTime();
     const currentTime = new Date().getTime();
+
     return Math.floor((currentTime - joinTime) / (1000 * 60 * 60 * 24));
   });
 

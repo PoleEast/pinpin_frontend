@@ -62,7 +62,7 @@
 
 <script setup lang="ts">
   import { computed, ref } from "vue";
-  import WebLogin from "@/components/layout/hearder/dialog/dialogLoginRegister.vue";
+  import WebLogin from "@/components/layout/hearder/dialogLoginRegister.vue";
   import WebUserBtn from "@/components/layout/hearder/webUserBtn.vue";
   import { useAuthStore } from "@/stores/auth.store";
   import { useSnackbarStore } from "@/stores/snackbar.store";

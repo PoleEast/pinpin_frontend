@@ -180,7 +180,7 @@
       };
 
       const response = await authService.Login(loginRequest);
-      authStore.SetUser(response.data?.data?.nickname || "");
+      authStore.SetUser(response.data?.data?.nickname || "", response.data?.data?.avatar_public_id || "");
       const snackbar = {
         timeout: 2000,
         message: response.data.message,
@@ -227,7 +227,7 @@
       };
 
       const response = await authService.Register(registerRequest);
-      authStore.SetUser(response.data.data?.nickname ?? "");
+      authStore.SetUser(response.data.data?.nickname ?? "", response.data.data?.avatar_public_id ?? "");
       const snackbar = {
         timeout: 2000,
         message: response.data.message,
