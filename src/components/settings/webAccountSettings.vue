@@ -28,9 +28,9 @@
         <v-card-item>
           <v-row>
             <v-col cols="12" md="8">
-              <v-chip draggable color="primary" variant="outlined" class="mr-3 mb-3"> 老碰友，您於{{ formattedJoinDate }}加入PinPin </v-chip>
+              <v-chip draggable color="primary" variant="outlined" class="mr-3 mb-3"> 好碰友，您於{{ formattedJoinDate }}加入PinPin </v-chip>
               <v-spacer />
-              <v-chip draggable color="secondary" variant="outlined" class="mb-3"> 我們已經認識{{ daysSinceJoining }}天了 </v-chip>
+              <v-chip draggable color="secondary" variant="outlined" class="mb-3"> 我們已經認識 {{ daysSinceJoining }} 天了 !!</v-chip>
             </v-col>
           </v-row>
 
@@ -50,6 +50,7 @@
 <script lang="ts" setup>
   import type { IAccountSettingFormData, IFromBlock } from "@/interfaces/form.interface";
   import { ValidationService } from "@/services/validation.service";
+  import { calculateDaysDifference } from "@/utils/utils.utils";
   import { type UserProfileResponseDTO } from "pinpin_library";
   import { computed, onMounted, reactive, ref, useTemplateRef, watch, type Ref } from "vue";
   import type { VForm } from "vuetify/components";
@@ -130,10 +131,7 @@
   const daysSinceJoining = computed(() => {
     if (createAt.value === null || createAt.value === undefined) return 0;
 
-    const joinTime = new Date(createAt.value).getTime();
-    const currentTime = new Date().getTime();
-
-    return Math.floor((currentTime - joinTime) / (1000 * 60 * 60 * 24));
+    return calculateDaysDifference(createAt.value) + 1;
   });
 
   watch(

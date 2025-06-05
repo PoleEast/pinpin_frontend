@@ -1,4 +1,5 @@
 import axios, { type AxiosResponse } from "axios";
+import { axiosLockManager } from "../utils/AxiosLockManager.utils";
 import type { ApiResponseDTO, LoginResponseDTO, LoginRequestDTO, RegisterRequestDTO } from "pinpin_library";
 
 export const authService = {
@@ -8,8 +9,10 @@ export const authService = {
    * @returns {Promise<AxiosResponse>} API響應結果
    */
   async Register(data: RegisterRequestDTO): Promise<AxiosResponse> {
-    const response = await axios.post("/user/register", data);
-    return response;
+    return await axiosLockManager.withLock("Register", async () => {
+      const response = await axios.post("/user/register", data);
+      return response;
+    });
   },
 
   /**
@@ -18,8 +21,10 @@ export const authService = {
    * @returns {Promise<AxiosResponse<ApiResponseDTO<LoginResponseDTO>>>} 登入回應結果
    */
   async Login(data: LoginRequestDTO): Promise<AxiosResponse<ApiResponseDTO<LoginResponseDTO>>> {
-    const response = await axios.post("/user/login", data);
-    return response;
+    return await axiosLockManager.withLock("Login", async () => {
+      const response = await axios.post("/user/login", data);
+      return response;
+    });
   },
 
   /**
@@ -27,8 +32,10 @@ export const authService = {
    * @returns {Promise<AxiosResponse<ApiResponseDTO>>} 登出回應結果
    */
   async Logout(): Promise<AxiosResponse<ApiResponseDTO>> {
-    const response = await axios.get("/user/logout");
-    return response;
+    return await axiosLockManager.withLock("Logout", async () => {
+      const response = await axios.get("/user/logout");
+      return response;
+    });
   },
 
   /**

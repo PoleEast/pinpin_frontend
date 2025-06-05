@@ -7,7 +7,7 @@
     </div>
     <div class="d-flex justify-end mb-2">
       <v-btn class="mr-2" text="取消" @click="cancel"></v-btn>
-      <v-btn class="mr-2" text="剪裁" @click="getCanvas"></v-btn>
+      <v-btn class="mr-2" text="剪裁" :loading="props.updateLoading" @click="getCanvas"></v-btn>
     </div>
   </div>
 </template>
@@ -20,6 +20,7 @@
   const props = defineProps<{
     src: string | undefined;
     alt: string | undefined;
+    updateLoading: boolean;
   }>();
 
   const emits = defineEmits<{

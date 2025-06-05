@@ -44,7 +44,7 @@
   import { computed, markRaw, onMounted, ref, type Ref } from "vue";
   import type { ISettingOption } from "@/interfaces/settingOption.interface";
   import { settingService } from "@/services/setting.service";
-  import type { AccountRequestDTO, SettingResponseDTO, UserProfileResponseDTO } from "pinpin_library";
+  import type { AccountRequestDTO, SettingResponseDTO, UserProfileRequestDTO, UserProfileResponseDTO } from "pinpin_library";
   import type { IAccountSettingFormData, IUserProfileSettingFromData } from "@/interfaces/form.interface";
   import { useSnackbarStore } from "@/stores/snackbar.store";
   import type { Isnackbar } from "@/interfaces/snackbar.interface";
@@ -134,12 +134,26 @@
   const updateUserProfile = async (userProfileSettingFromData: IUserProfileSettingFromData) => {
     updateLoading.value = true;
     try {
-      const userProfileRequestDTO = {
-        ...userProfileSettingFromData,
-        avatar: userProfileSettingFromData.avatar_public_id,
+      const userProfileRequestDTO: UserProfileRequestDTO = {
+        nickname: userProfileSettingFromData.nickname,
+        fullname: userProfileSettingFromData.fullname,
+        motto: userProfileSettingFromData.motto,
+        bio: userProfileSettingFromData.bio,
+        isFullNameVisible: userProfileSettingFromData.isFullNameVisible,
+        coverPhoto: userProfileSettingFromData.coverPhoto,
+        birthday: userProfileSettingFromData.birthday,
+        gender: userProfileSettingFromData.gender,
+        phone: userProfileSettingFromData.phone,
+        address: userProfileSettingFromData.address,
+        originCountry: userProfileSettingFromData.originCountry,
+        visitedCountries: userProfileSettingFromData.visitedCountries,
+        travelInterests: userProfileSettingFromData.travelInterests,
+        travelStyles: userProfileSettingFromData.travelStyles,
+        languages: userProfileSettingFromData.languages,
+        currencies: userProfileSettingFromData.currencies,
       };
 
-      const response = await settingService.UpdateUserProfileSetting(userProfileRequestDTO);
+      const response = await settingService.UpdateUserProfileStting(userProfileRequestDTO);
 
       const snackbar: Isnackbar = {
         timeout: 2000,

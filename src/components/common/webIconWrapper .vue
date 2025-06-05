@@ -1,5 +1,5 @@
 <template>
-  <font-awesome-icon v-if="icons && icons.icon_type === 'fontawesome'" :icon="icons.icon" />
+  <font-awesome-icon v-if="icons && icons.icon_type === 'fontawesome'" fixed-width :icon="icons.icon" />
   <icon-flag v-else-if="icons && icons.icon" :icon="icons.icon" />
 </template>
 

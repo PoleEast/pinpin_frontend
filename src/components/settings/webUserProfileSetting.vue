@@ -43,7 +43,7 @@
                   base-color="transparent"
                   :variant="bioTextIsFocus ? 'filled' : 'plain'"
                   class="text-no-wrap user-card-subtitle-input zero-padding-input"
-                  label="寫下你的人生信條"
+                  :label="bioTextIsFocus ? '' : '寫下你的人生信條'"
                   auto-grow
                   :rules="mottoRules"
                   density="compact"
@@ -202,8 +202,9 @@
       </v-card>
       <v-row>
         <v-col cols="12" class="d-flex justify-end">
+          <!-- TODO:實作復原btn -->
           <v-btn class="mr-3" color="secondary" size="large" variant="plain">復原</v-btn>
-          <v-btn variant="elevated" color="primary" size="large" type="submit">儲存</v-btn>
+          <v-btn variant="elevated" color="primary" size="large" :loading="isLoading" type="submit">儲存</v-btn>
         </v-col>
       </v-row>
     </v-form>
@@ -448,6 +449,7 @@
       }));
   });
 
+  //TODO:新增旅遊風格詳細資料
   const inputChips = computed((): IInputChips[] => [
     {
       icon: "earth-asia",
@@ -527,7 +529,7 @@
     userProfileSettingFromData.fullname = props.userProfile.fullname;
     userProfileSettingFromData.nickname = props.userProfile.nickname;
     userProfileSettingFromData.isFullNameVisible = props.userProfile.isFullNameVisible;
-    userProfileSettingFromData.avatar_public_id = props.userProfile.avatar;
+    userProfileSettingFromData.avatar_public_id = props.userProfile.avatar?.public_id;
     userProfileSettingFromData.coverPhoto = props.userProfile.coverPhoto;
     userProfileSettingFromData.birthday = props.userProfile.birthday;
     userProfileSettingFromData.gender = props.userProfile.gender;
@@ -589,6 +591,9 @@
     emits("update", userProfileSettingFromData);
   };
 
+  /**
+   * 開啟頭像編輯Dialog。
+   */
   const openAvatarEditDialog = () => {
     showDialog.value = true;
   };
