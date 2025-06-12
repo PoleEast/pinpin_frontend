@@ -1,5 +1,5 @@
 <template>
-  <v-footer app color="gray-900" class="px-4 pa-0">
+  <v-footer :app="$vuetify.display.mdAndUp" color="gray-900" class="px-4 pa-0">
     <span class="text-white">© {{ currentYear }} by PinPinTeam</span>
     <v-spacer />
     <v-btn icon href="https://github.com/PoleEast" target="_blank" rel="noopener noreferrer" variant="plain">

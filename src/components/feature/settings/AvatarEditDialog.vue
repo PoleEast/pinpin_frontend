@@ -93,13 +93,13 @@
         </v-card-title>
         <v-card-subtitle class="text-center">頭像剪裁中！把你偷吃團友點心被抓包的表情裁掉吧！</v-card-subtitle>
         <v-card-text class="mt-3 pa-0">
-          <web-copper
+          <AppCopper
             v-if="showCutImageView"
             :updateLoading="updateLoading"
             :src="imageUrl"
             :alt="avatarFile?.name"
             @cancel="init"
-            @get-image="uploadAvatar"></web-copper>
+            @get-image="uploadAvatar"></AppCopper>
         </v-card-text>
       </v-container>
     </v-card>
@@ -109,7 +109,7 @@
   import { computed, ref, watch } from "vue";
   import { RightTriangleIcon, LeftTriangleIcon } from "@/utils/functionalComponent.utils";
   import { settingService } from "@/services/setting.service";
-  import WebCopper from "../common/webCopper.vue";
+  import AppCopper from "@/components/common/AppCopper.vue";
   import { USERPROFILE_AVATAR, type AvatarChangeHistoryResponseDTO, type AvatarResponseDTO } from "pinpin_library";
   import { calculateDaysDifference, cloudinaryUrl } from "@/utils/utils.utils";
   import { useAuthStore } from "@/stores/auth.store";

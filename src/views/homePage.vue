@@ -8,7 +8,7 @@
       <img src="../assets/home/homeMainLogo.png" alt="PinPin旅圖Logo" class="logo-image" />
       <!-- 按鈕區域 -->
       <div class="buttons-container">
-        <v-btn :to="{ name: 'schdule' }" rounded="xl" color="success" variant="text" :ripple="false" class="action-button">
+        <v-btn :to="{ name: 'schedule' }" rounded="xl" color="success" variant="text" :ripple="false" class="action-button">
           <img src="../assets/home/homeMainSchdule.png" alt="行程規劃" class="button-image" />
         </v-btn>
         <v-btn :to="{ name: 'search' }" rounded="xl" color="success" variant="text" :ripple="false" class="action-button">

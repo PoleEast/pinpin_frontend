@@ -98,8 +98,8 @@ export const settingService = {
    * @param {UserProfileRequestDTO} userProfileRequestDTO - 用戶資料
    * @returns {Promise<AxiosResponse<ApiResponseDTO<UserProfileResponseDTO>>>} 更新結果
    */
-  async UpdateUserProfileStting(userProfileRequestDTO: UserProfileRequestDTO): Promise<AxiosResponse<ApiResponseDTO<UserProfileResponseDTO>>> {
-    return await axiosLockManager.withLock("UpdateUserProfileeStting", async () => {
+  async UpdateUserProfileSetting(userProfileRequestDTO: UserProfileRequestDTO): Promise<AxiosResponse<ApiResponseDTO<UserProfileResponseDTO>>> {
+    return await axiosLockManager.withLock("UpdateUserProfileSetting", async () => {
       const response = await axios.patch("/userProfile/updateUserProfile", userProfileRequestDTO);
       return response;
     });

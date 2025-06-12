@@ -1,18 +1,18 @@
 <template>
   <v-app class="app-bg">
-    <webHeader />
+    <AppHeader />
     <v-main>
       <router-view></router-view>
     </v-main>
-    <webFooter />
-    <WebSnackbar />
+    <AppFooter />
+    <AppSnackbar />
   </v-app>
 </template>
 
 <script setup lang="ts">
-  import webHeader from "./components/layout/hearder/webHeader.vue";
-  import webFooter from "./components/layout/footer/webFooter.vue";
-  import WebSnackbar from "./components/common/webSnackbar.vue";
+  import AppHeader from "./components/layout/header/AppHeader.vue";
+  import AppFooter from "./components/layout/footer/AppFooter.vue";
+  import AppSnackbar from "./components/layout/AppSnackbar.vue";
 </script>
 
 <style>

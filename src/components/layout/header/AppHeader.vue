@@ -13,7 +13,7 @@
       </div>
       <div class="ml-auto mr-3">
         <v-fade-transition hide-on-leave>
-          <WebUserBtn v-show="isLoggedIn" @show-snackbar="pushSnackbar" />
+          <UserButton v-show="isLoggedIn" @show-snackbar="pushSnackbar" />
         </v-fade-transition>
         <v-fade-transition hide-on-leave>
           <v-btn v-show="!isLoggedIn" class="text-h6 font-weight-bold w-100" color="white" variant="text" @click="showDialogLogin"
@@ -43,7 +43,7 @@
           </v-list-item>
           <v-divider class="my-2" />
           <v-fade-transition hide-on-leave>
-            <WebUserBtn v-show="isLoggedIn" @show-snackbar="pushSnackbar" />
+            <UserButton v-show="isLoggedIn" @show-snackbar="pushSnackbar" />
           </v-fade-transition>
           <v-fade-transition hide-on-leave>
             <v-btn v-show="!isLoggedIn" class="text-body-1 font-weight-bold" variant="text" @click="showDialogLogin"
@@ -57,13 +57,13 @@
       </v-menu>
     </template>
   </v-app-bar>
-  <WebLogin ref="webLoginRef" v-model:show-dialog="showDialog" @show-snackbar="pushSnackbar" />
+  <LoginRegisterDialog ref="webLoginRef" v-model:show-dialog="showDialog" @show-snackbar="pushSnackbar" />
 </template>
 
 <script setup lang="ts">
   import { computed, ref } from "vue";
-  import WebLogin from "@/components/layout/hearder/dialogLoginRegister.vue";
-  import WebUserBtn from "@/components/layout/hearder/webUserBtn.vue";
+  import LoginRegisterDialog from "@/components/feature/auth/LoginRegisterDialog.vue";
+  import UserButton from "@/components/layout/header/UserButton.vue";
   import { useAuthStore } from "@/stores/auth.store";
   import { useSnackbarStore } from "@/stores/snackbar.store";
   import type { Isnackbar } from "@/interfaces/snackbar.interface";
@@ -72,7 +72,7 @@
   const snackbarStore = useSnackbarStore();
 
   const menuItems = [
-    { title: "行程規劃", path: "/schdule" },
+    { title: "行程規劃", path: "/schedule" },
     { title: "搜尋景點", path: "/search" },
   ];
 

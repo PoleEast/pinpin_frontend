@@ -1,8 +1,8 @@
 import { createRouter, createWebHistory } from "vue-router";
 
-import homePage from "@/views/homePage.vue";
-import schdulePage from "@/views/schdulePage.vue";
-import searchPage from "@/views/searchPage.vue";
+import homePage from "@/views/HomePage.vue";
+import schedulePage from "@/views/SchedulePage.vue";
+import searchPage from "@/views/SearchPage.vue";
 import userProfilesPage from "@/views/settingPage.vue";
 import { useAuthStore } from "@/stores/auth.store";
 import type { Isnackbar } from "@/interfaces/snackbar.interface";
@@ -25,9 +25,9 @@ const router = createRouter({
       },
     },
     {
-      path: "/schdule",
-      name: "schdule",
-      component: schdulePage,
+      path: "/schedule",
+      name: "schedule",
+      component: schedulePage,
     },
     {
       path: "/search",

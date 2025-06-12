@@ -2,8 +2,8 @@
   <v-container fluid class="mt-4">
     <v-row justify="center" no-gutters>
       <v-spacer />
-      <v-col cols="2">
-        <v-list class="mt-4">
+      <v-col cols="0" md="2">
+        <v-list class="mt-4 d-none d-md-block">
           <v-list-subheader>設定</v-list-subheader>
           <v-list-item
             v-for="(item, index) in settingsOptions"
@@ -18,7 +18,7 @@
           </v-list-item>
         </v-list>
       </v-col>
-      <v-col cols="5">
+      <v-col cols="12" md="5">
         <v-card class="mt-4 pa-4" elevation="3">
           <v-card-title class="text-h5 font-weight-bold"
             ><font-awesome-icon v-if="currentOption" :icon="currentOption?.icon" size="lg" class="me-3" />{{ currentOption?.title }}</v-card-title
@@ -35,12 +35,29 @@
       <v-spacer />
     </v-row>
   </v-container>
+  <v-fab app class="d-md-none" color="primary" icon size="large">
+    <font-awesome-icon icon="ellipsis-vertical" size="lg" />
+    <v-speed-dial activator="parent" location="bottom">
+      <v-btn
+        v-for="(item, index) in settingsOptions"
+        :key="index"
+        :value="item.title || index"
+        :active="currentOption?.title === item.title"
+        @click="currentOption = item"
+        size="large"
+        class="mb-2"
+        :class="currentOption?.title === item.title ? 'bg-success' : 'bg-primary'"
+        icon>
+        <font-awesome-icon :icon="item.icon" size="lg" />
+      </v-btn>
+    </v-speed-dial>
+  </v-fab>
 </template>
 
 <script lang="ts" setup>
-  import wevUserProfileSetting from "@/components/settings/webUserProfileSetting.vue";
-  import webAccountSetting from "@/components/settings/webAccountSettings.vue";
-  import WebNotificationSettings from "@/components/settings/webNotificationSettings.vue";
+  import UserProfileSetting from "@/components/feature/settings/UserProfileSetting.vue";
+  import AccountSettings from "@/components/feature/settings/AccountSettings.vue";
+  import NotificationSettings from "@/components/feature/settings/NotificationSettings.vue";
   import { computed, markRaw, onMounted, ref, type Ref } from "vue";
   import type { ISettingOption } from "@/interfaces/settingOption.interface";
   import { settingService } from "@/services/setting.service";
@@ -60,7 +77,7 @@
   const settingsOptions = computed((): ISettingOption[] => [
     {
       title: "帳號設定",
-      component: markRaw(webAccountSetting),
+      component: markRaw(AccountSettings),
       icon: "user",
       props: { isLoading: updateLoading, userProfile: userProfile },
       emits: { update: updateAccountSetting },
@@ -68,7 +85,7 @@
     },
     {
       title: "個人資料",
-      component: markRaw(wevUserProfileSetting),
+      component: markRaw(UserProfileSetting),
       icon: "id-badge",
       props: { isLoading: updateLoading, settingData: settingData, userProfile: userProfile },
       emits: { update: updateUserProfile },
@@ -76,7 +93,7 @@
     },
     {
       title: "通知設定",
-      component: markRaw(WebNotificationSettings),
+      component: markRaw(NotificationSettings),
       icon: "bell",
       props: { isLoading: updateLoading, settingData: settingData },
       emits: {},
@@ -153,7 +170,7 @@
         currencies: userProfileSettingFromData.currencies,
       };
 
-      const response = await settingService.UpdateUserProfileStting(userProfileRequestDTO);
+      const response = await settingService.UpdateUserProfileSetting(userProfileRequestDTO);
 
       const snackbar: Isnackbar = {
         timeout: 2000,

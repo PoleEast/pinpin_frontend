@@ -113,7 +113,7 @@
               <template v-slot:item="{ item, props }">
                 <v-list-item v-bind="props" v-ripple>
                   <template v-slot:prepend>
-                    <webIconWrapper
+                    <AppIconWrapper
                       :icons="{
                         icon_type: item.raw.icon_type || 'flag',
                         icon: item.raw.icon || '',
@@ -165,7 +165,7 @@
                         @click:close="removeUserProfile(chip, inputChip.type)"
                         class="mr-1 mb-1 cursor-default"
                         ><template v-slot:prepend>
-                          <webIconWrapper
+                          <AppIconWrapper
                             v-if="chip.icon"
                             :icons="chip"
                             class="mr-1"
@@ -181,7 +181,7 @@
                               v-ripple
                               @click="addUserProfile(chip, inputChip.type)">
                               <template v-slot:prepend>
-                                <webIconWrapper
+                                <AppIconWrapper
                                   v-if="chip.icon"
                                   :icons="chip"
                                   class="mr-1"
@@ -208,7 +208,7 @@
         </v-col>
       </v-row>
     </v-form>
-    <DialogAvatarEdit v-model:show-dialog="showDialog"></DialogAvatarEdit>
+    <AvatarEditDialog v-model:show-dialog="showDialog"></AvatarEditDialog>
   </v-container>
 </template>
 
@@ -224,11 +224,11 @@
   } from "@/utils/functionalComponent.utils";
   import { USERPROFILE_REQUSER_VALIDATION, type SettingResponseDTO, type UserProfileResponseDTO } from "pinpin_library";
   import { computed, onMounted, reactive, ref, unref, useTemplateRef, watch } from "vue";
-  import webIconWrapper from "../common/webIconWrapper .vue";
+  import AppIconWrapper from "@/components/ui/AppIconWrapper .vue";
   import type { VForm } from "vuetify/components";
   import { ValidationService } from "@/services/validation.service";
   import { createDateFieldRules, createTextFieldRules, validateArrayField } from "@/utils/validators.untils";
-  import DialogAvatarEdit from "./dialogAvatarEdit.vue";
+  import AvatarEditDialog from "./AvatarEditDialog.vue";
   import { useAuthStore } from "@/stores/auth.store";
   import { cloudinaryUrl } from "@/utils/utils.utils";
 
