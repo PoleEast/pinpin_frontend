@@ -1,4 +1,4 @@
-import type { Isnackbar } from "@/interfaces/snackbar.interface";
+import type { Isnackbar } from "@/interfaces";
 import { defineStore } from "pinia";
 
 const useSnackbarStore = defineStore("snackbar", {

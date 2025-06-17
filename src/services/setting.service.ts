@@ -1,6 +1,6 @@
 import type { AxiosResponse } from "axios";
 import axios from "axios";
-import { axiosLockManager } from "../utils/AxiosLockManager.utils";
+import { axiosLockManager } from "../utils";
 import type {
   AccountRequestDTO,
   ApiResponseDTO,

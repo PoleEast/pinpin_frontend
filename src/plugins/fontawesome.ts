@@ -46,7 +46,6 @@ import {
   faTree,
   faCampground,
   faUtensils,
-  faStar,
   faGlobe,
   faIceCream,
   faWineGlass,
@@ -85,7 +84,23 @@ import {
   faPenRuler,
   faPen,
   faEllipsisVertical,
+  faMagnifyingGlass,
+  faTableList,
+  faTable,
+  faCaretUp,
+  fa1,
+  fa2,
+  fa3,
+  fa4,
+  fa5,
+  fa6,
+  fa7,
+  fa8,
+  fa9,
+  faStarHalf,
 } from "@fortawesome/free-solid-svg-icons";
+import { faStar as faSolidStar } from "@fortawesome/free-solid-svg-icons";
+import { faStar as faRegularStar } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon as _FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
 library.add(
@@ -134,7 +149,9 @@ library.add(
   faTree,
   faCampground,
   faUtensils,
-  faStar,
+  faSolidStar,
+  faRegularStar,
+  faStarHalf,
   faGlobe,
   faIceCream,
   faWineGlass,
@@ -174,6 +191,20 @@ library.add(
   faPenRuler,
   faPen,
   faEllipsisVertical,
+  faMagnifyingGlass,
+  faHeart,
+  faTableList,
+  faTable,
+  faCaretUp,
+  fa1,
+  fa2,
+  fa3,
+  fa4,
+  fa5,
+  fa6,
+  fa7,
+  fa8,
+  fa9,
 );
 
 export type FontAwesomeIcon = typeof _FontAwesomeIcon;

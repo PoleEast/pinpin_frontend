@@ -83,15 +83,15 @@
               :rules="birthdayRules"
               v-model="userProfileSettingFromData.birthday"
               label="你的降臨日期"
-              :mode-icon="InvertedTriangleIcon"
-              :next-icon="RightTriangleIcon"
-              :prev-icon="LeftTriangleIcon">
+              :mode-icon="createTriangleIcon('down')"
+              :next-icon="createTriangleIcon('right')"
+              :prev-icon="createTriangleIcon('left')">
               <template v-slot:prepend><font-awesome-icon icon="calendar-days" size="2x" fixed-width class="text-primary" /></template>
             </v-date-input>
             <v-radio-group v-model="userProfileSettingFromData.gender" :rules="genderRules" label="性別" inline>
-              <v-radio color="blue" :value="0" label="男" :false-icon="RadioFalseIcon" :true-icon="RadioTureIcon"></v-radio>
-              <v-radio color="pink" :value="1" label="女" :false-icon="RadioFalseIcon" :true-icon="RadioTureIcon"></v-radio>
-              <v-radio color="green" :value="2" label="不公開" :false-icon="RadioFalseIcon" :true-icon="RadioTureIcon"></v-radio>
+              <v-radio color="blue" :value="0" label="男" :false-icon="RadioFalseIcon" :true-icon="RadioTrueIcon"></v-radio>
+              <v-radio color="pink" :value="1" label="女" :false-icon="RadioFalseIcon" :true-icon="RadioTrueIcon"></v-radio>
+              <v-radio color="green" :value="2" label="不公開" :false-icon="RadioFalseIcon" :true-icon="RadioTrueIcon"></v-radio>
               <template v-slot:prepend><font-awesome-icon icon="venus-mars" size="2x" fixed-width class="text-primary" /></template>
             </v-radio-group>
             <v-text-field
@@ -213,24 +213,34 @@
 </template>
 
 <script lang="ts" setup>
-  import type { IChip, IInputChips, IUserProfileSettingFromData } from "@/interfaces/form.interface";
-  import {
-    RadioFalseIcon,
-    RadioTureIcon,
-    CloseIcon,
-    InvertedTriangleIcon,
-    RightTriangleIcon,
-    LeftTriangleIcon,
-  } from "@/utils/functionalComponent.utils";
-  import { USERPROFILE_REQUSER_VALIDATION, type SettingResponseDTO, type UserProfileResponseDTO } from "pinpin_library";
+  //#region import
+
   import { computed, onMounted, reactive, ref, unref, useTemplateRef, watch } from "vue";
+
+  //components
   import AppIconWrapper from "@/components/ui/AppIconWrapper .vue";
-  import type { VForm } from "vuetify/components";
-  import { ValidationService } from "@/services/validation.service";
-  import { createDateFieldRules, createTextFieldRules, validateArrayField } from "@/utils/validators.untils";
   import AvatarEditDialog from "./AvatarEditDialog.vue";
-  import { useAuthStore } from "@/stores/auth.store";
-  import { cloudinaryUrl } from "@/utils/utils.utils";
+
+  //services
+  import {
+    cloudinaryUrl,
+    createDateFieldRules,
+    createTextFieldRules,
+    validateArrayField,
+    CloseIcon,
+    RadioTrueIcon,
+    RadioFalseIcon,
+    createTriangleIcon,
+  } from "@/utils";
+  import { ValidationService } from "@/services";
+  import { useAuthStore } from "@/stores";
+
+  //types
+  import type { VForm } from "vuetify/components";
+  import { USERPROFILE_REQUSER_VALIDATION, type SettingResponseDTO, type UserProfileResponseDTO } from "pinpin_library";
+  import type { IChip, IInputChips, IUserProfileSettingFromData } from "@/interfaces";
+
+  //#endregion
 
   //#region 變數
 
@@ -244,15 +254,13 @@
     (e: "update", data: IUserProfileSettingFromData): void;
   }>();
 
-  const userProfileSettingFormRef = useTemplateRef<VForm>("userProfileSettingForm");
-
   const valid = ref(false);
-
   const mottoTextIsFocus = ref(false);
   const nicknameTextIsFocus = ref(false);
   const bioTextIsFocus = ref(false);
   const showDialog = ref(false);
 
+  const userProfileSettingFormRef = useTemplateRef<VForm>("userProfileSettingForm");
   const userProfileSettingFromData = reactive<IUserProfileSettingFromData>({
     motto: "",
     bio: "",
@@ -272,8 +280,6 @@
     travelInterests: [],
     travelStyles: [],
   });
-
-  //#endregion
 
   //#region 驗證
 
@@ -336,6 +342,8 @@
     USERPROFILE_REQUSER_VALIDATION.ADDRESS.MIN_LENGTH,
     USERPROFILE_REQUSER_VALIDATION.ADDRESS.MAX_LENGTH,
   );
+
+  //#endregion
 
   //#endregion
 

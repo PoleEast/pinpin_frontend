@@ -48,14 +48,22 @@
   </v-container>
 </template>
 <script lang="ts" setup>
-  import type { IAccountSettingFormData, IFromBlock } from "@/interfaces/form.interface";
-  import { ValidationService } from "@/services/validation.service";
-  import { calculateDaysDifference } from "@/utils/utils.utils";
-  import { type UserProfileResponseDTO } from "pinpin_library";
+  //#region import
+
   import { computed, onMounted, reactive, ref, useTemplateRef, watch, type Ref } from "vue";
   import type { VForm } from "vuetify/components";
 
-  //#region 變數
+  //services
+  import { ValidationService } from "@/services";
+  import { calculateDaysDifference } from "@/utils";
+
+  //types
+  import { type UserProfileResponseDTO } from "pinpin_library";
+  import type { IAccountSettingFormData, IFromBlock } from "@/interfaces";
+
+  //#endregion
+
+  //#region variable
 
   const props = defineProps<{
     isLoading: boolean;
@@ -64,16 +72,19 @@
   const emits = defineEmits<{
     (e: "update", data: IAccountSettingFormData): void;
   }>();
+
+  const show = ref(false);
+  const valid = ref(false);
+  const createAt: Ref<Date | null> = ref(null);
+  const rules = ValidationService.createRules();
+
   const accountSettingsFormData = reactive<IAccountSettingFormData>({
     account: "",
     email: "",
     password: "",
     confirmPassword: "",
   });
-  const show = ref(false);
-  const rules = ValidationService.createRules();
 
-  const createAt: Ref<Date | null> = ref(null);
   const confirmPasswordRules = [(v: string) => v === accountSettingsFormData.password || "密碼不一致"];
   const inputList: IFromBlock[] = [
     {
@@ -118,12 +129,8 @@
       ],
     },
   ];
-  const valid = ref(false);
   const accountSettingsFormRef = useTemplateRef<VForm>("accountSettingsForm");
 
-  //#endregion
-
-  //計算時間
   const formattedJoinDate = computed(() => {
     return createAt.value !== null && createAt.value !== undefined ? createAt.value.toLocaleDateString() : "未知日期";
   });
@@ -134,12 +141,9 @@
     return calculateDaysDifference(createAt.value) + 1;
   });
 
-  watch(
-    () => props.userProfile,
-    () => {
-      resetForm();
-    },
-  );
+  //#endregion
+
+  //#region function
 
   const resetForm = () => {
     accountSettingsFormData.account = props.userProfile?.user?.account ?? "";
@@ -156,7 +160,16 @@
     emits("update", accountSettingsFormData);
   };
 
+  //#endregion
+
   onMounted(() => {
     resetForm();
   });
+
+  watch(
+    () => props.userProfile,
+    () => {
+      resetForm();
+    },
+  );
 </script>

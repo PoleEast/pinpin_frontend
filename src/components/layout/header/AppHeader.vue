@@ -64,9 +64,8 @@
   import { computed, ref } from "vue";
   import LoginRegisterDialog from "@/components/feature/auth/LoginRegisterDialog.vue";
   import UserButton from "@/components/layout/header/UserButton.vue";
-  import { useAuthStore } from "@/stores/auth.store";
-  import { useSnackbarStore } from "@/stores/snackbar.store";
-  import type { Isnackbar } from "@/interfaces/snackbar.interface";
+  import { useAuthStore, useSnackbarStore } from "@/stores";
+  import type { Isnackbar } from "@/interfaces";
 
   const authStore = useAuthStore();
   const snackbarStore = useSnackbarStore();

@@ -27,9 +27,9 @@
 </template>
 
 <script setup lang="ts">
-  import type { Isnackbar } from "@/interfaces/snackbar.interface";
-  import { useAuthStore } from "@/stores/auth.store";
-  import { cloudinaryUrl } from "@/utils/utils.utils";
+  import type { Isnackbar } from "@/interfaces";
+  import { useAuthStore } from "@/stores";
+  import { cloudinaryUrl } from "@/utils";
   import { computed } from "vue";
 
   const emit = defineEmits<{

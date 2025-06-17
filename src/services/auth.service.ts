@@ -1,5 +1,5 @@
 import axios, { type AxiosResponse } from "axios";
-import { axiosLockManager } from "../utils/AxiosLockManager.utils";
+import { axiosLockManager } from "../utils";
 import type { ApiResponseDTO, LoginResponseDTO, LoginRequestDTO, RegisterRequestDTO } from "pinpin_library";
 
 export const authService = {

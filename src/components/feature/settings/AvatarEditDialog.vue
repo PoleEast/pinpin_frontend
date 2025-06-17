@@ -106,14 +106,21 @@
   </v-dialog>
 </template>
 <script lang="ts" setup>
+  //#region import
   import { computed, ref, watch } from "vue";
-  import { RightTriangleIcon, LeftTriangleIcon } from "@/utils/functionalComponent.utils";
-  import { settingService } from "@/services/setting.service";
   import AppCopper from "@/components/common/AppCopper.vue";
+
+  //services
+  import { useAuthStore, useSnackbarStore } from "@/stores";
+  import { settingService } from "@/services";
+  import { cloudinaryUrl, calculateDaysDifference, LeftTriangleIcon, RightTriangleIcon } from "@/utils";
+
+  //types
   import { USERPROFILE_AVATAR, type AvatarChangeHistoryResponseDTO, type AvatarResponseDTO } from "pinpin_library";
-  import { calculateDaysDifference, cloudinaryUrl } from "@/utils/utils.utils";
-  import { useAuthStore } from "@/stores/auth.store";
-  import { useSnackbarStore } from "@/stores/snackbar.store";
+
+  //#endregion
+
+  //#region variables
 
   const showDialog = defineModel<boolean>("showDialog");
 
@@ -146,6 +153,10 @@
       avatars: userAvatars.value,
     },
   ]);
+
+  //#endregion
+
+  //#region function
 
   /**
    * 顯示裁剪頭像的dialog
@@ -276,7 +287,6 @@
     updateLoading.value = false;
 
     //獲取所有頭像
-
     const defaultAvatarResponse = (await settingService.GetDefaultAvatar()).data.data;
     const defaultAvatarResult = defaultAvatarResponse?.map((item: AvatarResponseDTO) => ({
       ...item,
@@ -309,6 +319,8 @@
     selectedAvatar.value =
       (defaultAvatarResponse ?? []).concat(userAvatarResponse ?? []).find((item) => item.public_id === authStore.AvatarPublicId)?.id ?? undefined;
   };
+
+  //#endregion
 
   watch(showDialog, (value) => {
     if (value) {

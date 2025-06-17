@@ -107,17 +107,21 @@
 </template>
 
 <script setup lang="ts">
-  import { authService } from "@/services/auth.service";
-  import { useAuthStore } from "@/stores/auth.store";
-  import type { IRegisterFormData } from "@/interfaces/form.interface";
-  import { AxiosError, HttpStatusCode } from "axios";
-  import { type ApiResponseDTO, type LoginRequestDTO, type RegisterRequestDTO } from "pinpin_library";
+  //#region import
   import { reactive, ref, useTemplateRef, watch } from "vue";
-  import type { VForm } from "vuetify/components";
-  import type { Isnackbar } from "@/interfaces/snackbar.interface";
-  import { ValidationService } from "@/services/validation.service";
+  import { AxiosError, HttpStatusCode } from "axios";
 
-  //變數
+  //services
+  import { authService, ValidationService } from "@/services";
+  import { useAuthStore } from "@/stores";
+
+  //types
+  import type { VForm } from "vuetify/components";
+  import type { IRegisterFormData, Isnackbar } from "@/interfaces";
+  import { type ApiResponseDTO, type LoginRequestDTO, type RegisterRequestDTO } from "pinpin_library";
+  //#endregion;
+
+  //#region variable
   const registerFormRef = useTemplateRef<VForm>("registerForm");
   const loginFormRef = useTemplateRef<VForm>("loginForm");
   const showPassword = ref<boolean>(false);
@@ -127,10 +131,9 @@
   const registerErrorMessage = ref<string>("");
   const loginErrorMessage = ref<string>("");
 
-  //獲取狀態的引用
   const authStore = useAuthStore();
-
   const showDialog = defineModel<boolean>("showDialog");
+  const emit = defineEmits<{ showSnackbar: [snackbar: Isnackbar] }>();
 
   defineExpose({
     handleLoginStatus: () => {
@@ -156,14 +159,10 @@
   const confirmPasswordRules = [(v: string) => v.length > 0 || "請輸入確認密碼", (v: string) => v === registerFormData.password || "密碼不相同"];
 
   //#endregion 驗證規則
-  const emit = defineEmits<{ showSnackbar: [snackbar: Isnackbar] }>();
 
-  //當dialog切換時清空輸入欄位
-  watch(isLogin, () => {
-    clearFromData();
-  });
+  //#endregion
 
-  //方法
+  //#region function
   //TODO : 實作第三方登入
   const login = async () => {
     //清空錯誤訊息
@@ -254,4 +253,11 @@
     registerErrorMessage.value = "";
     loginErrorMessage.value = "";
   };
+
+  //#endregion
+
+  //當dialog切換時清空輸入欄位
+  watch(isLogin, () => {
+    clearFromData();
+  });
 </script>

@@ -3,7 +3,7 @@
     <v-row justify="center" no-gutters>
       <v-spacer />
       <v-col cols="0" md="2">
-        <v-list class="mt-4 d-none d-md-block">
+        <v-list class="mt-4 d-none d-md-block bg-transparent">
           <v-list-subheader>設定</v-list-subheader>
           <v-list-item
             v-for="(item, index) in settingsOptions"
@@ -55,25 +55,36 @@
 </template>
 
 <script lang="ts" setup>
+  //#region import
+
+  import { computed, markRaw, onMounted, ref, type Ref } from "vue";
+
+  //components
   import UserProfileSetting from "@/components/feature/settings/UserProfileSetting.vue";
   import AccountSettings from "@/components/feature/settings/AccountSettings.vue";
   import NotificationSettings from "@/components/feature/settings/NotificationSettings.vue";
-  import { computed, markRaw, onMounted, ref, type Ref } from "vue";
-  import type { ISettingOption } from "@/interfaces/settingOption.interface";
-  import { settingService } from "@/services/setting.service";
-  import type { AccountRequestDTO, SettingResponseDTO, UserProfileRequestDTO, UserProfileResponseDTO } from "pinpin_library";
-  import type { IAccountSettingFormData, IUserProfileSettingFromData } from "@/interfaces/form.interface";
-  import { useSnackbarStore } from "@/stores/snackbar.store";
-  import type { Isnackbar } from "@/interfaces/snackbar.interface";
 
+  //services
+  import { settingService } from "@/services/setting.service";
+  import { useSnackbarStore } from "@/stores";
+
+  //types
+  import type { AccountRequestDTO, SettingResponseDTO, UserProfileRequestDTO, UserProfileResponseDTO } from "pinpin_library";
+  import type { IAccountSettingFormData, ISettingOption, Isnackbar, IUserProfileSettingFromData } from "@/interfaces";
+
+  //#endregion
+
+  //#region variable
   const settingData = ref<SettingResponseDTO>();
   const userProfile = ref<UserProfileResponseDTO>();
   const updateLoading = ref(true);
+  const currentOption: Ref<ISettingOption | null> = ref(null);
+
+  const snackbarStore = useSnackbarStore();
+
   const initLoading = computed(() => {
     return settingData.value === undefined || userProfile.value === undefined;
   });
-  const snackbarStore = useSnackbarStore();
-
   const settingsOptions = computed((): ISettingOption[] => [
     {
       title: "帳號設定",
@@ -100,8 +111,10 @@
       description: "輕鬆管理通知，讓每則提醒化身旅程中滿滿驚喜與趣味！",
     },
   ]);
-  const currentOption: Ref<ISettingOption | null> = ref(null);
 
+  //#endregion
+
+  //#region function
   const getSettingData = async (): Promise<SettingResponseDTO> => {
     try {
       return (await settingService.GetSettingData()).data?.data || ({} as SettingResponseDTO);
@@ -189,6 +202,8 @@
     }
   };
 
+  //#endregion
+
   onMounted(async () => {
     try {
       const [settingResponse, profileResponse] = await Promise.all([getSettingData(), getUserProfile()]);
@@ -203,4 +218,3 @@
     }
   });
 </script>
-<style scoped></style>

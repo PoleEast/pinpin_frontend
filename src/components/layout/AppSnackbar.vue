@@ -9,25 +9,15 @@
 
 <script setup lang="ts">
   import { computed, ref, watch } from "vue";
-  import { useSnackbarStore } from "@/stores/snackbar.store";
+  import { useSnackbarStore } from "@/stores";
 
-  const snackbarStore = useSnackbarStore();
   const isVisible = ref(false);
 
+  const snackbarStore = useSnackbarStore();
   const currentSnackbar = computed(() => (snackbarStore.queue.length > 0 ? snackbarStore.queue[0] : null));
 
   // 當隊列中有新項目時，顯示snackbar
-  watch(
-    () => snackbarStore.queue.length,
-    (newLength, oldLength) => {
-      if (newLength > 0 && oldLength === 0) {
-        isVisible.value = true;
-      }
-    },
-    { immediate: true },
-  );
-
-  function handleVisibilityChange(value: boolean) {
+  const handleVisibilityChange = (value: boolean) => {
     if (!value && currentSnackbar.value) {
       snackbarStore.ShiftSnackbar();
 
@@ -38,9 +28,19 @@
         }, 300);
       }
     }
-  }
+  };
 
-  function closeSnackbar() {
+  const closeSnackbar = () => {
     isVisible.value = false;
-  }
+  };
+
+  watch(
+    () => snackbarStore.queue.length,
+    (newLength, oldLength) => {
+      if (newLength > 0 && oldLength === 0) {
+        isVisible.value = true;
+      }
+    },
+    { immediate: true },
+  );
 </script>

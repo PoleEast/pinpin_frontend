@@ -1,4 +1,4 @@
-import { authService } from "@/services/auth.service";
+import { authService } from "@/services";
 import { type AxiosResponse } from "axios";
 import { defineStore } from "pinia";
 import type { ApiErrorResponseDTO, ApiResponseDTO } from "pinpin_library";
