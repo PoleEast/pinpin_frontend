@@ -65,7 +65,7 @@
   import NotificationSettings from "@/components/feature/settings/NotificationSettings.vue";
 
   //services
-  import { settingService } from "@/services/setting.service";
+  import { settingService } from "@/services";
   import { useSnackbarStore } from "@/stores";
 
   //types

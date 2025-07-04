@@ -1,15 +1,23 @@
 /**
- * 將巢狀物件轉換為包含 value 屬性的不可變陣列
+ * 將物件映射轉換為只讀的選項陣列，每個選項物件包含一個 `value` 屬性（原始映射的鍵）以及對應值物件的所有屬性。
  *
- * @template TMap - 繼承自 Record<string, Record<string, unknown>> 的泛型類型
- * @param {TMap} map - 要轉換的巢狀物件，鍵為字串，值為物件
- * @returns {ReadonlyArray<Readonly<{value: keyof TMap} & TMap[keyof TMap]>>}
- *          返回凍結的陣列，每個元素包含原始鍵作為 value 屬性，並展開原始值的所有屬性
+ * 每個選項物件都會被深度凍結以確保不可變性。
  *
- * 此函數將物件的每個鍵值對轉換為陣列元素，其中：
- * - 原始物件的鍵成為新物件的 value 屬性
- * - 原始物件的值（必須為物件）的所有屬性被展開到新物件中
- * - 返回的陣列和其中的物件都是不可變的（使用 Object.freeze）
+ * @typeParam TMap - 輸入映射的型別，每個鍵對應一個屬性物件。
+ * @param map - 要轉換為選項陣列的物件映射。
+ * @returns 一個只讀的選項物件陣列，每個物件包含 `value` 屬性和映射值的所有屬性。
+ *
+ * @example
+ * const colorMap = {
+ *   red: { label: '紅色', hex: '#FF0000' },
+ *   blue: { label: '藍色', hex: '#0000FF' }
+ * };
+ * const options = objectToOptions(colorMap);
+ * // options 為:
+ * // [
+ * //   { value: 'red', label: '紅色', hex: '#FF0000' },
+ * //   { value: 'blue', label: '藍色', hex: '#0000FF' }
+ * // ]
  */
 const objectToOptions = <TMap extends Record<string, Record<string, unknown>>>(
   map: TMap,

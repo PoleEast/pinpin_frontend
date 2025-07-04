@@ -14,10 +14,14 @@ class AxiosLockManager {
    * @throws 操作本身拋出的錯誤
    * ```
    */
-  withLock = <T>(lockKey: string, operation: () => Promise<T>): Promise<T> => {
+  withLock = <T>(lockKey: string, operation: () => Promise<T>, showError: boolean = true): Promise<T> => {
     return new Promise(async (resolve, reject) => {
       if (this.operationLock.has(lockKey)) {
-        reject(new Error("等待回應中請稍後"));
+        if (showError) {
+          reject(new Error("等待回應中請稍後"));
+        } else {
+          reject();
+        }
         return;
       }
 

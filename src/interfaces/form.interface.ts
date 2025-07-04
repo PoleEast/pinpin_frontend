@@ -59,6 +59,7 @@ interface IChip {
   color?: string;
   icon?: string;
   icon_type?: string;
+  value?: string | string[] | number | number[];
 }
 
 interface IInputChips {

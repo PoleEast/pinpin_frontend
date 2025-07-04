@@ -10,25 +10,24 @@
           <v-card-subtitle>找找那些讓你捨不得回家的地方</v-card-subtitle>
           <v-card-item class="pb-0">
             <PlacesAutocompleteInput
-              :types="includedPrimaryTypes"
+              :place-type="placeType"
+              :session-token="sessionToken"
               label="搜尋"
               placeholder="大阪 鐵板燒"
               class="mt-2 mb-0"
-              auto-select-first
               hide-no-data
+              return-object
               :custom-filter="() => true"
-              :loading="loading"
-              @search="search"></PlacesAutocompleteInput>
+              :search-text-rule="searchTextRule"
+              validate-on="input"
+              @search-by-place-id="searchByPlaceId"
+              @search-by-text="searchByText"></PlacesAutocompleteInput>
           </v-card-item>
           <v-card-item class="pt-0">
-            <v-chip-group class="d-flex flex-wrap" column multiple :close="false">
-              <v-chip
-                v-for="(category, index) in ['美食', '景點', '住宿', '交通', '購物']"
-                :key="index"
-                class="ma-1"
-                color="primary"
-                text-color="white">
-                {{ category }}
+            <v-chip-group class="d-flex flex-wrap" column :close="false" v-model="placeType">
+              <v-chip v-for="(placeType, index) in placeTypes" :key="index" color="primary" class="ma-1 d-flex align-center" :value="placeType.value">
+                <font-awesome-icon icon="xmark" class="mr-1" />
+                <span>{{ placeType.text }}</span>
               </v-chip>
             </v-chip-group>
           </v-card-item>
@@ -86,6 +85,7 @@
                   </v-card-text>
                 </v-card-item>
                 <v-card-item>
+                  <!-- TODO:需要告訴使用者區間是多少到多少 -->
                   <v-card-subtitle>價格區間</v-card-subtitle>
                   <v-card-text>
                     <v-range-slider
@@ -129,6 +129,7 @@
         </v-card>
       </v-col>
       <v-col cols="9">
+        <!-- 依據使用者興趣內容推薦地點 -->
         <v-card elevation="2">
           <v-card-title class="text-h5 font-weight-bold d-flex justify-space-between align-center">
             <v-sheet>
@@ -163,21 +164,32 @@
   </v-container>
 </template>
 <script lang="ts" setup>
-  import { type BusinessTimes, BUSINESS_TIME_OPTIONS } from "@/constants";
-  import { createNumberIcon, createTriangleIcon, createStarIcon } from "@/utils/index";
   import { ref } from "vue";
+  import PlacesAutocompleteInput from "@/components/feature/search/PlacesAutocompleteInput.vue";
 
-  const loading = ref(false);
-  const searchText = ref<string>();
+  import { type BusinessTimes, BUSINESS_TIME_OPTIONS } from "@/constants";
+  import { createNumberIcon, createTriangleIcon, createStarIcon, createTextFieldRules } from "@/utils/index";
+  import type { IChip } from "@/interfaces";
+  import { GOOGLE_PLACE_TYPE_OPTIONS, type GooglePlaceType } from "@/constants/googlePlaceType.constant";
+  import { generateUUID } from "@/utils/string.utils";
+
   const starRating = ref(5);
   const businesstimeSelect = ref<BusinessTimes>("UNLIMITED");
   const businessTimeSpecificDays = ref([0, 4]);
   const piriceType = ["$", "$$", "$$$", "$$$$"];
   const priceRange = ref([0, 2000]);
   const BusinessTimeSpecificTimeRange = ref([0, 24]);
-  const includedPrimaryTypes = ref<string[]>([]);
+
   const viewMode = ref("grid");
   const placesSort = ref<string[]>([]);
+  const placeTypes: IChip[] = GOOGLE_PLACE_TYPE_OPTIONS.map((type) => ({
+    text: type.label,
+    value: type.value,
+  }));
+  const placeType = ref<GooglePlaceType | undefined>();
+  const sessionToken = ref<string>(generateUUID());
+
+  const searchTextRule = createTextFieldRules("關鍵字", 1, 50, true);
 
   // const searchResultTitle: string[] = [
   //   "太棒了！我們為你挖掘出 {數量} 個精彩去處，看看哪些能征服你的旅伴！",
@@ -185,8 +197,11 @@
   //   "唉呀！這個關鍵字讓我們迷路了，不如換個方向繼續探索？",
   // ];
 
-  const search = () => {
-    // Implement search logic here
-    console.log("Searching for:", searchText.value);
+  const searchByText = (PlaceId: string) => {
+    console.log("Searching for:", PlaceId);
+  };
+
+  const searchByPlaceId = (PlaceId: string) => {
+    console.log("Searching for:", PlaceId);
   };
 </script>

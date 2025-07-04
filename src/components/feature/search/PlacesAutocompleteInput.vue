@@ -1,33 +1,162 @@
 <template>
   <v-autocomplete
     :items="autocompleteItems"
+    :item-value="(item) => item.placeId"
+    :menu-props="{
+      minWidth: 'auto',
+      maxWidth: '0',
+    }"
+    :focused="errorMessages !== ''"
     menu-icon=""
+    :loading="loading"
     v-model:search="searchText"
-    @update:search="autocompleteUpdateSearchText"
-    @update:model-value="search">
-    <template v-slot:append-inner>
-      <font-awesome-icon icon="magnifying-glass" @click="search" class="cursor-pointer mx-1" />
+    v-model="searchObject"
+    :error-messages="errorMessages"
+    :error="errorMessages !== ''"
+    @keydown.enter="searchByText"
+    @blur="errorMessages = ''"
+    @update:search="autocompleteUpdateSearchText(searchText, sessionToken, includedPrimaryTypes)"
+    @update:model-value="searchByPlaceId">
+    <template #append-inner>
+      <font-awesome-icon icon="magnifying-glass" @click="searchByText" class="cursor-pointer mx-1" />
+    </template>
+    <template #prepend-inner>
+      <img src="\src\assets\google_logo\desktop\google_on_white.png" alt="search-icon" class="cursor-pointer" />
+    </template>
+    <template #item="{ props, item }">
+      <v-list-item class="overflow-hidden" v-bind="props" :key="item.raw.placeId">
+        <v-list-item-subtitle class="overflow-hidden">{{ item.raw.subtitle }}</v-list-item-subtitle>
+      </v-list-item>
     </template>
   </v-autocomplete>
 </template>
 
 <script setup lang="ts">
-  import { ref } from "vue";
+  import { computed, ref } from "vue";
+  import { debounce } from "perfect-debounce";
+  import { GOOGLE_PLACE_TYPE_MAP, type GooglePlaceType } from "@/constants/googlePlaceType.constant";
+  import { useSnackbarStore } from "@/stores";
 
-  const autocompleteItems = ref<string[]>(["大阪 鐵板燒", "東京 拉麵", "京都 抹茶", "北海道 海鮮", "沖繩 美食"]);
+  //#region variables
   const searchText = ref<string>("");
-  const emit = defineEmits<{
-    (e: "search", value: string): void;
+  const errorMessages = ref<string>("");
+  const loading = ref(false);
+  const snackbarStore = useSnackbarStore();
+  const autocompleteItems = ref<
+    {
+      title: string;
+      subtitle: string;
+      placeId: string;
+    }[]
+  >([]);
+  const searchObject = ref<{
+    title: string;
+    subtitle: string;
+    placeId: string;
   }>();
 
-  // const props = defineProps<{
-  //   types: string[];
-  // }>();
+  const emit = defineEmits<{
+    (e: "searchByPlaceId", value: string): void;
+    (e: "searchByText", value: string): void;
+  }>();
 
-  const autocompleteUpdateSearchText = (value: string) => {
-    searchText.value = value;
+  const props = defineProps<{
+    sessionToken: string;
+    placeType: GooglePlaceType | undefined;
+    searchTextRule: ((v: string) => boolean | string)[];
+  }>();
+
+  const includedPrimaryTypes = computed<string[] | undefined>(() => {
+    if (!props.placeType) {
+      return undefined;
+    }
+    return GOOGLE_PLACE_TYPE_MAP[props.placeType].items;
+  });
+  //#endregion
+
+  //#region methods
+
+  /**
+   *  validate 關鍵字
+   *  會將props.searchTextRule中的每個規則都執行
+   *  如果每個規則都 return true,就 return true
+   *  如果有任何一個規則 return string,就 return 那個string
+   *  @param searchText 關鍵字
+   *  @returns  boolean | string
+   */
+  const searchTextValidate = (searchText: string): boolean | string => {
+    for (const rule of props.searchTextRule) {
+      const result = rule(searchText);
+      if (typeof result === "string") {
+        return result;
+      }
+    }
+    return true;
   };
-  const search = () => {
-    emit("search", searchText.value);
+
+  const autocompleteUpdateSearchText = debounce(
+    async (keyword: string, sessionToken: string) => {
+      if (!keyword || !sessionToken) {
+        return;
+      }
+
+      loading.value = true;
+
+      try {
+        //const response = await searchService.GetAutoComplete(keyword, sessionToken, primaryTypes);
+        // autocompleteItems.value =
+        //   response.data.data?.map((item) => ({
+        //     title: item.text,
+        //     subtitle: item.location,
+        //     placeId: item.placeId,
+        //   })) || [];
+      } catch (error) {
+        snackbarStore.PushSnackbar({
+          message: (error as Error).message,
+          color: "error",
+          timeout: 2000,
+        });
+      } finally {
+        loading.value = false;
+      }
+    },
+    800,
+    {
+      leading: false,
+      trailing: true,
+    },
+  );
+
+  /**
+   * 關鍵字搜尋
+   * @description
+   *  validate 關鍵字，通過就 emit  searchByText 事件
+   *  否則將錯誤訊息顯示
+   */
+  const searchByText = () => {
+    const result = searchTextValidate(searchText.value);
+    if (typeof result === "string") {
+      errorMessages.value = result;
+      return;
+    }
+
+    emit("searchByText", searchText.value);
   };
+
+  /**
+   * 依據地點ID搜尋
+   * @description
+   *  validate searchObject.value?.placeId是否存在
+   *  如果存在就 emit  searchByPlaceId 事件
+   *  否則輸出錯誤訊息
+   */
+  const searchByPlaceId = () => {
+    if (!searchObject.value?.placeId) {
+      //TODO: 輸出錯誤訊息
+      return;
+    }
+    emit("searchByPlaceId", searchObject.value?.placeId);
+  };
+
+  //#endregion
 </script>
