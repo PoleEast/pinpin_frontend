@@ -45,7 +45,8 @@
 
 <script lang="ts" setup>
   import { createStarIcon } from "@/utils";
-  import { BUSINESS_STATUS_MAP, type BusinessStatus } from "@/constants/index";
+  import { BUSINESS_STATUS_MAP } from "@/constants/index";
+  import type { GoogleMapsPlaceBusinessStatus } from "pinpin_library";
 
   defineProps<{
     placeName: string;
@@ -53,7 +54,7 @@
     price: "$" | "$$" | "$$$" | "$$$$";
     primaryType: string;
     address: string;
-    businssStuts: BusinessStatus;
+    businssStuts: GoogleMapsPlaceBusinessStatus;
     phone: string;
   }>();
 </script>

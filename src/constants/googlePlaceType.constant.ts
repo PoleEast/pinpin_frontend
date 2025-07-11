@@ -16,9 +16,9 @@ const GOOGLE_PLACE_TYPE_MAP: Record<GooglePlaceType, { label: string; items: str
   [GOOGLE_PLACE_TYPE.FOOD]: Object.freeze({ label: "美食", items: ["restaurant", "food", "point_of_interest"] }),
   [GOOGLE_PLACE_TYPE.DESSERT]: Object.freeze({
     label: "甜點",
-    items: ["ice_cream_shop", "cafe", "dessert_restaurant", "confectionery", "point_of_interest"],
+    items: ["dessert_restaurant", "cafe", "ice_cream_shop", "confectionery", "point_of_interest"],
   }),
-  [GOOGLE_PLACE_TYPE.ATTRACTIONS]: Object.freeze({ label: "景點", items: ["point_of_interest", "tourist_attraction"] }),
+  [GOOGLE_PLACE_TYPE.ATTRACTIONS]: Object.freeze({ label: "觀光景點", items: ["tourist_attraction", "point_of_interest"] }),
   [GOOGLE_PLACE_TYPE.HOTEL]: Object.freeze({ label: "住宿", items: ["lodging", "motel", "hotel ", "campground", "point_of_interest"] }),
   [GOOGLE_PLACE_TYPE.TRANSIT]: Object.freeze({
     label: "交通",

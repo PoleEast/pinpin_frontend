@@ -153,11 +153,7 @@
             </v-btn-toggle>
           </v-card-title>
           <v-card-subtitle>找到這些景點</v-card-subtitle>
-          <v-card-item>
-            <v-row>
-              <v-col cols="4" v-for="i in 5" :key="i"> </v-col>
-            </v-row>
-          </v-card-item>
+          <PlaceCard v-for="place in places" :place="place" :key="place.placeId"></PlaceCard>
         </v-card>
       </v-col>
     </v-row>
@@ -166,30 +162,36 @@
 <script lang="ts" setup>
   import { ref } from "vue";
   import PlacesAutocompleteInput from "@/components/feature/search/PlacesAutocompleteInput.vue";
+  import PlaceCard from "@/components/feature/search/PlaceCard.vue";
 
   import { type BusinessTimes, BUSINESS_TIME_OPTIONS } from "@/constants";
   import { createNumberIcon, createTriangleIcon, createStarIcon, createTextFieldRules } from "@/utils/index";
   import type { IChip } from "@/interfaces";
   import { GOOGLE_PLACE_TYPE_OPTIONS, type GooglePlaceType } from "@/constants/googlePlaceType.constant";
   import { generateUUID } from "@/utils/string.utils";
+  import { searchService } from "@/services";
 
+  const sessionToken = ref<string>(generateUUID());
+  const searchTextRule = createTextFieldRules("關鍵字", 1, 50, true);
+
+  // #region 搜尋相關
   const starRating = ref(5);
   const businesstimeSelect = ref<BusinessTimes>("UNLIMITED");
   const businessTimeSpecificDays = ref([0, 4]);
   const piriceType = ["$", "$$", "$$$", "$$$$"];
   const priceRange = ref([0, 2000]);
   const BusinessTimeSpecificTimeRange = ref([0, 24]);
-
-  const viewMode = ref("grid");
-  const placesSort = ref<string[]>([]);
   const placeTypes: IChip[] = GOOGLE_PLACE_TYPE_OPTIONS.map((type) => ({
     text: type.label,
     value: type.value,
   }));
   const placeType = ref<GooglePlaceType | undefined>();
-  const sessionToken = ref<string>(generateUUID());
+  // #endregion
 
-  const searchTextRule = createTextFieldRules("關鍵字", 1, 50, true);
+  // #region 搜尋結果相關
+  const viewMode = ref("grid");
+  const places = ref<object[]>([]);
+  const placesSort = ref<string[]>([]);
 
   // const searchResultTitle: string[] = [
   //   "太棒了！我們為你挖掘出 {數量} 個精彩去處，看看哪些能征服你的旅伴！",
@@ -197,8 +199,18 @@
   //   "唉呀！這個關鍵字讓我們迷路了，不如換個方向繼續探索？",
   // ];
 
-  const searchByText = (PlaceId: string) => {
-    console.log("Searching for:", PlaceId);
+  const searchByText = async (keyword: string) => {
+    const response = await searchService.GetTextSearchLocation(keyword);
+    places.value =
+      response.data.data?.locations.map((place) => ({
+        placeName: place.name,
+        rating: place.rating,
+        price: place.priceLevel,
+        primaryType: place.primaryType,
+        address: place.address,
+        businssStuts: place.businessStatus,
+        phone: place.phoneNumber,
+      })) || [];
   };
 
   const searchByPlaceId = (PlaceId: string) => {

@@ -13,12 +13,12 @@
     v-model="searchObject"
     :error-messages="errorMessages"
     :error="errorMessages !== ''"
-    @keydown.enter="searchByText"
+    @keydown.enter="searchByText(searchText)"
     @blur="errorMessages = ''"
     @update:search="autocompleteUpdateSearchText(searchText, sessionToken, includedPrimaryTypes)"
     @update:model-value="searchByPlaceId">
     <template #append-inner>
-      <font-awesome-icon icon="magnifying-glass" @click="searchByText" class="cursor-pointer mx-1" />
+      <font-awesome-icon icon="magnifying-glass" @click="searchByText(searchText)" class="cursor-pointer mx-1" />
     </template>
     <template #prepend-inner>
       <img src="\src\assets\google_logo\desktop\google_on_white.png" alt="search-icon" class="cursor-pointer" />
@@ -36,6 +36,7 @@
   import { debounce } from "perfect-debounce";
   import { GOOGLE_PLACE_TYPE_MAP, type GooglePlaceType } from "@/constants/googlePlaceType.constant";
   import { useSnackbarStore } from "@/stores";
+  import { searchService } from "@/services";
 
   //#region variables
   const searchText = ref<string>("");
@@ -62,7 +63,7 @@
 
   const props = defineProps<{
     sessionToken: string;
-    placeType: GooglePlaceType | undefined;
+    placeType?: GooglePlaceType | undefined;
     searchTextRule: ((v: string) => boolean | string)[];
   }>();
 
@@ -95,21 +96,22 @@
   };
 
   const autocompleteUpdateSearchText = debounce(
-    async (keyword: string, sessionToken: string) => {
+    async (keyword: string, sessionToken: string, primaryTypes?: string[]) => {
       if (!keyword || !sessionToken) {
+        autocompleteItems.value = [];
         return;
       }
 
       loading.value = true;
 
       try {
-        //const response = await searchService.GetAutoComplete(keyword, sessionToken, primaryTypes);
-        // autocompleteItems.value =
-        //   response.data.data?.map((item) => ({
-        //     title: item.text,
-        //     subtitle: item.location,
-        //     placeId: item.placeId,
-        //   })) || [];
+        const response = await searchService.GetAutoComplete(keyword, sessionToken, primaryTypes);
+        autocompleteItems.value =
+          response.data.data?.map((item) => ({
+            title: item.text,
+            subtitle: item.address,
+            placeId: item.placeId,
+          })) || [];
       } catch (error) {
         snackbarStore.PushSnackbar({
           message: (error as Error).message,
@@ -133,15 +135,19 @@
    *  validate 關鍵字，通過就 emit  searchByText 事件
    *  否則將錯誤訊息顯示
    */
-  const searchByText = () => {
-    const result = searchTextValidate(searchText.value);
-    if (typeof result === "string") {
-      errorMessages.value = result;
-      return;
-    }
-
-    emit("searchByText", searchText.value);
-  };
+  const searchByText = debounce(
+    (keyword: string) => {
+      if (searchTextValidate(keyword)) {
+        emit("searchByText", keyword);
+      } else {
+        errorMessages.value = searchTextValidate(keyword) as string;
+      }
+    },
+    1000,
+    {
+      trailing: true,
+    },
+  );
 
   /**
    * 依據地點ID搜尋

@@ -1,6 +1,6 @@
 import { axiosLockManager } from "@/utils";
 import axios, { type AxiosResponse } from "axios";
-import type { ApiResponseDTO, autoCompletResponseeDTO } from "pinpin_library";
+import type { ApiResponseDTO, autoCompletResponseeDTO, IsearchLocationResponseDTO } from "pinpin_library";
 
 export const searchService = {
   /**
@@ -22,6 +22,30 @@ export const searchService = {
           params: {
             sessionToken: sessionToken,
             primaryTypes: primaryTypes,
+          },
+        });
+        return response;
+      },
+      false,
+    );
+  },
+
+  async GetTextSearchLocation(
+    keyword: string,
+    priceLevel?: string[],
+    primaryType: string = "",
+    nextPageToken: string = "",
+    pageSize: number = 12,
+  ): Promise<AxiosResponse<ApiResponseDTO<IsearchLocationResponseDTO>>> {
+    return await axiosLockManager.withLock(
+      "GetTextSearchLocation",
+      async () => {
+        const response: AxiosResponse<ApiResponseDTO<IsearchLocationResponseDTO>> = await axios.get(`/searchLocation/textSearchLocation/${keyword}`, {
+          params: {
+            priceLevel: priceLevel,
+            primaryType: primaryType,
+            nextPageToken: nextPageToken,
+            pageSize: pageSize,
           },
         });
         return response;
