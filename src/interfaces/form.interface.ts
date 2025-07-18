@@ -1,3 +1,5 @@
+import type { GoogleMapsPlaceBusinessStatus, GoogleMapsPlacePriceLevel } from "pinpin_library";
+
 interface IRegisterFormData {
   account: string;
   nickname: string;
@@ -70,4 +72,28 @@ interface IInputChips {
   type: "visitedCountries" | "languages" | "currencies" | "travelInterests" | "travelStyles";
 }
 
-export type { IRegisterFormData, ITextField, IFromBlock, IAccountSettingFormData, IUserProfileSettingFromData, IInputChips, IChip, ILabel };
+interface ILocationCard {
+  placeName: string;
+  rating: number;
+  price: GoogleMapsPlacePriceLevel;
+  primaryType: string;
+  address: string;
+  businssStuts: GoogleMapsPlaceBusinessStatus;
+  phone: string;
+  Id: string;
+  photoURL: string;
+  IconURL: string;
+  userRatingCount: number;
+}
+
+export type {
+  IRegisterFormData,
+  ITextField,
+  IFromBlock,
+  IAccountSettingFormData,
+  IUserProfileSettingFromData,
+  IInputChips,
+  IChip,
+  ILabel,
+  ILocationCard,
+};

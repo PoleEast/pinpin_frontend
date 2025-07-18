@@ -39,7 +39,6 @@ const createTriangleIcon = (direction: "left" | "right" | "up" | "down"): Functi
 };
 
 const createStarIcon = (mode: "filled" | "empty" | "half", size: FontAwesomeIconProps["size"] = "1x"): FunctionalComponent => {
-  console.log(mode);
   return () =>
     h(FontAwesomeIcon, {
       icon: mode === "filled" ? "star" : mode === "empty" ? ["far", "star"] : "star-half",

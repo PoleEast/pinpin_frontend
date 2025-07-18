@@ -1,7 +1,7 @@
 <template>
   <v-container fluid class="mt-4">
     <v-row>
-      <v-col cols="3">
+      <v-col cols="12" md="3">
         <v-card elevation="2">
           <v-card-title class="text-h5 font-weight-bold">
             <font-awesome-icon icon="magnifying-glass" size="lg" />
@@ -39,16 +39,20 @@
                   <v-card-text class="pa-0">
                     <v-rating
                       title="訪客評分"
-                      :model-value="starRating"
+                      v-model="starRating"
+                      length="5"
                       active-color="warning"
                       hover
+                      half-increments
                       size="55"
+                      clearable
                       :full-icon="createStarIcon('filled', 'lg')"
                       :empty-icon="createStarIcon('empty', 'lg')">
                     </v-rating>
                   </v-card-text>
                 </v-card-item>
-                <v-card-item class="pt-0">
+                <!-- 放棄實作營業時段功能，google api 不支援，要實作複雜度與成本過高 -->
+                <!-- <v-card-item class="pt-0">
                   <v-card-subtitle>營業時間</v-card-subtitle>
                   <v-card-text class="py-1 px-0">
                     <v-select v-model="businesstimeSelect" :items="BUSINESS_TIME_OPTIONS" item-value="value" item-title="label"></v-select>
@@ -83,7 +87,7 @@
                       </v-range-slider>
                     </v-card-item>
                   </v-card-text>
-                </v-card-item>
+                </v-card-item> -->
                 <v-card-item>
                   <!-- TODO:需要告訴使用者區間是多少到多少 -->
                   <v-card-subtitle>價格區間</v-card-subtitle>
@@ -92,6 +96,7 @@
                       ripple
                       v-model="priceRange"
                       thumb-label="always"
+                      min="0"
                       :max="piriceType.length - 1"
                       step="1"
                       thumb-size="15"
@@ -110,6 +115,7 @@
                 <v-card-item>
                   <v-card-subtitle>排序依據</v-card-subtitle
                   ><v-card-text class="px-0">
+                    <!-- TODO: 實作排序功能 -->
                     <v-chip-group column multiple :close="false" v-model="placesSort" @update:model-value="console.log(placesSort)">
                       <v-chip
                         v-for="(category, index) in ['評分', '價格', '評分人數', '營業狀態']"
@@ -128,13 +134,14 @@
           </v-expansion-panels>
         </v-card>
       </v-col>
-      <v-col cols="9">
+      <v-col cols="12" md="9">
         <!-- 依據使用者興趣內容推薦地點 -->
         <v-card elevation="2">
           <v-card-title class="text-h5 font-weight-bold d-flex justify-space-between align-center">
             <v-sheet>
-              <span><font-awesome-icon icon="map-location-dot" size="lg" class="mr-2" />搜尋結果</span>
+              <span><font-awesome-icon icon="map-location-dot" size="lg" class="mr-2" />{{ resultkeyword ? resultkeyword + "的" : "" }}搜尋結果</span>
             </v-sheet>
+            <!-- TODO:顯示格式實作 -->
             <v-btn-toggle color="primary" density="compact" border :model-value="viewMode" mandatory>
               <v-tooltip text="表格" location="bottom">
                 <template v-slot:activator="{ props }">
@@ -152,68 +159,204 @@
               </v-tooltip>
             </v-btn-toggle>
           </v-card-title>
-          <v-card-subtitle>找到這些景點</v-card-subtitle>
-          <PlaceCard v-for="place in places" :place="place" :key="place.placeId"></PlaceCard>
+          <v-card-subtitle class="mb-2" v-if="locations.length"> 滑動瀏覽、點擊收藏，把喜歡的地方都加進你的旅遊口袋名單~ </v-card-subtitle>
+          <v-card-item>
+            <!-- TODO:實作無限滾動 -->
+            <v-row>
+              <v-col cols="12" md="4" v-for="location in locations" :key="location.Id">
+                <PlaceCard :location="location" :image-max-height="locationCardImageMaxHeight"></PlaceCard>
+              </v-col>
+            </v-row>
+          </v-card-item>
+          <v-card-actions class="d-block">
+            <template v-if="!nextPageToken && lastTextSearchOption">
+              <v-alert class="justify-center" text="看來我們已經把這裡的寶藏都挖出來了！試試換個關鍵字，說不定會有意外驚喜" variant="plain"></v-alert>
+            </template>
+            <template v-else-if="nextPageToken && lastTextSearchOption">
+              <div ref="nextpageLoaderTrigger">
+                <v-alert class="justify-center" text="搜尋雷達全開！正在找更多好地方..." variant="plain"></v-alert>
+                <v-progress-linear indeterminate color="primary" class="w-50 mx-auto mb-2" opacity="0.8"></v-progress-linear>
+              </div>
+            </template>
+            <template v-else>
+              <v-alert class="justify-center" text="搜尋全世界的美食、景點、體驗，把想去的地方都收進行程裡！" variant="plain"></v-alert>
+            </template>
+          </v-card-actions>
         </v-card>
       </v-col>
     </v-row>
   </v-container>
 </template>
 <script lang="ts" setup>
-  import { ref } from "vue";
+  import { onMounted, onUnmounted, ref, watch, type Ref } from "vue";
   import PlacesAutocompleteInput from "@/components/feature/search/PlacesAutocompleteInput.vue";
   import PlaceCard from "@/components/feature/search/PlaceCard.vue";
 
-  import { type BusinessTimes, BUSINESS_TIME_OPTIONS } from "@/constants";
   import { createNumberIcon, createTriangleIcon, createStarIcon, createTextFieldRules } from "@/utils/index";
-  import type { IChip } from "@/interfaces";
-  import { GOOGLE_PLACE_TYPE_OPTIONS, type GooglePlaceType } from "@/constants/googlePlaceType.constant";
+  import type { IChip, ILocationCard, ITextSearchOption } from "@/interfaces";
+  import { GOOGLE_PLACE_TYPE_MAP, GOOGLE_PLACE_TYPE_OPTIONS, type GooglePlaceType } from "@/constants/googlePlaceType.constant";
   import { generateUUID } from "@/utils/string.utils";
   import { searchService } from "@/services";
+  import { useSnackbarStore } from "@/stores";
+  import { BUSSINESS_PRICE_OPTIONS } from "@/constants/BusinessPrice.constant";
 
+  const locationCardImageMaxHeight = 200;
+  let observer: IntersectionObserver | null = null;
   const sessionToken = ref<string>(generateUUID());
   const searchTextRule = createTextFieldRules("關鍵字", 1, 50, true);
+  const loading = ref(false);
+  const nextpageLoaderTrigger: Ref<HTMLElement | null> = ref(null);
 
   // #region 搜尋相關
-  const starRating = ref(5);
-  const businesstimeSelect = ref<BusinessTimes>("UNLIMITED");
-  const businessTimeSpecificDays = ref([0, 4]);
-  const piriceType = ["$", "$$", "$$$", "$$$$"];
-  const priceRange = ref([0, 2000]);
-  const BusinessTimeSpecificTimeRange = ref([0, 24]);
+
+  const starRating = ref<number>(0);
+  // const businesstimeSelect = ref<BusinessTimes>("UNLIMITED");
+  // const businessTimeSpecificDays = ref([0, 4]);
+  // const BusinessTimeSpecificTimeRange = ref([0, 24]);
+  const piriceType = BUSSINESS_PRICE_OPTIONS.filter((type) => type.index !== undefined).map((type) => type.label);
+  const priceRange = ref([0, piriceType.length - 1]);
   const placeTypes: IChip[] = GOOGLE_PLACE_TYPE_OPTIONS.map((type) => ({
     text: type.label,
     value: type.value,
   }));
   const placeType = ref<GooglePlaceType | undefined>();
+
   // #endregion
 
   // #region 搜尋結果相關
-  const viewMode = ref("grid");
-  const places = ref<object[]>([]);
-  const placesSort = ref<string[]>([]);
 
-  // const searchResultTitle: string[] = [
-  //   "太棒了！我們為你挖掘出 {數量} 個精彩去處，看看哪些能征服你的旅伴！",
-  //   "雖然選擇不多，但這 {數量} 個地方絕對是當地的隱藏寶石！",
-  //   "唉呀！這個關鍵字讓我們迷路了，不如換個方向繼續探索？",
-  // ];
+  const viewMode = ref("grid");
+  const locations = ref<ILocationCard[]>([]);
+  const placesSort = ref<string[]>([]);
+  const resultkeyword = ref("");
+
+  const nextPageToken = ref<string>("");
+  const isNewNextPageToken = ref(false);
+  const lastTextSearchOption = ref<ITextSearchOption | undefined>();
+  const pageSize = 12;
+
+  //#endregion
 
   const searchByText = async (keyword: string) => {
-    const response = await searchService.GetTextSearchLocation(keyword);
-    places.value =
-      response.data.data?.locations.map((place) => ({
-        placeName: place.name,
-        rating: place.rating,
-        price: place.priceLevel,
-        primaryType: place.primaryType,
-        address: place.address,
-        businssStuts: place.businessStatus,
-        phone: place.phoneNumber,
-      })) || [];
+    if (!keyword) {
+      useSnackbarStore().PushSnackbar({
+        message: "請輸入關鍵字",
+        color: "warning",
+        timeout: 2000,
+      });
+      return;
+    }
+
+    loading.value = true;
+
+    locations.value = [];
+    nextPageToken.value = "";
+
+    const textSearchOption: ITextSearchOption = {
+      keyword: placeType.value ? keyword + " " + GOOGLE_PLACE_TYPE_MAP[placeType.value].label : keyword,
+      priceLevel: BUSSINESS_PRICE_OPTIONS.slice(priceRange.value[0], priceRange.value[1] + 1).map((option) => option.value),
+      primaryType: placeType.value ? GOOGLE_PLACE_TYPE_MAP[placeType.value].textSearchItem : undefined,
+      pageSize: pageSize,
+      maxImageHeight: locationCardImageMaxHeight,
+      rating: starRating.value ? starRating.value : undefined,
+    };
+
+    processTextSearchResult(textSearchOption);
+  };
+
+  const loadNextPage = (textSearchOption: ITextSearchOption, nextPageToken: string) => {
+    textSearchOption.nextPageToken = nextPageToken;
+    processTextSearchResult(textSearchOption);
+    console.log("loadNextPage");
+  };
+
+  const processTextSearchResult = async (textSearchOption: ITextSearchOption) => {
+    try {
+      const response = await searchService.GetTextSearchLocation(textSearchOption);
+
+      if (!response.data.data) {
+        useSnackbarStore().PushSnackbar({
+          message: "我們不認識你說的地方TT，你要查查看其他地方嗎?",
+          color: "warning",
+          timeout: 2000,
+        });
+        return;
+      }
+
+      const result: ILocationCard[] =
+        response.data.data.locations.map(
+          (location): ILocationCard => ({
+            placeName: location.name,
+            rating: location.rating,
+            price: location.priceLevel,
+            primaryType: location.primaryType,
+            address: location.address,
+            businssStuts: location.businessStatus,
+            phone: location.phoneNumber,
+            Id: location.id,
+            photoURL: location.photoURL,
+            IconURL: location.IconMaskBaseURL,
+            userRatingCount: location.userRatingCount,
+          }),
+        ) ?? [];
+
+      locations.value.push(...result);
+
+      nextPageToken.value = response.data.data?.nextPageToken ?? "";
+    } catch {
+      nextPageToken.value = "";
+    } finally {
+      loading.value = false;
+      lastTextSearchOption.value = textSearchOption;
+    }
   };
 
   const searchByPlaceId = (PlaceId: string) => {
     console.log("Searching for:", PlaceId);
   };
+
+  onMounted(() => {
+    observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          if (lastTextSearchOption.value && nextPageToken.value && isNewNextPageToken.value) {
+            isNewNextPageToken.value = false;
+            loadNextPage(lastTextSearchOption.value, nextPageToken.value);
+          }
+        }
+      },
+      {
+        threshold: 1,
+      },
+    );
+  });
+
+  watch(
+    nextpageLoaderTrigger,
+    (element) => {
+      if (!observer) return;
+
+      if (element) {
+        observer.observe(element);
+      } else {
+        observer.disconnect();
+      }
+    },
+    {
+      flush: "post",
+    },
+  );
+
+  watch(
+    () => nextPageToken.value,
+    (newalue, oldValue) => {
+      isNewNextPageToken.value = newalue !== oldValue && newalue !== "";
+    },
+  );
+
+  onUnmounted(() => {
+    if (observer) {
+      observer.disconnect();
+    }
+  });
 </script>

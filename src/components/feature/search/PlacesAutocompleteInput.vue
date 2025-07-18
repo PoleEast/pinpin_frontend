@@ -35,14 +35,12 @@
   import { computed, ref } from "vue";
   import { debounce } from "perfect-debounce";
   import { GOOGLE_PLACE_TYPE_MAP, type GooglePlaceType } from "@/constants/googlePlaceType.constant";
-  import { useSnackbarStore } from "@/stores";
   import { searchService } from "@/services";
 
   //#region variables
   const searchText = ref<string>("");
   const errorMessages = ref<string>("");
   const loading = ref(false);
-  const snackbarStore = useSnackbarStore();
   const autocompleteItems = ref<
     {
       title: string;
@@ -71,7 +69,7 @@
     if (!props.placeType) {
       return undefined;
     }
-    return GOOGLE_PLACE_TYPE_MAP[props.placeType].items;
+    return GOOGLE_PLACE_TYPE_MAP[props.placeType].autocompleteItems;
   });
   //#endregion
 
@@ -112,12 +110,8 @@
             subtitle: item.address,
             placeId: item.placeId,
           })) || [];
-      } catch (error) {
-        snackbarStore.PushSnackbar({
-          message: (error as Error).message,
-          color: "error",
-          timeout: 2000,
-        });
+      } catch {
+        autocompleteItems.value = [];
       } finally {
         loading.value = false;
       }

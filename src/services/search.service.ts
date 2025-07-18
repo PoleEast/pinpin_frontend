@@ -1,3 +1,4 @@
+import type { ITextSearchOption } from "@/interfaces";
 import { axiosLockManager } from "@/utils";
 import axios, { type AxiosResponse } from "axios";
 import type { ApiResponseDTO, autoCompletResponseeDTO, IsearchLocationResponseDTO } from "pinpin_library";
@@ -30,24 +31,22 @@ export const searchService = {
     );
   },
 
-  async GetTextSearchLocation(
-    keyword: string,
-    priceLevel?: string[],
-    primaryType: string = "",
-    nextPageToken: string = "",
-    pageSize: number = 12,
-  ): Promise<AxiosResponse<ApiResponseDTO<IsearchLocationResponseDTO>>> {
+  async GetTextSearchLocation(options: ITextSearchOption): Promise<AxiosResponse<ApiResponseDTO<IsearchLocationResponseDTO>>> {
     return await axiosLockManager.withLock(
       "GetTextSearchLocation",
       async () => {
-        const response: AxiosResponse<ApiResponseDTO<IsearchLocationResponseDTO>> = await axios.get(`/searchLocation/textSearchLocation/${keyword}`, {
-          params: {
-            priceLevel: priceLevel,
-            primaryType: primaryType,
-            nextPageToken: nextPageToken,
-            pageSize: pageSize,
+        const response: AxiosResponse<ApiResponseDTO<IsearchLocationResponseDTO>> = await axios.get(
+          `/searchLocation/textSearchLocation/${options.keyword}`,
+          {
+            params: {
+              priceLevel: options?.priceLevel || [],
+              primaryType: options?.primaryType || "",
+              nextPageToken: options?.nextPageToken || "",
+              pageSize: options?.pageSize || 12,
+              maxImageHeight: options?.maxImageHeight || 200,
+            },
           },
-        });
+        );
         return response;
       },
       false,

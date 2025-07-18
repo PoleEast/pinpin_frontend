@@ -6,7 +6,7 @@
           <v-card-title>你的旅遊名片</v-card-title>
           <v-card-subtitle>讓旅伴們認識真實的你!</v-card-subtitle>
           <v-card-text class="px-0">
-            <!-- TODO: 這裡要有上傳頭像和背景 -->
+            <!-- TODO: 這裡要有上傳背景 -->
             <!-- TODO: 點擊卡片後可以觀看名片 -->
             <!-- TODO: 實作名片功能 -->
             <v-card class="text-white" hover image="https://cdn.vuetifyjs.com/images/cards/docks.jpg">
