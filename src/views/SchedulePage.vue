@@ -1,5 +1,7 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+  import PlaceDetailCard from "@/components/feature/places/PlaceDetailCard.vue";
+</script>
 
 <template>
-  <div style="width: 400px; height: 400px"></div>
+  <PlaceDetailCard></PlaceDetailCard>
 </template>

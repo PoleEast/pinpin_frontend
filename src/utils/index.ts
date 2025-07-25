@@ -4,3 +4,6 @@ export * from "./AxiosLockManager.utils";
 export * from "./cloudinary.utils";
 export * from "./validators.untils";
 export * from "./functionalComponent.utils";
+export * from "./string.utils";
+export * from "./type.utils";
+export * from "./typeGuard.utils";

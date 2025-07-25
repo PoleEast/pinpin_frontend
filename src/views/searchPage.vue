@@ -190,14 +190,25 @@
 <script lang="ts" setup>
   import { onMounted, onUnmounted, ref, watch, type Ref } from "vue";
   import PlacesAutocompleteInput from "@/components/feature/search/PlacesAutocompleteInput.vue";
-  import PlaceCard from "@/components/feature/search/PlaceCard.vue";
+  import PlaceCard from "@/components/feature/places/PlaceCard.vue";
 
-  import { createNumberIcon, createTriangleIcon, createStarIcon, createTextFieldRules } from "@/utils/index";
+  import {
+    createNumberIcon,
+    createTriangleIcon,
+    createStarIcon,
+    createTextFieldRules,
+    isValidKey,
+    isStringOrStringArray,
+    isNumericString,
+  } from "@/utils/index";
   import type { IChip, ILocationCard, ITextSearchOption } from "@/interfaces";
   import { GOOGLE_PLACE_TYPE_MAP, GOOGLE_PLACE_TYPE_OPTIONS, type GooglePlaceType } from "@/constants/googlePlaceType.constant";
   import { generateUUID } from "@/utils/string.utils";
   import { searchService } from "@/services";
   import { useSnackbarStore } from "@/stores";
+  import { useRoute } from "vue-router";
+  import router from "@/router";
+  import { GOOGLE_MAPS_PLACE_PRICE_LEVEL } from "pinpin_library";
   import { BUSSINESS_PRICE_OPTIONS } from "@/constants/BusinessPrice.constant";
 
   const locationCardImageMaxHeight = 200;
@@ -209,10 +220,10 @@
 
   // #region 搜尋相關
 
-  const starRating = ref<number>(0);
   // const businesstimeSelect = ref<BusinessTimes>("UNLIMITED");
   // const businessTimeSpecificDays = ref([0, 4]);
   // const BusinessTimeSpecificTimeRange = ref([0, 24]);
+  const starRating = ref<number>(0);
   const piriceType = BUSSINESS_PRICE_OPTIONS.filter((type) => type.index !== undefined).map((type) => type.label);
   const priceRange = ref([0, piriceType.length - 1]);
   const placeTypes: IChip[] = GOOGLE_PLACE_TYPE_OPTIONS.map((type) => ({
@@ -220,6 +231,7 @@
     value: type.value,
   }));
   const placeType = ref<GooglePlaceType | undefined>();
+  const route = useRoute();
 
   // #endregion
 
@@ -261,17 +273,28 @@
       rating: starRating.value ? starRating.value : undefined,
     };
 
-    processTextSearchResult(textSearchOption);
+    triggerSearchByUrl(textSearchOption);
   };
 
   const loadNextPage = (textSearchOption: ITextSearchOption, nextPageToken: string) => {
     textSearchOption.nextPageToken = nextPageToken;
     processTextSearchResult(textSearchOption);
-    console.log("loadNextPage");
+  };
+
+  const triggerSearchByUrl = (textSearchOption: ITextSearchOption) => {
+    router.push({
+      query: {
+        keyword: textSearchOption.keyword,
+        priceLevel: textSearchOption.priceLevel,
+        primaryType: textSearchOption.primaryType,
+        rating: textSearchOption.rating,
+      },
+    });
   };
 
   const processTextSearchResult = async (textSearchOption: ITextSearchOption) => {
     try {
+      console.log(textSearchOption);
       const response = await searchService.GetTextSearchLocation(textSearchOption);
 
       if (!response.data.data) {
@@ -315,6 +338,36 @@
     console.log("Searching for:", PlaceId);
   };
 
+  const validatePrimaryType = (primaryType: unknown, required: boolean = false) => {
+    if (!required && !primaryType) return true;
+
+    if (typeof primaryType !== "string") return false;
+
+    if (!GOOGLE_PLACE_TYPE_OPTIONS.some((type) => type.textSearchItem === primaryType)) return false;
+
+    return true;
+  };
+
+  const validateRating = (rating: unknown, required: boolean = false): rating is number => {
+    if (!required && !rating) return true;
+
+    if (!isNumericString(rating)) return false;
+
+    if (rating < 0 || rating > 5 || rating % 0.5) return false;
+
+    return true;
+  };
+
+  const validatePriceLevel = (priceLevel: unknown, required: boolean = false) => {
+    if (!required && !priceLevel) return true;
+
+    if (!isStringOrStringArray(priceLevel)) return false;
+
+    if (!isValidKey(priceLevel, GOOGLE_MAPS_PLACE_PRICE_LEVEL)) return false;
+
+    return true;
+  };
+
   onMounted(() => {
     observer = new IntersectionObserver(
       (entries) => {
@@ -351,6 +404,30 @@
     () => nextPageToken.value,
     (newalue, oldValue) => {
       isNewNextPageToken.value = newalue !== oldValue && newalue !== "";
+    },
+  );
+
+  watch(
+    () => route.query,
+    (query) => {
+      if (!validatePriceLevel(query.priceLevel) || !validatePrimaryType(query.primaryType) || !validateRating(query.rating) || !query.keyword) {
+        router.replace({ query: {} });
+        return;
+      }
+
+      const textSearchOption: ITextSearchOption = {
+        keyword: query.keyword as string,
+        priceLevel: query.priceLevel as string[],
+        primaryType: query.primaryType as string,
+        pageSize: pageSize,
+        maxImageHeight: locationCardImageMaxHeight,
+        rating: query.rating,
+      };
+
+      processTextSearchResult(textSearchOption);
+    },
+    {
+      immediate: true,
     },
   );
 

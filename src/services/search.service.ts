@@ -19,8 +19,9 @@ export const searchService = {
     return await axiosLockManager.withLock(
       "GetAutoComplete",
       async () => {
-        const response: AxiosResponse<ApiResponseDTO<autoCompletResponseeDTO[]>> = await axios.get(`/searchLocation/autoComplete/${keyword}`, {
+        const response: AxiosResponse<ApiResponseDTO<autoCompletResponseeDTO[]>> = await axios.get(`/searchLocation/autoComplete`, {
           params: {
+            keyword: keyword,
             sessionToken: sessionToken,
             primaryTypes: primaryTypes,
           },
@@ -39,6 +40,7 @@ export const searchService = {
           `/searchLocation/textSearchLocation/${options.keyword}`,
           {
             params: {
+              keyword: options.keyword,
               priceLevel: options?.priceLevel || [],
               primaryType: options?.primaryType || "",
               nextPageToken: options?.nextPageToken || "",
