@@ -1,7 +1,11 @@
 <template>
   <v-card class="border rounded-lg pa-0" hover>
     <v-img :src="location.photoURL" :height="imageMaxHeight + 'px'" cover>
-      <v-btn class="ma-2 rounded-1 aspect-ratio-" variant="outlined" color="pink-lighten-3" size="small">
+      <v-btn
+        class="ma-2 rounded-1 aspect-ratio-"
+        variant="outlined"
+        color="pink-lighten-3"
+        size="small">
         <font-awesome-icon class="pa-0 ma-0" icon="heart" />
       </v-btn>
     </v-img>
@@ -34,14 +38,18 @@
           <span class="text-subtitle-2">{{ location.phone }}</span>
         </v-col>
         <v-col cols="auto" class="py-0">
-          <span class="text-subtitle-2 text-success" :color="BUSINESS_STATUS_MAP[location.businssStuts].color">
+          <span
+            class="text-subtitle-2 text-success"
+            :color="BUSINESS_STATUS_MAP[location.businssStuts].color">
             {{ BUSINESS_STATUS_MAP[location.businssStuts].label }}
           </span>
         </v-col>
       </v-row>
       <v-row class="pb-1">
         <v-col cols="auto" class="pt-0">
-          <span class="text-subtitle-2 text-info d-block text-truncate">{{ location.address }}</span>
+          <span class="text-subtitle-2 text-info d-block text-truncate">
+            {{ location.address }}
+          </span>
         </v-col>
       </v-row>
     </v-card-subtitle>

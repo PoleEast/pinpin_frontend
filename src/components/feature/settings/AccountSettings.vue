@@ -2,11 +2,19 @@
   <v-container>
     <v-form @submit.prevent="save" v-model="valid" ref="accountSettingsForm">
       <v-card variant="flat">
-        <v-card-item v-for="group in inputList" :key="group.title" variant="flat" :loading="props.isLoading" class="mb-4">
+        <v-card-item
+          v-for="group in inputList"
+          :key="group.title"
+          variant="flat"
+          :loading="props.isLoading"
+          class="mb-4">
           <v-card-title class="px-1">{{ group.title }}</v-card-title>
           <v-card-text class="pa-0">
             <v-row>
-              <v-col v-for="input in group.textFields" :key="input.label" cols="12">
+              <v-col
+                v-for="input in group.textFields"
+                :key="input.label"
+                cols="12">
                 <v-text-field
                   :label="input.label"
                   :type="input.type"
@@ -15,10 +23,19 @@
                   :rules="input.rule"
                   :readonly="input.readonly"
                   :hint="input.hint"
-                  v-model="accountSettingsFormData[input.model as keyof IAccountSettingFormData]"
+                  v-model="
+                    accountSettingsFormData[
+                      input.model as keyof IAccountSettingFormData
+                    ]
+                  "
                   outlined
                   color="primary">
-                  <template v-slot:prepend><font-awesome-icon :icon="input.icon" size="2x" class="mx-1 text-primary" /></template>
+                  <template v-slot:prepend>
+                    <font-awesome-icon
+                      :icon="input.icon"
+                      size="2x"
+                      class="mx-1 text-primary" />
+                  </template>
                 </v-text-field>
               </v-col>
             </v-row>
@@ -28,17 +45,43 @@
         <v-card-item>
           <v-row>
             <v-col cols="12" md="8">
-              <v-chip draggable color="primary" variant="outlined" class="mr-3 mb-3">好碰友，您於{{ formattedJoinDate }}加入PinPin</v-chip>
+              <v-chip
+                draggable
+                color="primary"
+                variant="outlined"
+                class="mr-3 mb-3">
+                好碰友，您於{{ formattedJoinDate }}加入PinPin
+              </v-chip>
               <v-spacer />
-              <v-chip draggable color="secondary" variant="outlined" class="mb-3">我們已經認識 {{ daysSinceJoining }} 天了 !!</v-chip>
+              <v-chip
+                draggable
+                color="secondary"
+                variant="outlined"
+                class="mb-3">
+                我們已經認識 {{ daysSinceJoining }} 天了 !!
+              </v-chip>
             </v-col>
           </v-row>
 
           <v-row>
             <v-col cols="12" class="d-flex justify-end">
               <v-card-actions>
-                <v-btn class="mr-3" color="secondary" size="large" variant="plain" @click="resetForm">復原</v-btn>
-                <v-btn variant="elevated" color="primary" size="large" type="submit" :loading="isLoading">儲存</v-btn>
+                <v-btn
+                  class="mr-3"
+                  color="secondary"
+                  size="large"
+                  variant="plain"
+                  @click="resetForm">
+                  復原
+                </v-btn>
+                <v-btn
+                  variant="elevated"
+                  color="primary"
+                  size="large"
+                  type="submit"
+                  :loading="isLoading">
+                  儲存
+                </v-btn>
               </v-card-actions>
             </v-col>
           </v-row>
@@ -50,7 +93,15 @@
 <script lang="ts" setup>
   //#region import
 
-  import { computed, onMounted, reactive, ref, useTemplateRef, watch, type Ref } from "vue";
+  import {
+    computed,
+    onMounted,
+    reactive,
+    ref,
+    useTemplateRef,
+    watch,
+    type Ref,
+  } from "vue";
   import type { VForm } from "vuetify/components";
 
   //services
@@ -85,7 +136,9 @@
     confirmPassword: "",
   });
 
-  const confirmPasswordRules = [(v: string) => v === accountSettingsFormData.password || "密碼不一致"];
+  const confirmPasswordRules = [
+    (v: string) => v === accountSettingsFormData.password || "密碼不一致",
+  ];
   const inputList: IFromBlock[] = [
     {
       title: "帳號資訊",
@@ -132,7 +185,9 @@
   const accountSettingsFormRef = useTemplateRef<VForm>("accountSettingsForm");
 
   const formattedJoinDate = computed(() => {
-    return createAt.value !== null && createAt.value !== undefined ? createAt.value.toLocaleDateString() : "未知日期";
+    return createAt.value !== null && createAt.value !== undefined
+      ? createAt.value.toLocaleDateString()
+      : "未知日期";
   });
 
   const daysSinceJoining = computed(() => {

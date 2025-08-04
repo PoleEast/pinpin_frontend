@@ -3,48 +3,88 @@
     <v-card class="rounded-xl">
       <v-container v-if="!showCutImageView">
         <v-card-title class="text-center d-flex justify-center align-center">
-          <span class="text-h4 font-weight-bold text-primary d-flex align-center justify-center">
+          <span
+            class="text-h4 font-weight-bold text-primary d-flex align-center justify-center">
             <font-awesome-icon icon="image" class="mr-3" />
             更換頭像
           </span>
         </v-card-title>
-        <v-card-subtitle class="text-center">上傳頭像，讓旅伴知道誰是行李箱裡藏零食最多的人！</v-card-subtitle>
+        <v-card-subtitle class="text-center">
+          上傳頭像，讓旅伴知道誰是行李箱裡藏零食最多的人！
+        </v-card-subtitle>
         <v-card-text class="mt-3 pa-0">
-          <v-file-upload v-model="avatarFile" density="compact" title="上傳圖片/拖曳圖片至此" @update:modelValue="editAvatar()">
-            <template v-slot:icon><font-awesome-icon icon="pen-ruler" /></template>
+          <v-file-upload
+            v-model="avatarFile"
+            density="compact"
+            title="上傳圖片/拖曳圖片至此"
+            @update:modelValue="editAvatar()">
+            <template v-slot:icon>
+              <font-awesome-icon icon="pen-ruler" />
+            </template>
           </v-file-upload>
         </v-card-text>
         <v-card-text class="py-1">
-          <v-tabs v-model="tabValue" class="mb-3" @update:model-value="dataIteratorPage = 1">
-            <v-tab v-for="(data, index) in tabData" :key="data.name" :text="data.name" :value="index"></v-tab>
+          <v-tabs
+            v-model="tabValue"
+            class="mb-3"
+            @update:model-value="dataIteratorPage = 1">
+            <v-tab
+              v-for="(data, index) in tabData"
+              :key="data.name"
+              :text="data.name"
+              :value="index"></v-tab>
           </v-tabs>
           <v-tabs-window v-model="tabValue">
-            <v-tabs-window-item v-for="(data, index) in tabData" :key="data.name" :value="index">
+            <v-tabs-window-item
+              v-for="(data, index) in tabData"
+              :key="data.name"
+              :value="index">
               <v-container>
-                <v-data-iterator :page="dataIteratorPage" :items="data.avatars" items-per-page="5">
+                <v-data-iterator
+                  :page="dataIteratorPage"
+                  :items="data.avatars"
+                  items-per-page="5">
                   <template v-slot:default="{ items }">
                     <div class="d-flex flex-wrap justify-center">
-                      <div v-for="avatar in items" :key="`avatar-${avatar.raw.id}`">
+                      <div
+                        v-for="avatar in items"
+                        :key="`avatar-${avatar.raw.id}`">
                         <v-hover>
                           <template v-slot:default="{ isHovering, props }">
                             <v-avatar
-                              :image="cloudinaryUrl(avatar.raw.public_id, 'f_auto,q_auto,dpr_auto,c_scale,w_150')"
+                              :image="
+                                cloudinaryUrl(
+                                  avatar.raw.public_id,
+                                  'f_auto,q_auto,dpr_auto,c_scale,w_150',
+                                )
+                              "
                               :class="[
-                                isHovering ? 'elevation-12 avatar-scale' : 'elevation-4',
-                                selectedAvatar === avatar.raw.id ? 'border-lg border-success border-opacity-75' : '',
+                                isHovering
+                                  ? 'elevation-12 avatar-scale'
+                                  : 'elevation-4',
+                                selectedAvatar === avatar.raw.id
+                                  ? 'border-lg border-success border-opacity-75'
+                                  : '',
                               ]"
                               size="70"
                               loading="lazy"
                               class="mx-3 my-1 transition"
                               v-bind="props"
-                              @click="selectedAvatar = avatar.raw.id"></v-avatar>
-                            <div class="avatar-date text-caption text-center mt-1">
+                              @click="
+                                selectedAvatar = avatar.raw.id
+                              "></v-avatar>
+                            <div
+                              class="avatar-date text-caption text-center mt-1">
                               {{
                                 data.name === "預設頭像"
                                   ? ""
-                                  : calculateDaysDifference(avatar.raw.create_at) === 0
+                                  : calculateDaysDifference(
+                                        avatar.raw.create_at,
+                                      ) === 0
                                     ? "今天"
-                                    : calculateDaysDifference(avatar.raw.create_at) + "天前"
+                                    : calculateDaysDifference(
+                                        avatar.raw.create_at,
+                                      ) + "天前"
                               }}
                             </div>
                           </template>
@@ -85,12 +125,15 @@
       </v-container>
       <v-container v-else>
         <v-card-title class="text-center flex justify-center align-center">
-          <span class="text-h4 font-weight-bold text-primary d-flex align-center justify-center">
+          <span
+            class="text-h4 font-weight-bold text-primary d-flex align-center justify-center">
             <font-awesome-icon icon="image" class="mr-3" />
             裁切頭像
           </span>
         </v-card-title>
-        <v-card-subtitle class="text-center">頭像剪裁中！把你偷吃團友點心被抓包的表情裁掉吧！</v-card-subtitle>
+        <v-card-subtitle class="text-center">
+          頭像剪裁中！把你偷吃團友點心被抓包的表情裁掉吧！
+        </v-card-subtitle>
         <v-card-text class="mt-3 pa-0">
           <AppCopper
             v-if="showCutImageView"
@@ -112,10 +155,19 @@
   //services
   import { useAuthStore, useSnackbarStore } from "@/stores";
   import { settingService } from "@/services";
-  import { cloudinaryUrl, calculateDaysDifference, LeftTriangleIcon, RightTriangleIcon } from "@/utils";
+  import {
+    cloudinaryUrl,
+    calculateDaysDifference,
+    LeftTriangleIcon,
+    RightTriangleIcon,
+  } from "@/utils";
 
   //types
-  import { USERPROFILE_AVATAR, type AvatarChangeHistoryResponseDTO, type AvatarResponseDTO } from "pinpin_library";
+  import {
+    USERPROFILE_AVATAR,
+    type AvatarChangeHistoryResponseDTO,
+    type AvatarResponseDTO,
+  } from "pinpin_library";
 
   //#endregion
 
@@ -235,7 +287,8 @@
       handleCloseDialogError("頭像更新失敗，請稍後再試");
       return;
     }
-    authStore.AvatarPublicId = response.data?.data?.public_id ?? authStore.AvatarPublicId;
+    authStore.AvatarPublicId =
+      response.data?.data?.public_id ?? authStore.AvatarPublicId;
 
     snackbarStore.PushSnackbar({
       message: "頭像更新成功！",
@@ -260,7 +313,10 @@
     const compressCanvas = document.createElement("canvas");
     const ctx = compressCanvas.getContext("2d");
 
-    const scale = Math.min(USERPROFILE_AVATAR.MAX_WIDTH / image.width, USERPROFILE_AVATAR.MAX_WIDTH / image.height);
+    const scale = Math.min(
+      USERPROFILE_AVATAR.MAX_WIDTH / image.width,
+      USERPROFILE_AVATAR.MAX_WIDTH / image.height,
+    );
 
     compressCanvas.width = image.width * scale;
     compressCanvas.height = image.height * scale;
@@ -286,37 +342,55 @@
     updateLoading.value = false;
 
     //獲取所有頭像
-    const defaultAvatarResponse = (await settingService.GetDefaultAvatar()).data.data;
-    const defaultAvatarResult = defaultAvatarResponse?.map((item: AvatarResponseDTO) => ({
-      ...item,
-      public_id: cloudinaryUrl(item.public_id, "f_auto,q_auto,dpr_auto,c_scale,w_150"),
-    }));
+    const defaultAvatarResponse = (await settingService.GetDefaultAvatar()).data
+      .data;
+    const defaultAvatarResult = defaultAvatarResponse?.map(
+      (item: AvatarResponseDTO) => ({
+        ...item,
+        public_id: cloudinaryUrl(
+          item.public_id,
+          "f_auto,q_auto,dpr_auto,c_scale,w_150",
+        ),
+      }),
+    );
     //歷史投像需要轉換
-    const changeHistoryAvatarResponse = await settingService.GetChangeHistoryAvatar();
+    const changeHistoryAvatarResponse =
+      await settingService.GetChangeHistoryAvatar();
     const changeHistoryAvatarResult: AvatarResponseDTO[] =
-      changeHistoryAvatarResponse?.data?.data?.map((item: AvatarChangeHistoryResponseDTO) => {
-        return {
-          id: item.avatar.id,
-          public_id: cloudinaryUrl(item.avatar.public_id),
-          type: item.avatar.type,
-          create_at: item.change_date,
-        };
-      }) ?? [];
+      changeHistoryAvatarResponse?.data?.data?.map(
+        (item: AvatarChangeHistoryResponseDTO) => {
+          return {
+            id: item.avatar.id,
+            public_id: cloudinaryUrl(item.avatar.public_id),
+            type: item.avatar.type,
+            create_at: item.change_date,
+          };
+        },
+      ) ?? [];
 
     const userAvatarResponse = (await settingService.GetUserAvatar()).data.data;
-    const userAvatarResult = userAvatarResponse?.map((item: AvatarResponseDTO) => {
-      return {
-        ...item,
-        public_id: cloudinaryUrl(item.public_id),
-      };
-    });
+    const userAvatarResult = userAvatarResponse?.map(
+      (item: AvatarResponseDTO) => {
+        return {
+          ...item,
+          public_id: cloudinaryUrl(item.public_id),
+        };
+      },
+    );
 
-    defaultAvatars.value = Array.isArray(defaultAvatarResult) ? defaultAvatarResult : [];
-    recentAvatars.value = Array.isArray(changeHistoryAvatarResult) ? changeHistoryAvatarResult : [];
+    defaultAvatars.value = Array.isArray(defaultAvatarResult)
+      ? defaultAvatarResult
+      : [];
+    recentAvatars.value = Array.isArray(changeHistoryAvatarResult)
+      ? changeHistoryAvatarResult
+      : [];
     userAvatars.value = Array.isArray(userAvatarResult) ? userAvatarResult : [];
 
     selectedAvatar.value =
-      (defaultAvatarResponse ?? []).concat(userAvatarResponse ?? []).find((item) => item.public_id === authStore.AvatarPublicId)?.id ?? undefined;
+      (defaultAvatarResponse ?? [])
+        .concat(userAvatarResponse ?? [])
+        .find((item) => item.public_id === authStore.AvatarPublicId)?.id ??
+      undefined;
   };
 
   //#endregion

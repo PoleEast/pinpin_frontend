@@ -3,17 +3,28 @@
     <!-- Dialog區塊 -->
     <v-card class="rounded-xl">
       <v-card-title class="text-center pt-8">
-        <span class="text-h4 font-weight-bold text-primary d-flex align-center justify-center">
+        <span
+          class="text-h4 font-weight-bold text-primary d-flex align-center justify-center">
           <font-awesome-icon icon="right-to-bracket" class="mr-3" />
           {{ isLogin ? "登入" : "加入" }} PinPin
         </span>
       </v-card-title>
       <v-card-subtitle class="text-center pt-3">
-        <span class="font-weight-bold">{{ isLogin ? "歡迎來到PinPin，準備規劃您的旅程了嗎?" : "加入PinPin，開始你的旅程規劃吧！" }}</span>
+        <span class="font-weight-bold">
+          {{
+            isLogin
+              ? "歡迎來到PinPin，準備規劃您的旅程了嗎?"
+              : "加入PinPin，開始你的旅程規劃吧！"
+          }}
+        </span>
       </v-card-subtitle>
       <v-card-text>
         <!-- 登入表單 -->
-        <v-form v-if="isLogin" @submit.prevent="login" v-model="valid" ref="loginForm">
+        <v-form
+          v-if="isLogin"
+          @submit.prevent="login"
+          v-model="valid"
+          ref="loginForm">
           <v-container>
             <v-text-field
               v-model="loginFormData.account"
@@ -22,7 +33,9 @@
               label="帳號"
               required
               class="mb-4">
-              <template v-slot:prepend><font-awesome-icon size="2x" icon="person-walking-luggage" /></template>
+              <template v-slot:prepend>
+                <font-awesome-icon size="2x" icon="person-walking-luggage" />
+              </template>
             </v-text-field>
             <v-text-field
               v-model="loginFormData.password"
@@ -32,12 +45,26 @@
               required
               :type="showPassword ? 'text' : 'password'"
               class="mb-4">
-              <template v-slot:prepend><font-awesome-icon icon="key" size="2x" class="mx-1" /></template>
+              <template v-slot:prepend>
+                <font-awesome-icon icon="key" size="2x" class="mx-1" />
+              </template>
               <template v-slot:append-inner>
-                <font-awesome-icon :icon="showPassword ? 'eye' : 'eye-slash'" @click="showPassword = !showPassword" class="mx-1 cursor-pointer" />
+                <font-awesome-icon
+                  :icon="showPassword ? 'eye' : 'eye-slash'"
+                  @click="showPassword = !showPassword"
+                  class="mx-1 cursor-pointer" />
               </template>
             </v-text-field>
-            <v-btn color="primary" size="large" block :loading="loading" type="submit" class="mb-4" elevation="1">登入</v-btn>
+            <v-btn
+              color="primary"
+              size="large"
+              block
+              :loading="loading"
+              type="submit"
+              class="mb-4"
+              elevation="1">
+              登入
+            </v-btn>
             <div class="d-flex align-center mb-4">
               <v-divider></v-divider>
               <span class="mx-3 text-grey">或</span>
@@ -46,12 +73,21 @@
 
             <div class="text-center justify-center align-center d-flex">
               <span class="text-primary">竟然還沒加入我們？</span>
-              <v-btn color="secondary" class="px-3 mx-2" @click="isLogin = false">立即加入!!</v-btn>
+              <v-btn
+                color="secondary"
+                class="px-3 mx-2"
+                @click="isLogin = false">
+                立即加入!!
+              </v-btn>
             </div>
           </v-container>
         </v-form>
         <!-- 註冊表單 -->
-        <v-form v-else @submit.prevent="register" v-model="valid" ref="registerForm">
+        <v-form
+          v-else
+          @submit.prevent="register"
+          v-model="valid"
+          ref="registerForm">
           <v-container>
             <v-text-field
               v-model="registerFormData.account"
@@ -60,10 +96,19 @@
               required
               class="mb-4"
               :error-messages="registerErrorMessage">
-              <template v-slot:prepend><font-awesome-icon size="2x" icon="person-walking-luggage" /></template>
+              <template v-slot:prepend>
+                <font-awesome-icon size="2x" icon="person-walking-luggage" />
+              </template>
             </v-text-field>
-            <v-text-field v-model="registerFormData.nickname" label="暱稱" :rules="rules.nickname" required class="mb-4">
-              <template v-slot:prepend><font-awesome-icon size="2x" icon="id-card-clip" /></template>
+            <v-text-field
+              v-model="registerFormData.nickname"
+              label="暱稱"
+              :rules="rules.nickname"
+              required
+              class="mb-4">
+              <template v-slot:prepend>
+                <font-awesome-icon size="2x" icon="id-card-clip" />
+              </template>
             </v-text-field>
             <v-text-field
               :rules="rules.password(true)"
@@ -71,9 +116,14 @@
               label="密碼"
               :type="showPassword ? 'text' : 'password'"
               class="mb-4">
-              <template v-slot:prepend><font-awesome-icon icon="key" size="2x" class="mx-1" /></template>
+              <template v-slot:prepend>
+                <font-awesome-icon icon="key" size="2x" class="mx-1" />
+              </template>
               <template v-slot:append-inner>
-                <font-awesome-icon :icon="showPassword ? 'eye' : 'eye-slash'" @click="showPassword = !showPassword" class="mx-1 cursor-pointer" />
+                <font-awesome-icon
+                  :icon="showPassword ? 'eye' : 'eye-slash'"
+                  @click="showPassword = !showPassword"
+                  class="mx-1 cursor-pointer" />
               </template>
             </v-text-field>
             <v-text-field
@@ -82,9 +132,20 @@
               :rules="confirmPasswordRules"
               :type="showPassword ? 'text' : 'password'"
               class="mb-4">
-              <template v-slot:prepend><font-awesome-icon icon="square-check" size="2x" class="mx-1" /></template>
+              <template v-slot:prepend>
+                <font-awesome-icon icon="square-check" size="2x" class="mx-1" />
+              </template>
             </v-text-field>
-            <v-btn color="primary" size="large" block :loading="loading" class="mb-4" elevation="1" type="submit">加入</v-btn>
+            <v-btn
+              color="primary"
+              size="large"
+              block
+              :loading="loading"
+              class="mb-4"
+              elevation="1"
+              type="submit">
+              加入
+            </v-btn>
             <div class="d-flex align-center mb-4">
               <v-divider></v-divider>
               <span class="mx-3 text-grey">或</span>
@@ -93,7 +154,12 @@
 
             <div class="text-center justify-center align-center d-flex">
               <span class="text-primary">What!?已經有帳號了？</span>
-              <v-btn color="secondary" class="px-3 mx-2" @click="isLogin = true">立即登入!!</v-btn>
+              <v-btn
+                color="secondary"
+                class="px-3 mx-2"
+                @click="isLogin = true">
+                立即登入!!
+              </v-btn>
             </div>
           </v-container>
         </v-form>
@@ -114,7 +180,11 @@
   //types
   import type { VForm } from "vuetify/components";
   import type { IRegisterFormData, Isnackbar } from "@/interfaces";
-  import { type ApiResponseDTO, type LoginRequestDTO, type RegisterRequestDTO } from "pinpin_library";
+  import {
+    type ApiResponseDTO,
+    type LoginRequestDTO,
+    type RegisterRequestDTO,
+  } from "pinpin_library";
   //#endregion;
 
   //#region variable
@@ -152,7 +222,10 @@
   //#region 驗證規則
 
   const rules = ValidationService.createRules();
-  const confirmPasswordRules = [(v: string) => v.length > 0 || "請輸入確認密碼", (v: string) => v === registerFormData.password || "密碼不相同"];
+  const confirmPasswordRules = [
+    (v: string) => v.length > 0 || "請輸入確認密碼",
+    (v: string) => v === registerFormData.password || "密碼不相同",
+  ];
 
   //#endregion 驗證規則
 
@@ -175,7 +248,10 @@
       };
 
       const response = await authService.Login(loginRequest);
-      authStore.SetUser(response.data?.data?.nickname || "", response.data?.data?.avatar_public_id || "");
+      authStore.SetUser(
+        response.data?.data?.nickname || "",
+        response.data?.data?.avatar_public_id || "",
+      );
       const snackbar = {
         timeout: 2000,
         message: response.data.message,
@@ -186,7 +262,10 @@
       showDialog.value = false;
     } catch (error) {
       const apiError = error as AxiosError<ApiResponseDTO>;
-      loginErrorMessage.value = apiError.status == HttpStatusCode.Unauthorized ? (apiError.response?.data.message ?? "") : "";
+      loginErrorMessage.value =
+        apiError.status == HttpStatusCode.Unauthorized
+          ? (apiError.response?.data.message ?? "")
+          : "";
     } finally {
       loading.value = false;
     }
@@ -222,7 +301,10 @@
       };
 
       const response = await authService.Register(registerRequest);
-      authStore.SetUser(response.data.data?.nickname ?? "", response.data.data?.avatar_public_id ?? "");
+      authStore.SetUser(
+        response.data.data?.nickname ?? "",
+        response.data.data?.avatar_public_id ?? "",
+      );
       const snackbar = {
         timeout: 2000,
         message: response.data.message,
@@ -233,7 +315,10 @@
       showDialog.value = false;
     } catch (error) {
       const apiError = error as AxiosError<ApiResponseDTO>;
-      loginErrorMessage.value = apiError.status == HttpStatusCode.Unauthorized ? (apiError.response?.data.message ?? "") : "";
+      loginErrorMessage.value =
+        apiError.status == HttpStatusCode.Unauthorized
+          ? (apiError.response?.data.message ?? "")
+          : "";
     } finally {
       loading.value = false;
     }

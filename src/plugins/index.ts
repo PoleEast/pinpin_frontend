@@ -7,5 +7,10 @@ import "./axios";
 import iconify from "./iconify";
 
 export function registerPlugins(app: App) {
-  app.use(createPinia()).use(router).use(vuetify).use(iconify).component("font-awesome-icon", FontAwesomeIcon);
+  app
+    .use(createPinia())
+    .use(router)
+    .use(vuetify)
+    .use(iconify)
+    .component("font-awesome-icon", FontAwesomeIcon);
 }

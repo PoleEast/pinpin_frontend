@@ -2,7 +2,12 @@
   <v-footer :app="$vuetify.display.mdAndUp" color="gray-900" class="px-4 pa-0">
     <span class="text-white">© {{ currentYear }} by PinPinTeam</span>
     <v-spacer />
-    <v-btn icon href="https://github.com/PoleEast" target="_blank" rel="noopener noreferrer" variant="plain">
+    <v-btn
+      icon
+      href="https://github.com/PoleEast"
+      target="_blank"
+      rel="noopener noreferrer"
+      variant="plain">
       <font-awesome-icon icon="fa-brands fa-github" size="2x" />
     </v-btn>
   </v-footer>

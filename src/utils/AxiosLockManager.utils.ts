@@ -14,7 +14,11 @@ class AxiosLockManager {
    * @throws 操作本身拋出的錯誤
    * ```
    */
-  withLock = <T>(lockKey: string, operation: () => Promise<T>, showError: boolean = true): Promise<T> => {
+  withLock = <T>(
+    lockKey: string,
+    operation: () => Promise<T>,
+    showError: boolean = true,
+  ): Promise<T> => {
     return new Promise(async (resolve, reject) => {
       if (this.operationLock.has(lockKey)) {
         if (showError) {

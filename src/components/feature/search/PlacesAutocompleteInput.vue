@@ -15,17 +15,34 @@
     :error="errorMessages !== ''"
     @keydown.enter="searchByText(searchText)"
     @blur="errorMessages = ''"
-    @update:search="autocompleteUpdateSearchText(searchText, sessionToken, includedPrimaryTypes)"
+    @update:search="
+      autocompleteUpdateSearchText(
+        searchText,
+        sessionToken,
+        includedPrimaryTypes,
+      )
+    "
     @update:model-value="searchByPlaceId">
     <template #append-inner>
-      <font-awesome-icon icon="magnifying-glass" @click="searchByText(searchText)" class="cursor-pointer mx-1" />
+      <font-awesome-icon
+        icon="magnifying-glass"
+        @click="searchByText(searchText)"
+        class="cursor-pointer mx-1" />
     </template>
     <template #prepend-inner>
-      <img src="\src\assets\google_logo\desktop\google_on_white.png" alt="search-icon" class="cursor-pointer" />
+      <img
+        src="\src\assets\google_logo\desktop\google_on_white.png"
+        alt="search-icon"
+        class="cursor-pointer" />
     </template>
     <template #item="{ props, item }">
-      <v-list-item class="overflow-hidden" v-bind="props" :key="item.raw.placeId">
-        <v-list-item-subtitle class="overflow-hidden">{{ item.raw.subtitle }}</v-list-item-subtitle>
+      <v-list-item
+        class="overflow-hidden"
+        v-bind="props"
+        :key="item.raw.placeId">
+        <v-list-item-subtitle class="overflow-hidden">
+          {{ item.raw.subtitle }}
+        </v-list-item-subtitle>
       </v-list-item>
     </template>
   </v-autocomplete>
@@ -34,7 +51,10 @@
 <script setup lang="ts">
   import { computed, ref } from "vue";
   import { debounce } from "perfect-debounce";
-  import { GOOGLE_PLACE_TYPE_MAP, type GooglePlaceType } from "@/constants/googlePlaceType.constant";
+  import {
+    GOOGLE_PLACE_TYPE_MAP,
+    type GooglePlaceType,
+  } from "@/constants/googlePlaceType.constant";
   import { searchService } from "@/services";
 
   //#region variables
@@ -103,7 +123,11 @@
       loading.value = true;
 
       try {
-        const response = await searchService.GetAutoComplete(keyword, sessionToken, primaryTypes);
+        const response = await searchService.GetAutoComplete(
+          keyword,
+          sessionToken,
+          primaryTypes,
+        );
         autocompleteItems.value =
           response.data.data?.map((item) => ({
             title: item.text,

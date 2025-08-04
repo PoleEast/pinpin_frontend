@@ -1,7 +1,11 @@
 import type { ITextSearchOption } from "@/interfaces";
 import { axiosLockManager } from "@/utils";
 import axios, { type AxiosResponse } from "axios";
-import type { ApiResponseDTO, autoCompletResponseeDTO, IsearchLocationResponseDTO } from "pinpin_library";
+import type {
+  ApiResponseDTO,
+  autoCompletResponseeDTO,
+  IsearchLocationResponseDTO,
+} from "pinpin_library";
 
 export const searchService = {
   /**
@@ -19,7 +23,9 @@ export const searchService = {
     return await axiosLockManager.withLock(
       "GetAutoComplete",
       async () => {
-        const response: AxiosResponse<ApiResponseDTO<autoCompletResponseeDTO[]>> = await axios.get(`/searchLocation/autoComplete`, {
+        const response: AxiosResponse<
+          ApiResponseDTO<autoCompletResponseeDTO[]>
+        > = await axios.get(`/searchLocation/autoComplete`, {
           params: {
             keyword: keyword,
             sessionToken: sessionToken,
@@ -32,11 +38,15 @@ export const searchService = {
     );
   },
 
-  async GetTextSearchLocation(options: ITextSearchOption): Promise<AxiosResponse<ApiResponseDTO<IsearchLocationResponseDTO>>> {
+  async GetTextSearchLocation(
+    options: ITextSearchOption,
+  ): Promise<AxiosResponse<ApiResponseDTO<IsearchLocationResponseDTO>>> {
     return await axiosLockManager.withLock(
       "GetTextSearchLocation",
       async () => {
-        const response: AxiosResponse<ApiResponseDTO<IsearchLocationResponseDTO>> = await axios.get(
+        const response: AxiosResponse<
+          ApiResponseDTO<IsearchLocationResponseDTO>
+        > = await axios.get(
           `/searchLocation/textSearchLocation/${options.keyword}`,
           {
             params: {

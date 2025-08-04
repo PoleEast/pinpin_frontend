@@ -1,13 +1,24 @@
 <template>
   <v-app-bar app color="primary" elevation="2">
-    <router-link :to="{ name: 'home' }" class="d-flex align-center ps-3 text-decoration-none">
-      <v-img :width="$vuetify.display.mdAndUp ? 150 : 100" src="/src/assets/logo.png" alt="PinPin Logo" />
+    <router-link
+      :to="{ name: 'home' }"
+      class="d-flex align-center ps-3 text-decoration-none">
+      <v-img
+        :width="$vuetify.display.mdAndUp ? 150 : 100"
+        src="/src/assets/logo.png"
+        alt="PinPin Logo" />
     </router-link>
 
     <!-- Desktop Navigation -->
     <div v-if="$vuetify.display.mdAndUp" class="d-flex align-center w-100 ml-4">
       <div class="d-flex">
-        <v-btn v-for="item in menuItems" :key="item.title" :to="item.path" color="white" variant="text" class="text-h6 font-weight-bold ml-2">
+        <v-btn
+          v-for="item in menuItems"
+          :key="item.title"
+          :to="item.path"
+          color="white"
+          variant="text"
+          class="text-h6 font-weight-bold ml-2">
           {{ item.title }}
         </v-btn>
       </div>
@@ -16,7 +27,12 @@
           <UserButton v-show="isLoggedIn" @show-snackbar="pushSnackbar" />
         </v-fade-transition>
         <v-fade-transition hide-on-leave>
-          <v-btn v-show="!isLoggedIn" class="text-h6 font-weight-bold w-100" color="white" variant="text" @click="showDialogLogin">
+          <v-btn
+            v-show="!isLoggedIn"
+            class="text-h6 font-weight-bold w-100"
+            color="white"
+            variant="text"
+            @click="showDialogLogin">
             <template v-slot:append>
               <font-awesome-icon icon="right-to-bracket" />
             </template>
@@ -38,7 +54,10 @@
         </template>
 
         <v-list density="compact">
-          <v-list-item v-for="item in menuItems" :key="item.title" :to="item.path">
+          <v-list-item
+            v-for="item in menuItems"
+            :key="item.title"
+            :to="item.path">
             <v-list-item-title>{{ item.title }}</v-list-item-title>
           </v-list-item>
           <v-divider class="my-2" />
@@ -46,7 +65,11 @@
             <UserButton v-show="isLoggedIn" @show-snackbar="pushSnackbar" />
           </v-fade-transition>
           <v-fade-transition hide-on-leave>
-            <v-btn v-show="!isLoggedIn" class="text-body-1 font-weight-bold" variant="text" @click="showDialogLogin">
+            <v-btn
+              v-show="!isLoggedIn"
+              class="text-body-1 font-weight-bold"
+              variant="text"
+              @click="showDialogLogin">
               <template v-slot:append>
                 <font-awesome-icon icon="right-to-bracket" />
               </template>
@@ -57,7 +80,10 @@
       </v-menu>
     </template>
   </v-app-bar>
-  <LoginRegisterDialog ref="webLoginRef" v-model:show-dialog="showDialog" @show-snackbar="pushSnackbar" />
+  <LoginRegisterDialog
+    ref="webLoginRef"
+    v-model:show-dialog="showDialog"
+    @show-snackbar="pushSnackbar" />
 </template>
 
 <script setup lang="ts">

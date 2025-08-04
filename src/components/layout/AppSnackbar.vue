@@ -1,5 +1,9 @@
 <template>
-  <v-snackbar v-model="isVisible" :timeout="currentSnackbar?.timeout" :color="currentSnackbar?.color" @update:model-value="handleVisibilityChange">
+  <v-snackbar
+    v-model="isVisible"
+    :timeout="currentSnackbar?.timeout"
+    :color="currentSnackbar?.color"
+    @update:model-value="handleVisibilityChange">
     {{ currentSnackbar?.message }}
     <template v-slot:actions>
       <v-btn variant="text" @click="closeSnackbar">關閉</v-btn>
@@ -14,7 +18,9 @@
   const isVisible = ref(false);
 
   const snackbarStore = useSnackbarStore();
-  const currentSnackbar = computed(() => (snackbarStore.queue.length > 0 ? snackbarStore.queue[0] : null));
+  const currentSnackbar = computed(() =>
+    snackbarStore.queue.length > 0 ? snackbarStore.queue[0] : null,
+  );
 
   // 當隊列中有新項目時，顯示snackbar
   const handleVisibilityChange = (value: boolean) => {

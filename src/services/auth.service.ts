@@ -1,6 +1,11 @@
 import axios, { type AxiosResponse } from "axios";
 import { axiosLockManager } from "../utils";
-import type { ApiResponseDTO, LoginResponseDTO, LoginRequestDTO, RegisterRequestDTO } from "pinpin_library";
+import type {
+  ApiResponseDTO,
+  LoginResponseDTO,
+  LoginRequestDTO,
+  RegisterRequestDTO,
+} from "pinpin_library";
 
 export const authService = {
   /**
@@ -20,7 +25,9 @@ export const authService = {
    * @param {LoginRequestDTO} data - 登入資料
    * @returns {Promise<AxiosResponse<ApiResponseDTO<LoginResponseDTO>>>} 登入回應結果
    */
-  async Login(data: LoginRequestDTO): Promise<AxiosResponse<ApiResponseDTO<LoginResponseDTO>>> {
+  async Login(
+    data: LoginRequestDTO,
+  ): Promise<AxiosResponse<ApiResponseDTO<LoginResponseDTO>>> {
     return await axiosLockManager.withLock("Login", async () => {
       const response = await axios.post("/user/login", data);
       return response;
@@ -44,7 +51,8 @@ export const authService = {
    */
 
   async checkAuthStatus(): Promise<LoginResponseDTO | undefined> {
-    const response: AxiosResponse<ApiResponseDTO<LoginResponseDTO>> = await axios("/user/check-auth");
+    const response: AxiosResponse<ApiResponseDTO<LoginResponseDTO>> =
+      await axios("/user/check-auth");
     return response?.data?.data;
   },
 };

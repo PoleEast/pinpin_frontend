@@ -7,13 +7,21 @@
     </div>
     <div class="d-flex justify-end mb-2">
       <v-btn class="mr-2" text="取消" @click="cancel"></v-btn>
-      <v-btn class="mr-2" text="剪裁" :loading="props.updateLoading" @click="getCanvas"></v-btn>
+      <v-btn
+        class="mr-2"
+        text="剪裁"
+        :loading="props.updateLoading"
+        @click="getCanvas"></v-btn>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-  import Cropper, { CropperCanvas, CropperImage, CropperSelection } from "cropperjs";
+  import Cropper, {
+    CropperCanvas,
+    CropperImage,
+    CropperSelection,
+  } from "cropperjs";
   import type { Selection } from "@cropper/element-selection";
   import { onMounted, ref } from "vue";
 
@@ -79,7 +87,13 @@
     cropperSelection?.setAttribute("aspect-ratio", "1");
 
     cropperImage?.$ready(() => {
-      if (cropperImage === null || cropperSelection === null || cropperCanvas === null || cropper.value === null) return;
+      if (
+        cropperImage === null ||
+        cropperSelection === null ||
+        cropperCanvas === null ||
+        cropper.value === null
+      )
+        return;
 
       cropperImage.$center("cover");
 

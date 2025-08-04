@@ -98,6 +98,8 @@ import {
   fa8,
   fa9,
   faStarHalf,
+  faComment,
+  faUpRightFromSquare,
 } from "@fortawesome/free-solid-svg-icons";
 import { faStar as faSolidStar } from "@fortawesome/free-solid-svg-icons";
 import { faStar as faRegularStar } from "@fortawesome/free-regular-svg-icons";
@@ -196,6 +198,8 @@ library.add(
   faTableList,
   faTable,
   faCaretUp,
+  faComment,
+  faUpRightFromSquare,
   fa1,
   fa2,
   fa3,

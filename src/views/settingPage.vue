@@ -22,14 +22,25 @@
       <v-col cols="12" md="5">
         <v-card class="mt-4 pa-4" elevation="3">
           <v-card-title class="text-h5 font-weight-bold">
-            <font-awesome-icon v-if="currentOption" :icon="currentOption?.icon" size="lg" class="me-3" />
+            <font-awesome-icon
+              v-if="currentOption"
+              :icon="currentOption?.icon"
+              size="lg"
+              class="me-3" />
             {{ currentOption?.title }}
           </v-card-title>
           <v-card-subtitle>{{ currentOption?.description }}</v-card-subtitle>
-          <v-skeleton-loader v-if="initLoading" type="card-avatar,heading,list-item-two-line, actions" class="mx-auto"></v-skeleton-loader>
+          <v-skeleton-loader
+            v-if="initLoading"
+            type="card-avatar,heading,list-item-two-line, actions"
+            class="mx-auto"></v-skeleton-loader>
           <v-expand-transition v-else mode="out-in">
             <keep-alive>
-              <component :is="currentOption?.component" v-bind="currentOption?.props" v-on="currentOption?.emits || {}" class="mt-2" />
+              <component
+                :is="currentOption?.component"
+                v-bind="currentOption?.props"
+                v-on="currentOption?.emits || {}"
+                class="mt-2" />
             </keep-alive>
           </v-expand-transition>
         </v-card>
@@ -48,7 +59,9 @@
         @click="currentOption = item"
         size="large"
         class="mb-2"
-        :class="currentOption?.title === item.title ? 'bg-success' : 'bg-primary'"
+        :class="
+          currentOption?.title === item.title ? 'bg-success' : 'bg-primary'
+        "
         icon>
         <font-awesome-icon :icon="item.icon" size="lg" />
       </v-btn>
@@ -71,8 +84,18 @@
   import { useSnackbarStore } from "@/stores";
 
   //types
-  import type { AccountRequestDTO, SettingResponseDTO, UserProfileRequestDTO, UserProfileResponseDTO } from "pinpin_library";
-  import type { IAccountSettingFormData, ISettingOption, Isnackbar, IUserProfileSettingFromData } from "@/interfaces";
+  import type {
+    AccountRequestDTO,
+    SettingResponseDTO,
+    UserProfileRequestDTO,
+    UserProfileResponseDTO,
+  } from "pinpin_library";
+  import type {
+    IAccountSettingFormData,
+    ISettingOption,
+    Isnackbar,
+    IUserProfileSettingFromData,
+  } from "@/interfaces";
 
   //#endregion
 
@@ -100,7 +123,11 @@
       title: "個人資料",
       component: markRaw(UserProfileSetting),
       icon: "id-badge",
-      props: { isLoading: updateLoading, settingData: settingData, userProfile: userProfile },
+      props: {
+        isLoading: updateLoading,
+        settingData: settingData,
+        userProfile: userProfile,
+      },
       emits: { update: updateUserProfile },
       description: "展示你的人特質，讓旅伴盡情見識幽默獨特的個人風格！",
     },
@@ -119,7 +146,10 @@
   //#region function
   const getSettingData = async (): Promise<SettingResponseDTO> => {
     try {
-      return (await settingService.GetSettingData()).data?.data || ({} as SettingResponseDTO);
+      return (
+        (await settingService.GetSettingData()).data?.data ||
+        ({} as SettingResponseDTO)
+      );
     } catch {
       return {} as SettingResponseDTO;
     }
@@ -127,13 +157,18 @@
 
   const getUserProfile = async (): Promise<UserProfileResponseDTO> => {
     try {
-      return (await settingService.GetUserProfile()).data?.data || ({} as UserProfileResponseDTO);
+      return (
+        (await settingService.GetUserProfile()).data?.data ||
+        ({} as UserProfileResponseDTO)
+      );
     } catch {
       return {} as UserProfileResponseDTO;
     }
   };
 
-  const updateAccountSetting = async (accountSettingsFormData: IAccountSettingFormData): Promise<AccountRequestDTO> => {
+  const updateAccountSetting = async (
+    accountSettingsFormData: IAccountSettingFormData,
+  ): Promise<AccountRequestDTO> => {
     updateLoading.value = true;
     try {
       const accountRequestDTO: AccountRequestDTO = {
@@ -141,7 +176,8 @@
         password: accountSettingsFormData.password,
       };
 
-      const response = await settingService.UpdateAccountSetting(accountRequestDTO);
+      const response =
+        await settingService.UpdateAccountSetting(accountRequestDTO);
       const snackbar: Isnackbar = {
         timeout: 2000,
         message: "帳號設定更新成功",
@@ -163,7 +199,9 @@
     }
   };
 
-  const updateUserProfile = async (userProfileSettingFromData: IUserProfileSettingFromData) => {
+  const updateUserProfile = async (
+    userProfileSettingFromData: IUserProfileSettingFromData,
+  ) => {
     updateLoading.value = true;
     try {
       const userProfileRequestDTO: UserProfileRequestDTO = {
@@ -185,7 +223,9 @@
         currencies: userProfileSettingFromData.currencies,
       };
 
-      const response = await settingService.UpdateUserProfileSetting(userProfileRequestDTO);
+      const response = await settingService.UpdateUserProfileSetting(
+        userProfileRequestDTO,
+      );
 
       const snackbar: Isnackbar = {
         timeout: 2000,
@@ -208,7 +248,10 @@
 
   onMounted(async () => {
     try {
-      const [settingResponse, profileResponse] = await Promise.all([getSettingData(), getUserProfile()]);
+      const [settingResponse, profileResponse] = await Promise.all([
+        getSettingData(),
+        getUserProfile(),
+      ]);
 
       settingData.value = settingResponse;
       userProfile.value = profileResponse;
