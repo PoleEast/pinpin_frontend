@@ -1,14 +1,15 @@
 <template>
   <v-card class="border rounded-lg pa-0" hover>
-    <v-img :src="location.photoURL" :height="imageMaxHeight + 'px'" cover
-      ><v-btn class="ma-2 rounded-1 aspect-ratio-" variant="outlined" color="pink-lighten-3" size="small"
-        ><font-awesome-icon class="pa-0 ma-0" icon="heart" /></v-btn
-    ></v-img>
+    <v-img :src="location.photoURL" :height="imageMaxHeight + 'px'" cover>
+      <v-btn class="ma-2 rounded-1 aspect-ratio-" variant="outlined" color="pink-lighten-3" size="small">
+        <font-awesome-icon class="pa-0 ma-0" icon="heart" />
+      </v-btn>
+    </v-img>
     <v-card-title class="mx-1 pb-0">{{ location.placeName }}</v-card-title>
     <v-card-subtitle class="mx-1">
       <v-row class="d-flex align-center justify-space-between pa-0">
         <v-col cols="auto pb-0">
-          <span class="text-subtitle-2">評分: </span>
+          <span class="text-subtitle-2">評分:</span>
           <v-rating
             :model-value="location.rating"
             active-color="warning"
@@ -19,7 +20,7 @@
             :empty-icon="createStarIcon('empty', '2xs')">
             icon
           </v-rating>
-          <span class="text-subtitle-2"> ({{ location.userRatingCount }}) </span>
+          <span class="text-subtitle-2">({{ location.userRatingCount }})</span>
         </v-col>
         <v-col cols="auto pb-0" class="d-flex align-center">
           <span class="text-subtitle-2 mr-3 font-weight-bold">
@@ -33,9 +34,9 @@
           <span class="text-subtitle-2">{{ location.phone }}</span>
         </v-col>
         <v-col cols="auto" class="py-0">
-          <span class="text-subtitle-2 text-success" :color="BUSINESS_STATUS_MAP[location.businssStuts].color">{{
-            BUSINESS_STATUS_MAP[location.businssStuts].label
-          }}</span>
+          <span class="text-subtitle-2 text-success" :color="BUSINESS_STATUS_MAP[location.businssStuts].color">
+            {{ BUSINESS_STATUS_MAP[location.businssStuts].label }}
+          </span>
         </v-col>
       </v-row>
       <v-row class="pb-1">

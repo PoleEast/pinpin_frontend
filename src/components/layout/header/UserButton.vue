@@ -12,13 +12,13 @@
         <v-list-item class="px-1" key="logout" value="logout">
           <v-divider class="mb-2" />
           <v-list-item-title class="text-right rounded">
-            <v-btn class="text-body-1 font-weight-bold" variant="text" @click="logout"
-              ><template v-slot:append>
+            <v-btn class="text-body-1 font-weight-bold" variant="text" @click="logout">
+              <template v-slot:append>
                 <font-awesome-icon class="text-primary" icon="right-to-bracket" />
               </template>
               登出
-            </v-btn></v-list-item-title
-          >
+            </v-btn>
+          </v-list-item-title>
         </v-list-item>
       </v-list>
     </v-menu>

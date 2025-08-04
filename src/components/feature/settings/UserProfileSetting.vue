@@ -48,8 +48,7 @@
                   :rules="mottoRules"
                   density="compact"
                   @update:focused="bioTextIsFocus = $event"
-                  v-model="userProfileSettingFromData.motto">
-                </v-text-field>
+                  v-model="userProfileSettingFromData.motto"></v-text-field>
               </template>
               <v-card-text>
                 <v-textarea
@@ -141,7 +140,7 @@
           <v-card-subtitle>旅途中的獨特色彩</v-card-subtitle>
           <v-card-text>
             <v-input v-for="(inputChip, index) in inputChips" :key="index">
-              <template v-slot:prepend> <font-awesome-icon :icon="inputChip.icon" fixed-width size="2x" class="text-primary mr-4" /></template>
+              <template v-slot:prepend><font-awesome-icon :icon="inputChip.icon" fixed-width size="2x" class="text-primary mr-4" /></template>
               <template v-slot:default>
                 <div>
                   <v-label
@@ -163,16 +162,13 @@
                         :close-icon="CloseIcon"
                         closable
                         @click:close="removeUserProfile(chip, inputChip.type)"
-                        class="mr-1 mb-1 cursor-default"
-                        ><template v-slot:prepend>
-                          <AppIconWrapper
-                            v-if="chip.icon"
-                            :icons="chip"
-                            class="mr-1"
-                            :class="chip.color ? 'text-' + chip.color : 'text-primary'" /></template
-                      ></v-chip>
+                        class="mr-1 mb-1 cursor-default">
+                        <template v-slot:prepend>
+                          <AppIconWrapper v-if="chip.icon" :icons="chip" class="mr-1" :class="chip.color ? 'text-' + chip.color : 'text-primary'" />
+                        </template>
+                      </v-chip>
                       <v-chip variant="plain" class="mr-1" v-if="inputChip.nochooseData.length > 0">
-                        <template v-slot:append> <font-awesome-icon icon="plus" class="text-primary mr-1" /></template>
+                        <template v-slot:append><font-awesome-icon icon="plus" class="text-primary mr-1" /></template>
                         <v-menu activator="parent" transition="scale-transition" offset-y location="right" max-height="400px" min-height="100px">
                           <v-list density="compact" rounded>
                             <v-list-item
@@ -185,8 +181,8 @@
                                   v-if="chip.icon"
                                   :icons="chip"
                                   class="mr-1"
-                                  :class="chip.color ? 'text-' + chip.color : 'text-primary'"
-                              /></template>
+                                  :class="chip.color ? 'text-' + chip.color : 'text-primary'" />
+                              </template>
                               <v-list-item-title>{{ chip.text }}</v-list-item-title>
                             </v-list-item>
                           </v-list>

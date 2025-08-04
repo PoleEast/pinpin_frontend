@@ -21,9 +21,10 @@
       </v-col>
       <v-col cols="12" md="5">
         <v-card class="mt-4 pa-4" elevation="3">
-          <v-card-title class="text-h5 font-weight-bold"
-            ><font-awesome-icon v-if="currentOption" :icon="currentOption?.icon" size="lg" class="me-3" />{{ currentOption?.title }}</v-card-title
-          >
+          <v-card-title class="text-h5 font-weight-bold">
+            <font-awesome-icon v-if="currentOption" :icon="currentOption?.icon" size="lg" class="me-3" />
+            {{ currentOption?.title }}
+          </v-card-title>
           <v-card-subtitle>{{ currentOption?.description }}</v-card-subtitle>
           <v-skeleton-loader v-if="initLoading" type="card-avatar,heading,list-item-two-line, actions" class="mx-auto"></v-skeleton-loader>
           <v-expand-transition v-else mode="out-in">

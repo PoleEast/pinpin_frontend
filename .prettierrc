@@ -2,5 +2,7 @@
   "trailingComma": "all",
   "vueIndentScriptAndStyle": true,
   "printWidth": 150,
-  "bracketSameLine": true
+  "bracketSameLine": true,
+  "htmlWhitespaceSensitivity": "ignore",
+  "singleAttributePerLine": false
 }

@@ -17,9 +17,9 @@
                   :hint="input.hint"
                   v-model="accountSettingsFormData[input.model as keyof IAccountSettingFormData]"
                   outlined
-                  color="primary"
-                  ><template v-slot:prepend><font-awesome-icon :icon="input.icon" size="2x" class="mx-1 text-primary" /></template
-                ></v-text-field>
+                  color="primary">
+                  <template v-slot:prepend><font-awesome-icon :icon="input.icon" size="2x" class="mx-1 text-primary" /></template>
+                </v-text-field>
               </v-col>
             </v-row>
           </v-card-text>
@@ -28,9 +28,9 @@
         <v-card-item>
           <v-row>
             <v-col cols="12" md="8">
-              <v-chip draggable color="primary" variant="outlined" class="mr-3 mb-3"> 好碰友，您於{{ formattedJoinDate }}加入PinPin </v-chip>
+              <v-chip draggable color="primary" variant="outlined" class="mr-3 mb-3">好碰友，您於{{ formattedJoinDate }}加入PinPin</v-chip>
               <v-spacer />
-              <v-chip draggable color="secondary" variant="outlined" class="mb-3"> 我們已經認識 {{ daysSinceJoining }} 天了 !!</v-chip>
+              <v-chip draggable color="secondary" variant="outlined" class="mb-3">我們已經認識 {{ daysSinceJoining }} 天了 !!</v-chip>
             </v-col>
           </v-row>
 

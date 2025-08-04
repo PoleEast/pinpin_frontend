@@ -9,10 +9,8 @@
         </span>
       </v-card-title>
       <v-card-subtitle class="text-center pt-3">
-        <span class="font-weight-bold">{{
-          isLogin ? "歡迎來到PinPin，準備規劃您的旅程了嗎?" : "加入PinPin，開始你的旅程規劃吧！"
-        }}</span></v-card-subtitle
-      >
+        <span class="font-weight-bold">{{ isLogin ? "歡迎來到PinPin，準備規劃您的旅程了嗎?" : "加入PinPin，開始你的旅程規劃吧！" }}</span>
+      </v-card-subtitle>
       <v-card-text>
         <!-- 登入表單 -->
         <v-form v-if="isLogin" @submit.prevent="login" v-model="valid" ref="loginForm">
@@ -23,9 +21,9 @@
               :error-messages="loginErrorMessage"
               label="帳號"
               required
-              class="mb-4"
-              ><template v-slot:prepend><font-awesome-icon size="2x" icon="person-walking-luggage" /></template
-            ></v-text-field>
+              class="mb-4">
+              <template v-slot:prepend><font-awesome-icon size="2x" icon="person-walking-luggage" /></template>
+            </v-text-field>
             <v-text-field
               v-model="loginFormData.password"
               :rules="rules.password(true)"
@@ -33,15 +31,13 @@
               label="密碼"
               required
               :type="showPassword ? 'text' : 'password'"
-              class="mb-4"
-              ><template v-slot:prepend><font-awesome-icon icon="key" size="2x" class="mx-1" /></template
-              ><template v-slot:append-inner
-                ><font-awesome-icon
-                  :icon="showPassword ? 'eye' : 'eye-slash'"
-                  @click="showPassword = !showPassword"
-                  class="mx-1 cursor-pointer" /></template
-            ></v-text-field>
-            <v-btn color="primary" size="large" block :loading="loading" type="submit" class="mb-4" elevation="1"> 登入 </v-btn>
+              class="mb-4">
+              <template v-slot:prepend><font-awesome-icon icon="key" size="2x" class="mx-1" /></template>
+              <template v-slot:append-inner>
+                <font-awesome-icon :icon="showPassword ? 'eye' : 'eye-slash'" @click="showPassword = !showPassword" class="mx-1 cursor-pointer" />
+              </template>
+            </v-text-field>
+            <v-btn color="primary" size="large" block :loading="loading" type="submit" class="mb-4" elevation="1">登入</v-btn>
             <div class="d-flex align-center mb-4">
               <v-divider></v-divider>
               <span class="mx-3 text-grey">或</span>
@@ -50,7 +46,7 @@
 
             <div class="text-center justify-center align-center d-flex">
               <span class="text-primary">竟然還沒加入我們？</span>
-              <v-btn color="secondary" class="px-3 mx-2" @click="isLogin = false"> 立即加入!! </v-btn>
+              <v-btn color="secondary" class="px-3 mx-2" @click="isLogin = false">立即加入!!</v-btn>
             </div>
           </v-container>
         </v-form>
@@ -66,29 +62,29 @@
               :error-messages="registerErrorMessage">
               <template v-slot:prepend><font-awesome-icon size="2x" icon="person-walking-luggage" /></template>
             </v-text-field>
-            <v-text-field v-model="registerFormData.nickname" label="暱稱" :rules="rules.nickname" required class="mb-4"
-              ><template v-slot:prepend><font-awesome-icon size="2x" icon="id-card-clip" /></template>
+            <v-text-field v-model="registerFormData.nickname" label="暱稱" :rules="rules.nickname" required class="mb-4">
+              <template v-slot:prepend><font-awesome-icon size="2x" icon="id-card-clip" /></template>
             </v-text-field>
             <v-text-field
               :rules="rules.password(true)"
               v-model="registerFormData.password"
               label="密碼"
               :type="showPassword ? 'text' : 'password'"
-              class="mb-4"
-              ><template v-slot:prepend><font-awesome-icon icon="key" size="2x" class="mx-1" /></template
-              ><template v-slot:append-inner
-                ><font-awesome-icon :icon="showPassword ? 'eye' : 'eye-slash'" @click="showPassword = !showPassword" class="mx-1 cursor-pointer"
-              /></template>
+              class="mb-4">
+              <template v-slot:prepend><font-awesome-icon icon="key" size="2x" class="mx-1" /></template>
+              <template v-slot:append-inner>
+                <font-awesome-icon :icon="showPassword ? 'eye' : 'eye-slash'" @click="showPassword = !showPassword" class="mx-1 cursor-pointer" />
+              </template>
             </v-text-field>
             <v-text-field
               v-model="registerFormData.confirmPassword"
               label="確認密碼"
               :rules="confirmPasswordRules"
               :type="showPassword ? 'text' : 'password'"
-              class="mb-4"
-              ><template v-slot:prepend><font-awesome-icon icon="square-check" size="2x" class="mx-1" /></template
-            ></v-text-field>
-            <v-btn color="primary" size="large" block :loading="loading" class="mb-4" elevation="1" type="submit"> 加入 </v-btn>
+              class="mb-4">
+              <template v-slot:prepend><font-awesome-icon icon="square-check" size="2x" class="mx-1" /></template>
+            </v-text-field>
+            <v-btn color="primary" size="large" block :loading="loading" class="mb-4" elevation="1" type="submit">加入</v-btn>
             <div class="d-flex align-center mb-4">
               <v-divider></v-divider>
               <span class="mx-3 text-grey">或</span>
@@ -97,7 +93,7 @@
 
             <div class="text-center justify-center align-center d-flex">
               <span class="text-primary">What!?已經有帳號了？</span>
-              <v-btn color="secondary" class="px-3 mx-2" @click="isLogin = true"> 立即登入!! </v-btn>
+              <v-btn color="secondary" class="px-3 mx-2" @click="isLogin = true">立即登入!!</v-btn>
             </div>
           </v-container>
         </v-form>

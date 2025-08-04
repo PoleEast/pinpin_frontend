@@ -62,8 +62,7 @@
                       class="mt-1"
                       :prev-icon="LeftTriangleIcon"
                       :next-icon="RightTriangleIcon"
-                      rounded="lg">
-                    </v-pagination>
+                      rounded="lg"></v-pagination>
                   </template>
                 </v-data-iterator>
               </v-container>

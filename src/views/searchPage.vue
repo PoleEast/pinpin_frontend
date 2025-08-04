@@ -47,8 +47,7 @@
                       size="55"
                       clearable
                       :full-icon="createStarIcon('filled', 'lg')"
-                      :empty-icon="createStarIcon('empty', 'lg')">
-                    </v-rating>
+                      :empty-icon="createStarIcon('empty', 'lg')"></v-rating>
                   </v-card-text>
                 </v-card-item>
                 <!-- 放棄實作營業時段功能，google api 不支援，要實作複雜度與成本過高 -->
@@ -113,8 +112,8 @@
             <v-expansion-panel title="排序" :collapse-icon="createTriangleIcon('up')" :expand-icon="createTriangleIcon('down')">
               <v-expansion-panel-text>
                 <v-card-item>
-                  <v-card-subtitle>排序依據</v-card-subtitle
-                  ><v-card-text class="px-0">
+                  <v-card-subtitle>排序依據</v-card-subtitle>
+                  <v-card-text class="px-0">
                     <!-- TODO: 實作排序功能 -->
                     <v-chip-group column multiple :close="false" v-model="placesSort" @update:model-value="console.log(placesSort)">
                       <v-chip
@@ -139,7 +138,10 @@
         <v-card elevation="2">
           <v-card-title class="text-h5 font-weight-bold d-flex justify-space-between align-center">
             <v-sheet>
-              <span><font-awesome-icon icon="map-location-dot" size="lg" class="mr-2" />{{ resultkeyword ? resultkeyword + "的" : "" }}搜尋結果</span>
+              <span>
+                <font-awesome-icon icon="map-location-dot" size="lg" class="mr-2" />
+                {{ resultkeyword ? resultkeyword + "的" : "" }}搜尋結果
+              </span>
             </v-sheet>
             <!-- TODO:顯示格式實作 -->
             <v-btn-toggle color="primary" density="compact" border :model-value="viewMode" mandatory>
@@ -159,7 +161,7 @@
               </v-tooltip>
             </v-btn-toggle>
           </v-card-title>
-          <v-card-subtitle class="mb-2" v-if="locations.length"> 滑動瀏覽、點擊收藏，把喜歡的地方都加進你的旅遊口袋名單~ </v-card-subtitle>
+          <v-card-subtitle class="mb-2" v-if="locations.length">滑動瀏覽、點擊收藏，把喜歡的地方都加進你的旅遊口袋名單~</v-card-subtitle>
           <v-card-item>
             <!-- TODO:實作無限滾動 -->
             <v-row>

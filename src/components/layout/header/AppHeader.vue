@@ -16,8 +16,8 @@
           <UserButton v-show="isLoggedIn" @show-snackbar="pushSnackbar" />
         </v-fade-transition>
         <v-fade-transition hide-on-leave>
-          <v-btn v-show="!isLoggedIn" class="text-h6 font-weight-bold w-100" color="white" variant="text" @click="showDialogLogin"
-            ><template v-slot:append>
+          <v-btn v-show="!isLoggedIn" class="text-h6 font-weight-bold w-100" color="white" variant="text" @click="showDialogLogin">
+            <template v-slot:append>
               <font-awesome-icon icon="right-to-bracket" />
             </template>
             登入/註冊
@@ -46,8 +46,8 @@
             <UserButton v-show="isLoggedIn" @show-snackbar="pushSnackbar" />
           </v-fade-transition>
           <v-fade-transition hide-on-leave>
-            <v-btn v-show="!isLoggedIn" class="text-body-1 font-weight-bold" variant="text" @click="showDialogLogin"
-              ><template v-slot:append>
+            <v-btn v-show="!isLoggedIn" class="text-body-1 font-weight-bold" variant="text" @click="showDialogLogin">
+              <template v-slot:append>
                 <font-awesome-icon icon="right-to-bracket" />
               </template>
               登入/註冊
