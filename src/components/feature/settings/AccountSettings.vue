@@ -11,10 +11,7 @@
           <v-card-title class="px-1">{{ group.title }}</v-card-title>
           <v-card-text class="pa-0">
             <v-row>
-              <v-col
-                v-for="input in group.textFields"
-                :key="input.label"
-                cols="12">
+              <v-col v-for="input in group.textFields" :key="input.label" cols="12">
                 <v-text-field
                   :label="input.label"
                   :type="input.type"
@@ -23,18 +20,11 @@
                   :rules="input.rule"
                   :readonly="input.readonly"
                   :hint="input.hint"
-                  v-model="
-                    accountSettingsFormData[
-                      input.model as keyof IAccountSettingFormData
-                    ]
-                  "
+                  v-model="accountSettingsFormData[input.model as keyof IAccountSettingFormData]"
                   outlined
                   color="primary">
                   <template v-slot:prepend>
-                    <font-awesome-icon
-                      :icon="input.icon"
-                      size="2x"
-                      class="mx-1 text-primary" />
+                    <font-awesome-icon :icon="input.icon" size="2x" class="mx-1 text-primary" />
                   </template>
                 </v-text-field>
               </v-col>
@@ -45,19 +35,11 @@
         <v-card-item>
           <v-row>
             <v-col cols="12" md="8">
-              <v-chip
-                draggable
-                color="primary"
-                variant="outlined"
-                class="mr-3 mb-3">
+              <v-chip draggable color="primary" variant="outlined" class="mr-3 mb-3">
                 好碰友，您於{{ formattedJoinDate }}加入PinPin
               </v-chip>
               <v-spacer />
-              <v-chip
-                draggable
-                color="secondary"
-                variant="outlined"
-                class="mb-3">
+              <v-chip draggable color="secondary" variant="outlined" class="mb-3">
                 我們已經認識 {{ daysSinceJoining }} 天了 !!
               </v-chip>
             </v-col>
@@ -93,15 +75,7 @@
 <script lang="ts" setup>
   //#region import
 
-  import {
-    computed,
-    onMounted,
-    reactive,
-    ref,
-    useTemplateRef,
-    watch,
-    type Ref,
-  } from "vue";
+  import { computed, onMounted, reactive, ref, useTemplateRef, watch, type Ref } from "vue";
   import type { VForm } from "vuetify/components";
 
   //services

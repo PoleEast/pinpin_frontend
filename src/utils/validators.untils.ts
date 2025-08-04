@@ -16,12 +16,9 @@ export const createTextFieldRules = (
 ): ((v: string) => boolean | string)[] => {
   return [
     (v: string) => !required || !!v || `${fieldName}一定要填寫`,
-    (v: string) =>
-      !v || v.length <= maxLength || `${fieldName}不能超過${maxLength}個字`,
-    (v: string) =>
-      !v || v.length >= minLength || `${fieldName}至少${minLength}個字`,
-    (v: string) =>
-      !v || !pattern || pattern.test(v) || `${fieldName}格式不正確`,
+    (v: string) => !v || v.length <= maxLength || `${fieldName}不能超過${maxLength}個字`,
+    (v: string) => !v || v.length >= minLength || `${fieldName}至少${minLength}個字`,
+    (v: string) => !v || !pattern || pattern.test(v) || `${fieldName}格式不正確`,
   ];
 };
 
@@ -39,13 +36,8 @@ export const createDateFieldRules = (
 ): ((v: string) => boolean | string)[] => {
   return [
     (v: string) => !required || !!v || `${fieldName}一定要填寫`,
-    (v: string) =>
-      !v || !isNaN(new Date(v).getTime()) || `${fieldName}格式不正確`,
-    (v: string) =>
-      !v ||
-      !isBeforeToday ||
-      new Date(v) < new Date() ||
-      `${fieldName}必須在今天之前`,
+    (v: string) => !v || !isNaN(new Date(v).getTime()) || `${fieldName}格式不正確`,
+    (v: string) => !v || !isBeforeToday || new Date(v) < new Date() || `${fieldName}必須在今天之前`,
   ];
 };
 
@@ -73,16 +65,10 @@ const createArrayFieldRules = <T>(
 ) => {
   return [
     (v: T[]) => !required || !!v || `${fieldName}一定要填寫`,
-    (v: T[]) =>
-      !v || v.length <= maxLength || `${fieldName}不能超過${maxLength}個選項`,
-    (v: T[]) =>
-      !v || v.length >= minLength || `${fieldName}至少選擇${minLength}個選項`,
-    (v: T[]) =>
-      !v ||
-      v.every((item) => sourceArray.includes(item)) ||
-      `${fieldName}包含無效選項`,
-    (v: T[]) =>
-      !v || v.length === new Set(v).size || `${fieldName}不能有重複的選項`,
+    (v: T[]) => !v || v.length <= maxLength || `${fieldName}不能超過${maxLength}個選項`,
+    (v: T[]) => !v || v.length >= minLength || `${fieldName}至少選擇${minLength}個選項`,
+    (v: T[]) => !v || v.every((item) => sourceArray.includes(item)) || `${fieldName}包含無效選項`,
+    (v: T[]) => !v || v.length === new Set(v).size || `${fieldName}不能有重複的選項`,
   ];
 };
 
@@ -106,17 +92,9 @@ export const validateArrayField = <T>(
   source: T[] = [],
   required = false,
 ) => {
-  const rules = createArrayFieldRules(
-    fieldName,
-    minLength,
-    maxLength,
-    source,
-    required,
-  );
+  const rules = createArrayFieldRules(fieldName, minLength, maxLength, source, required);
 
-  const error = rules
-    .map((rule) => rule(value))
-    .find((result) => typeof result === "string");
+  const error = rules.map((rule) => rule(value)).find((result) => typeof result === "string");
 
   return typeof error === "string" ? error : undefined;
 };

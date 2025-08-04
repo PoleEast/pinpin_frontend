@@ -4,9 +4,7 @@
  * @param value - 要檢查的值
  * @returns 如果值是字串或字串陣列，則返回 `true`，否則返回 `false`。
  */
-export const isStringOrStringArray = (
-  value: unknown,
-): value is string | string[] => {
+export const isStringOrStringArray = (value: unknown): value is string | string[] => {
   return (
     typeof value === "string" ||
     (Array.isArray(value) && value.every((item) => typeof item === "string"))

@@ -3,8 +3,7 @@
     <!-- Dialog區塊 -->
     <v-card class="rounded-xl">
       <v-card-title class="text-center pt-8">
-        <span
-          class="text-h4 font-weight-bold text-primary d-flex align-center justify-center">
+        <span class="text-h4 font-weight-bold text-primary d-flex align-center justify-center">
           <font-awesome-icon icon="right-to-bracket" class="mr-3" />
           {{ isLogin ? "登入" : "加入" }} PinPin
         </span>
@@ -12,19 +11,13 @@
       <v-card-subtitle class="text-center pt-3">
         <span class="font-weight-bold">
           {{
-            isLogin
-              ? "歡迎來到PinPin，準備規劃您的旅程了嗎?"
-              : "加入PinPin，開始你的旅程規劃吧！"
+            isLogin ? "歡迎來到PinPin，準備規劃您的旅程了嗎?" : "加入PinPin，開始你的旅程規劃吧！"
           }}
         </span>
       </v-card-subtitle>
       <v-card-text>
         <!-- 登入表單 -->
-        <v-form
-          v-if="isLogin"
-          @submit.prevent="login"
-          v-model="valid"
-          ref="loginForm">
+        <v-form v-if="isLogin" @submit.prevent="login" v-model="valid" ref="loginForm">
           <v-container>
             <v-text-field
               v-model="loginFormData.account"
@@ -73,21 +66,12 @@
 
             <div class="text-center justify-center align-center d-flex">
               <span class="text-primary">竟然還沒加入我們？</span>
-              <v-btn
-                color="secondary"
-                class="px-3 mx-2"
-                @click="isLogin = false">
-                立即加入!!
-              </v-btn>
+              <v-btn color="secondary" class="px-3 mx-2" @click="isLogin = false">立即加入!!</v-btn>
             </div>
           </v-container>
         </v-form>
         <!-- 註冊表單 -->
-        <v-form
-          v-else
-          @submit.prevent="register"
-          v-model="valid"
-          ref="registerForm">
+        <v-form v-else @submit.prevent="register" v-model="valid" ref="registerForm">
           <v-container>
             <v-text-field
               v-model="registerFormData.account"
@@ -154,12 +138,7 @@
 
             <div class="text-center justify-center align-center d-flex">
               <span class="text-primary">What!?已經有帳號了？</span>
-              <v-btn
-                color="secondary"
-                class="px-3 mx-2"
-                @click="isLogin = true">
-                立即登入!!
-              </v-btn>
+              <v-btn color="secondary" class="px-3 mx-2" @click="isLogin = true">立即登入!!</v-btn>
             </div>
           </v-container>
         </v-form>

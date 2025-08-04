@@ -25,9 +25,7 @@ export const authService = {
    * @param {LoginRequestDTO} data - 登入資料
    * @returns {Promise<AxiosResponse<ApiResponseDTO<LoginResponseDTO>>>} 登入回應結果
    */
-  async Login(
-    data: LoginRequestDTO,
-  ): Promise<AxiosResponse<ApiResponseDTO<LoginResponseDTO>>> {
+  async Login(data: LoginRequestDTO): Promise<AxiosResponse<ApiResponseDTO<LoginResponseDTO>>> {
     return await axiosLockManager.withLock("Login", async () => {
       const response = await axios.post("/user/login", data);
       return response;

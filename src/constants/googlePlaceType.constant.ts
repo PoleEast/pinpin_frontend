@@ -1,7 +1,6 @@
 import { objectToOptions } from "@/utils";
 
-type GooglePlaceType =
-  (typeof GOOGLE_PLACE_TYPE)[keyof typeof GOOGLE_PLACE_TYPE];
+type GooglePlaceType = (typeof GOOGLE_PLACE_TYPE)[keyof typeof GOOGLE_PLACE_TYPE];
 
 const GOOGLE_PLACE_TYPE = {
   FOOD: "FOOD",
@@ -39,13 +38,7 @@ const GOOGLE_PLACE_TYPE_MAP: Record<
   }),
   [GOOGLE_PLACE_TYPE.HOTEL]: Object.freeze({
     label: "住宿",
-    autocompleteItems: [
-      "lodging",
-      "motel",
-      "hotel",
-      "campground",
-      "point_of_interest",
-    ],
+    autocompleteItems: ["lodging", "motel", "hotel", "campground", "point_of_interest"],
   }),
   [GOOGLE_PLACE_TYPE.TRANSIT]: Object.freeze({
     label: "交通",
@@ -59,13 +52,7 @@ const GOOGLE_PLACE_TYPE_MAP: Record<
   }),
   [GOOGLE_PLACE_TYPE.SHOPPING]: Object.freeze({
     label: "購物",
-    autocompleteItems: [
-      "shopping_mall",
-      "store",
-      "market",
-      "supermarket",
-      "point_of_interest",
-    ],
+    autocompleteItems: ["shopping_mall", "store", "market", "supermarket", "point_of_interest"],
   }),
   [GOOGLE_PLACE_TYPE.NIGHT_SNACK]: Object.freeze({
     label: "宵夜",

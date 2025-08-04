@@ -59,9 +59,7 @@
         @click="currentOption = item"
         size="large"
         class="mb-2"
-        :class="
-          currentOption?.title === item.title ? 'bg-success' : 'bg-primary'
-        "
+        :class="currentOption?.title === item.title ? 'bg-success' : 'bg-primary'"
         icon>
         <font-awesome-icon :icon="item.icon" size="lg" />
       </v-btn>
@@ -146,10 +144,7 @@
   //#region function
   const getSettingData = async (): Promise<SettingResponseDTO> => {
     try {
-      return (
-        (await settingService.GetSettingData()).data?.data ||
-        ({} as SettingResponseDTO)
-      );
+      return (await settingService.GetSettingData()).data?.data || ({} as SettingResponseDTO);
     } catch {
       return {} as SettingResponseDTO;
     }
@@ -157,10 +152,7 @@
 
   const getUserProfile = async (): Promise<UserProfileResponseDTO> => {
     try {
-      return (
-        (await settingService.GetUserProfile()).data?.data ||
-        ({} as UserProfileResponseDTO)
-      );
+      return (await settingService.GetUserProfile()).data?.data || ({} as UserProfileResponseDTO);
     } catch {
       return {} as UserProfileResponseDTO;
     }
@@ -176,8 +168,7 @@
         password: accountSettingsFormData.password,
       };
 
-      const response =
-        await settingService.UpdateAccountSetting(accountRequestDTO);
+      const response = await settingService.UpdateAccountSetting(accountRequestDTO);
       const snackbar: Isnackbar = {
         timeout: 2000,
         message: "帳號設定更新成功",
@@ -199,9 +190,7 @@
     }
   };
 
-  const updateUserProfile = async (
-    userProfileSettingFromData: IUserProfileSettingFromData,
-  ) => {
+  const updateUserProfile = async (userProfileSettingFromData: IUserProfileSettingFromData) => {
     updateLoading.value = true;
     try {
       const userProfileRequestDTO: UserProfileRequestDTO = {
@@ -223,9 +212,7 @@
         currencies: userProfileSettingFromData.currencies,
       };
 
-      const response = await settingService.UpdateUserProfileSetting(
-        userProfileRequestDTO,
-      );
+      const response = await settingService.UpdateUserProfileSetting(userProfileRequestDTO);
 
       const snackbar: Isnackbar = {
         timeout: 2000,

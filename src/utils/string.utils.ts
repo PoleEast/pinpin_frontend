@@ -7,9 +7,7 @@
  */
 const generateUUID = (): string => {
   if (!crypto.randomUUID()) {
-    throw new Error(
-      "本網站不支援無UUID功能的瀏覽器,請更新瀏覽器版本或更換瀏覽器",
-    );
+    throw new Error("本網站不支援無UUID功能的瀏覽器,請更新瀏覽器版本或更換瀏覽器");
   }
 
   return crypto.randomUUID();

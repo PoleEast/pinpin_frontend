@@ -15,13 +15,7 @@
     :error="errorMessages !== ''"
     @keydown.enter="searchByText(searchText)"
     @blur="errorMessages = ''"
-    @update:search="
-      autocompleteUpdateSearchText(
-        searchText,
-        sessionToken,
-        includedPrimaryTypes,
-      )
-    "
+    @update:search="autocompleteUpdateSearchText(searchText, sessionToken, includedPrimaryTypes)"
     @update:model-value="searchByPlaceId">
     <template #append-inner>
       <font-awesome-icon
@@ -36,10 +30,7 @@
         class="cursor-pointer" />
     </template>
     <template #item="{ props, item }">
-      <v-list-item
-        class="overflow-hidden"
-        v-bind="props"
-        :key="item.raw.placeId">
+      <v-list-item class="overflow-hidden" v-bind="props" :key="item.raw.placeId">
         <v-list-item-subtitle class="overflow-hidden">
           {{ item.raw.subtitle }}
         </v-list-item-subtitle>
@@ -123,11 +114,7 @@
       loading.value = true;
 
       try {
-        const response = await searchService.GetAutoComplete(
-          keyword,
-          sessionToken,
-          primaryTypes,
-        );
+        const response = await searchService.GetAutoComplete(keyword, sessionToken, primaryTypes);
         autocompleteItems.value =
           response.data.data?.map((item) => ({
             title: item.text,

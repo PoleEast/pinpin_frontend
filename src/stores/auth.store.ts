@@ -24,8 +24,7 @@ const useAuthStore = defineStore("auth", {
      */
     async Logout(): Promise<ApiResponseDTO> {
       try {
-        const response: AxiosResponse<ApiResponseDTO> =
-          await authService.Logout();
+        const response: AxiosResponse<ApiResponseDTO> = await authService.Logout();
         this.UserNickname = "";
         this.AvatarPublicId = "";
         router.push({ name: "home" });
@@ -51,10 +50,7 @@ const useAuthStore = defineStore("auth", {
 
       try {
         const response = await authService.checkAuthStatus();
-        this.SetUser(
-          response?.nickname || "",
-          response?.avatar_public_id || "",
-        );
+        this.SetUser(response?.nickname || "", response?.avatar_public_id || "");
       } catch {
         this.UserNickname = "";
         this.AvatarPublicId = "";

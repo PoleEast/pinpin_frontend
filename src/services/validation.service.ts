@@ -1,8 +1,5 @@
 import { createTextFieldRules } from "@/utils";
-import {
-  USER_VALIDATION,
-  USERPROFILE_REQUSER_VALIDATION,
-} from "pinpin_library";
+import { USER_VALIDATION, USERPROFILE_REQUSER_VALIDATION } from "pinpin_library";
 
 export const ValidationService = {
   /**

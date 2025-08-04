@@ -23,11 +23,7 @@
                       scrim="#000000"
                       contained
                       @click="openAvatarEditDialog">
-                      <font-awesome-icon
-                        icon="pen"
-                        size="lg"
-                        fixed-width
-                        class="text-white" />
+                      <font-awesome-icon icon="pen" size="lg" fixed-width class="text-white" />
                     </v-overlay>
                   </div>
                 </v-hover>
@@ -83,11 +79,7 @@
               placeholder="克拉克·肯特"
               v-model="userProfileSettingFromData.fullname">
               <template v-slot:prepend>
-                <font-awesome-icon
-                  icon="signature"
-                  size="2x"
-                  fixed-width
-                  class="text-primary" />
+                <font-awesome-icon icon="signature" size="2x" fixed-width class="text-primary" />
               </template>
             </v-text-field>
             <v-date-input
@@ -130,11 +122,7 @@
                 :false-icon="RadioFalseIcon"
                 :true-icon="RadioTrueIcon"></v-radio>
               <template v-slot:prepend>
-                <font-awesome-icon
-                  icon="venus-mars"
-                  size="2x"
-                  fixed-width
-                  class="text-primary" />
+                <font-awesome-icon icon="venus-mars" size="2x" fixed-width class="text-primary" />
               </template>
             </v-radio-group>
             <v-text-field
@@ -144,11 +132,7 @@
               :rules="phoneRules"
               v-model="userProfileSettingFromData.phone">
               <template v-slot:prepend>
-                <font-awesome-icon
-                  icon="phone"
-                  size="2x"
-                  fixed-width
-                  class="text-primary" />
+                <font-awesome-icon icon="phone" size="2x" fixed-width class="text-primary" />
               </template>
             </v-text-field>
             <v-select
@@ -172,11 +156,7 @@
                 </v-list-item>
               </template>
               <template v-slot:prepend>
-                <font-awesome-icon
-                  icon="location-dot"
-                  size="2x"
-                  fixed-width
-                  class="text-primary" />
+                <font-awesome-icon icon="location-dot" size="2x" fixed-width class="text-primary" />
               </template>
             </v-select>
             <v-text-field
@@ -186,11 +166,7 @@
               :rules="addressRules"
               v-model="userProfileSettingFromData.address">
               <template v-slot:prepend>
-                <font-awesome-icon
-                  icon="street-view"
-                  fixed-width
-                  size="2x"
-                  class="text-primary" />
+                <font-awesome-icon icon="street-view" fixed-width size="2x" class="text-primary" />
               </template>
             </v-text-field>
           </v-card-text>
@@ -213,9 +189,7 @@
                     :text="inputChip.label.text"
                     class="mb-2 d-block"
                     :class="
-                      chipGroupErrorMessages[inputChip.type]
-                        ? 'text-error font-weight-bold'
-                        : ''
+                      chipGroupErrorMessages[inputChip.type] ? 'text-error font-weight-bold' : ''
                     " />
                   <div
                     v-if="chipGroupErrorMessages[inputChip.type]"
@@ -242,19 +216,12 @@
                             v-if="chip.icon"
                             :icons="chip"
                             class="mr-1"
-                            :class="
-                              chip.color ? 'text-' + chip.color : 'text-primary'
-                            " />
+                            :class="chip.color ? 'text-' + chip.color : 'text-primary'" />
                         </template>
                       </v-chip>
-                      <v-chip
-                        variant="plain"
-                        class="mr-1"
-                        v-if="inputChip.nochooseData.length > 0">
+                      <v-chip variant="plain" class="mr-1" v-if="inputChip.nochooseData.length > 0">
                         <template v-slot:append>
-                          <font-awesome-icon
-                            icon="plus"
-                            class="text-primary mr-1" />
+                          <font-awesome-icon icon="plus" class="text-primary mr-1" />
                         </template>
                         <v-menu
                           activator="parent"
@@ -274,11 +241,7 @@
                                   v-if="chip.icon"
                                   :icons="chip"
                                   class="mr-1"
-                                  :class="
-                                    chip.color
-                                      ? 'text-' + chip.color
-                                      : 'text-primary'
-                                  " />
+                                  :class="chip.color ? 'text-' + chip.color : 'text-primary'" />
                               </template>
                               <v-list-item-title>
                                 {{ chip.text }}
@@ -298,15 +261,8 @@
       <v-row>
         <v-col cols="12" class="d-flex justify-end">
           <!-- TODO:實作復原btn -->
-          <v-btn class="mr-3" color="secondary" size="large" variant="plain">
-            復原
-          </v-btn>
-          <v-btn
-            variant="elevated"
-            color="primary"
-            size="large"
-            :loading="isLoading"
-            type="submit">
+          <v-btn class="mr-3" color="secondary" size="large" variant="plain">復原</v-btn>
+          <v-btn variant="elevated" color="primary" size="large" :loading="isLoading" type="submit">
             儲存
           </v-btn>
         </v-col>
@@ -319,15 +275,7 @@
 <script lang="ts" setup>
   //#region import
 
-  import {
-    computed,
-    onMounted,
-    reactive,
-    ref,
-    unref,
-    useTemplateRef,
-    watch,
-  } from "vue";
+  import { computed, onMounted, reactive, ref, unref, useTemplateRef, watch } from "vue";
 
   //components
   import AppIconWrapper from "@/components/ui/AppIconWrapper .vue";
@@ -354,11 +302,7 @@
     type SettingResponseDTO,
     type UserProfileResponseDTO,
   } from "pinpin_library";
-  import type {
-    IChip,
-    IInputChips,
-    IUserProfileSettingFromData,
-  } from "@/interfaces";
+  import type { IChip, IInputChips, IUserProfileSettingFromData } from "@/interfaces";
 
   //#endregion
 
@@ -380,9 +324,7 @@
   const bioTextIsFocus = ref(false);
   const showDialog = ref(false);
 
-  const userProfileSettingFormRef = useTemplateRef<VForm>(
-    "userProfileSettingForm",
-  );
+  const userProfileSettingFormRef = useTemplateRef<VForm>("userProfileSettingForm");
   const userProfileSettingFromData = reactive<IUserProfileSettingFromData>({
     motto: "",
     bio: "",
@@ -460,8 +402,7 @@
   const birthdayRules = createDateFieldRules("降臨日", true);
 
   const genderRules = [
-    (v: number) =>
-      USERPROFILE_REQUSER_VALIDATION.GENDER.VALUES.includes(v) || "請選擇性別",
+    (v: number) => USERPROFILE_REQUSER_VALIDATION.GENDER.VALUES.includes(v) || "請選擇性別",
   ];
 
   const phoneRules = createTextFieldRules(
@@ -484,9 +425,7 @@
 
   const visitedCountriesChipsData = computed<IChip[]>(() => {
     return props.settingData.country
-      .filter((country) =>
-        userProfileSettingFromData.visitedCountries?.includes(country.id),
-      )
+      .filter((country) => userProfileSettingFromData.visitedCountries?.includes(country.id))
       .map<IChip>((country) => ({
         id: country.id,
         text: country.local_name,
@@ -497,9 +436,7 @@
 
   const travelInterestsChipsData = computed<IChip[]>(() => {
     return props.settingData.travelInterest
-      .filter((interest) =>
-        userProfileSettingFromData.travelInterests?.includes(interest.id),
-      )
+      .filter((interest) => userProfileSettingFromData.travelInterests?.includes(interest.id))
       .map<IChip>((interest) => ({
         id: interest.id,
         text: interest.name,
@@ -513,9 +450,7 @@
 
   const travelStylesChipsData = computed<IChip[]>(() => {
     return props.settingData.travelStyle
-      .filter((style) =>
-        userProfileSettingFromData.travelStyles?.includes(style.id),
-      )
+      .filter((style) => userProfileSettingFromData.travelStyles?.includes(style.id))
       .map<IChip>((style) => ({
         id: style.id,
         text: style.name,
@@ -526,9 +461,7 @@
 
   const languageChipsData = computed<IChip[]>(() => {
     return props.settingData.language
-      .filter((language) =>
-        userProfileSettingFromData.languages?.includes(language.id),
-      )
+      .filter((language) => userProfileSettingFromData.languages?.includes(language.id))
       .map<IChip>((language) => ({
         id: language.id,
         text: language.local_name,
@@ -537,9 +470,7 @@
 
   const currencyChipsData = computed<IChip[]>(() => {
     return props.settingData.currency
-      .filter((currency) =>
-        userProfileSettingFromData.currencies?.includes(currency.id),
-      )
+      .filter((currency) => userProfileSettingFromData.currencies?.includes(currency.id))
       .map<IChip>((currency) => ({
         id: currency.id,
         text: currency.code,
@@ -550,10 +481,7 @@
 
   const noChooseCountry = computed<IChip[]>(() => {
     return props.settingData.country
-      .filter(
-        (country) =>
-          !userProfileSettingFromData.visitedCountries?.includes(country.id),
-      )
+      .filter((country) => !userProfileSettingFromData.visitedCountries?.includes(country.id))
       .map<IChip>((country) => ({
         id: country.id,
         text: country.local_name,
@@ -564,10 +492,7 @@
 
   const noChooseTravelInterest = computed<IChip[]>(() => {
     return props.settingData.travelInterest
-      .filter(
-        (interest) =>
-          !userProfileSettingFromData.travelInterests?.includes(interest.id),
-      )
+      .filter((interest) => !userProfileSettingFromData.travelInterests?.includes(interest.id))
       .map<IChip>((interest) => ({
         id: interest.id,
         text: interest.name,
@@ -581,9 +506,7 @@
 
   const noChooseTravelStyle = computed<IChip[]>(() => {
     return props.settingData.travelStyle
-      .filter(
-        (style) => !userProfileSettingFromData.travelStyles?.includes(style.id),
-      )
+      .filter((style) => !userProfileSettingFromData.travelStyles?.includes(style.id))
       .map<IChip>((style) => ({
         id: style.id,
         text: style.name,
@@ -594,10 +517,7 @@
 
   const noChooseLanguage = computed<IChip[]>(() => {
     return props.settingData.language
-      .filter(
-        (language) =>
-          !userProfileSettingFromData.languages?.includes(language.id),
-      )
+      .filter((language) => !userProfileSettingFromData.languages?.includes(language.id))
       .map<IChip>((language) => ({
         id: language.id,
         text: language.local_name,
@@ -606,10 +526,7 @@
 
   const noChooseCurrency = computed<IChip[]>(() => {
     return props.settingData.currency
-      .filter(
-        (currency) =>
-          !userProfileSettingFromData.currencies?.includes(currency.id),
-      )
+      .filter((currency) => !userProfileSettingFromData.currencies?.includes(currency.id))
       .map<IChip>((currency) => ({
         id: currency.id,
         text: currency.code,
@@ -697,20 +614,16 @@
     userProfileSettingFromData.bio = props.userProfile.bio;
     userProfileSettingFromData.fullname = props.userProfile.fullname;
     userProfileSettingFromData.nickname = props.userProfile.nickname;
-    userProfileSettingFromData.isFullNameVisible =
-      props.userProfile.isFullNameVisible;
-    userProfileSettingFromData.avatar_public_id =
-      props.userProfile.avatar?.public_id;
+    userProfileSettingFromData.isFullNameVisible = props.userProfile.isFullNameVisible;
+    userProfileSettingFromData.avatar_public_id = props.userProfile.avatar?.public_id;
     userProfileSettingFromData.coverPhoto = props.userProfile.coverPhoto;
     userProfileSettingFromData.birthday = props.userProfile.birthday;
     userProfileSettingFromData.gender = props.userProfile.gender;
     userProfileSettingFromData.phone = props.userProfile.phone;
     userProfileSettingFromData.address = props.userProfile.address;
     userProfileSettingFromData.originCountry = props.userProfile.originCountry;
-    userProfileSettingFromData.visitedCountries =
-      props.userProfile.visitedCountries;
-    userProfileSettingFromData.travelInterests =
-      props.userProfile.travelInterests;
+    userProfileSettingFromData.visitedCountries = props.userProfile.visitedCountries;
+    userProfileSettingFromData.travelInterests = props.userProfile.travelInterests;
     userProfileSettingFromData.travelStyles = props.userProfile.travelStyles;
     userProfileSettingFromData.languages = props.userProfile.languages;
     userProfileSettingFromData.currencies = props.userProfile.currencies;
@@ -726,15 +639,10 @@
     chip: IChip,
     inputChipType: keyof Pick<
       typeof userProfileSettingFromData,
-      | "visitedCountries"
-      | "languages"
-      | "currencies"
-      | "travelInterests"
-      | "travelStyles"
+      "visitedCountries" | "languages" | "currencies" | "travelInterests" | "travelStyles"
     >,
   ) => {
-    if (chip.id === undefined || !userProfileSettingFromData[inputChipType])
-      return;
+    if (chip.id === undefined || !userProfileSettingFromData[inputChipType]) return;
     userProfileSettingFromData[inputChipType]?.push(chip.id);
   };
 
@@ -748,18 +656,13 @@
     chip: IChip,
     inputChipType: keyof Pick<
       typeof userProfileSettingFromData,
-      | "visitedCountries"
-      | "languages"
-      | "currencies"
-      | "travelInterests"
-      | "travelStyles"
+      "visitedCountries" | "languages" | "currencies" | "travelInterests" | "travelStyles"
     >,
   ) => {
-    if (chip.id === undefined || !userProfileSettingFromData[inputChipType])
-      return;
-    userProfileSettingFromData[inputChipType] = userProfileSettingFromData[
-      inputChipType
-    ]?.filter((id) => id !== chip.id);
+    if (chip.id === undefined || !userProfileSettingFromData[inputChipType]) return;
+    userProfileSettingFromData[inputChipType] = userProfileSettingFromData[inputChipType]?.filter(
+      (id) => id !== chip.id,
+    );
   };
 
   /**

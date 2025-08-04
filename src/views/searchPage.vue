@@ -24,11 +24,7 @@
               @search-by-text="searchByText"></PlacesAutocompleteInput>
           </v-card-item>
           <v-card-item class="pt-0">
-            <v-chip-group
-              class="d-flex flex-wrap"
-              column
-              :close="false"
-              v-model="placeType">
+            <v-chip-group class="d-flex flex-wrap" column :close="false" v-model="placeType">
               <v-chip
                 v-for="(placeType, index) in placeTypes"
                 :key="index"
@@ -137,12 +133,7 @@
                       v-model="placesSort"
                       @update:model-value="console.log(placesSort)">
                       <v-chip
-                        v-for="(category, index) in [
-                          '評分',
-                          '價格',
-                          '評分人數',
-                          '營業狀態',
-                        ]"
+                        v-for="(category, index) in ['評分', '價格', '評分人數', '營業狀態']"
                         :value="category"
                         :key="index"
                         class="ma-1"
@@ -165,14 +156,10 @@
       <v-col cols="12" md="9">
         <!-- 依據使用者興趣內容推薦地點 -->
         <v-card elevation="2">
-          <v-card-title
-            class="text-h5 font-weight-bold d-flex justify-space-between align-center">
+          <v-card-title class="text-h5 font-weight-bold d-flex justify-space-between align-center">
             <v-sheet>
               <span>
-                <font-awesome-icon
-                  icon="map-location-dot"
-                  size="lg"
-                  class="mr-2" />
+                <font-awesome-icon icon="map-location-dot" size="lg" class="mr-2" />
                 {{ resultkeyword ? resultkeyword + "的" : "" }}搜尋結果
               </span>
             </v-sheet>
@@ -193,10 +180,7 @@
               <v-tooltip text="列表" location="bottom">
                 <template v-slot:activator="{ props }">
                   <v-btn value="list">
-                    <font-awesome-icon
-                      v-bind="props"
-                      icon="table-list"
-                      size="lg" />
+                    <font-awesome-icon v-bind="props" icon="table-list" size="lg" />
                   </v-btn>
                 </template>
               </v-tooltip>
@@ -208,11 +192,7 @@
           <v-card-item>
             <!-- TODO:實作無限滾動 -->
             <v-row>
-              <v-col
-                cols="12"
-                md="4"
-                v-for="location in locations"
-                :key="location.Id">
+              <v-col cols="12" md="4" v-for="location in locations" :key="location.Id">
                 <PlaceCard
                   :location="location"
                   :image-max-height="locationCardImageMaxHeight"></PlaceCard>
@@ -292,9 +272,9 @@
   // const businessTimeSpecificDays = ref([0, 4]);
   // const BusinessTimeSpecificTimeRange = ref([0, 24]);
   const starRating = ref<number>(0);
-  const piriceType = BUSSINESS_PRICE_OPTIONS.filter(
-    (type) => type.index !== undefined,
-  ).map((type) => type.label);
+  const piriceType = BUSSINESS_PRICE_OPTIONS.filter((type) => type.index !== undefined).map(
+    (type) => type.label,
+  );
   const priceRange = ref([0, piriceType.length - 1]);
   const placeTypes: IChip[] = GOOGLE_PLACE_TYPE_OPTIONS.map((type) => ({
     text: type.label,
@@ -338,10 +318,9 @@
       keyword: placeType.value
         ? keyword + " " + GOOGLE_PLACE_TYPE_MAP[placeType.value].label
         : keyword,
-      priceLevel: BUSSINESS_PRICE_OPTIONS.slice(
-        priceRange.value[0],
-        priceRange.value[1] + 1,
-      ).map((option) => option.value),
+      priceLevel: BUSSINESS_PRICE_OPTIONS.slice(priceRange.value[0], priceRange.value[1] + 1).map(
+        (option) => option.value,
+      ),
       primaryType: placeType.value
         ? GOOGLE_PLACE_TYPE_MAP[placeType.value].textSearchItem
         : undefined,
@@ -353,10 +332,7 @@
     triggerSearchByUrl(textSearchOption);
   };
 
-  const loadNextPage = (
-    textSearchOption: ITextSearchOption,
-    nextPageToken: string,
-  ) => {
+  const loadNextPage = (textSearchOption: ITextSearchOption, nextPageToken: string) => {
     textSearchOption.nextPageToken = nextPageToken;
     processTextSearchResult(textSearchOption);
   };
@@ -372,13 +348,10 @@
     });
   };
 
-  const processTextSearchResult = async (
-    textSearchOption: ITextSearchOption,
-  ) => {
+  const processTextSearchResult = async (textSearchOption: ITextSearchOption) => {
     try {
       console.log(textSearchOption);
-      const response =
-        await searchService.GetTextSearchLocation(textSearchOption);
+      const response = await searchService.GetTextSearchLocation(textSearchOption);
 
       if (!response.data.data) {
         useSnackbarStore().PushSnackbar({
@@ -421,28 +394,18 @@
     console.log("Searching for:", PlaceId);
   };
 
-  const validatePrimaryType = (
-    primaryType: unknown,
-    required: boolean = false,
-  ) => {
+  const validatePrimaryType = (primaryType: unknown, required: boolean = false) => {
     if (!required && !primaryType) return true;
 
     if (typeof primaryType !== "string") return false;
 
-    if (
-      !GOOGLE_PLACE_TYPE_OPTIONS.some(
-        (type) => type.textSearchItem === primaryType,
-      )
-    )
+    if (!GOOGLE_PLACE_TYPE_OPTIONS.some((type) => type.textSearchItem === primaryType))
       return false;
 
     return true;
   };
 
-  const validateRating = (
-    rating: unknown,
-    required: boolean = false,
-  ): rating is number => {
+  const validateRating = (rating: unknown, required: boolean = false): rating is number => {
     if (!required && !rating) return true;
 
     if (!isNumericString(rating)) return false;
@@ -452,10 +415,7 @@
     return true;
   };
 
-  const validatePriceLevel = (
-    priceLevel: unknown,
-    required: boolean = false,
-  ) => {
+  const validatePriceLevel = (priceLevel: unknown, required: boolean = false) => {
     if (!required && !priceLevel) return true;
 
     if (!isStringOrStringArray(priceLevel)) return false;
@@ -469,11 +429,7 @@
     observer = new IntersectionObserver(
       (entries) => {
         if (entries[0].isIntersecting) {
-          if (
-            lastTextSearchOption.value &&
-            nextPageToken.value &&
-            isNewNextPageToken.value
-          ) {
+          if (lastTextSearchOption.value && nextPageToken.value && isNewNextPageToken.value) {
             isNewNextPageToken.value = false;
             loadNextPage(lastTextSearchOption.value, nextPageToken.value);
           }

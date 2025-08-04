@@ -1,7 +1,4 @@
-import type {
-  GoogleMapsPlaceBusinessStatus,
-  GoogleMapsPlacePriceLevel,
-} from "pinpin_library";
+import type { GoogleMapsPlaceBusinessStatus, GoogleMapsPlacePriceLevel } from "pinpin_library";
 
 interface IRegisterFormData {
   account: string;
@@ -72,12 +69,7 @@ interface IInputChips {
   label: ILabel;
   choosechips: IChip[];
   nochooseData: IChip[];
-  type:
-    | "visitedCountries"
-    | "languages"
-    | "currencies"
-    | "travelInterests"
-    | "travelStyles";
+  type: "visitedCountries" | "languages" | "currencies" | "travelInterests" | "travelStyles";
 }
 
 interface ILocationCard {

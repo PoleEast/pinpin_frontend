@@ -5,36 +5,19 @@
         <v-img :src="imgUrl" :height="imageMaxHeight + 'px'" cover class="pa-0">
           <div class="d-flex justify-end">
             <v-btn class="rounded-1 ma-2" variant="tonal" color="red-lighten-1">
-              <v-tooltip activator="parent" location="bottom">
-                加入最愛
-              </v-tooltip>
+              <v-tooltip activator="parent" location="bottom">加入最愛</v-tooltip>
               <font-awesome-icon icon="heart" />
             </v-btn>
-            <v-btn
-              class="rounded-1 ma-2"
-              variant="tonal"
-              color="deep-orange-darken-2">
-              <v-tooltip activator="parent" location="bottom">
-                加入行程
-              </v-tooltip>
+            <v-btn class="rounded-1 ma-2" variant="tonal" color="deep-orange-darken-2">
+              <v-tooltip activator="parent" location="bottom">加入行程</v-tooltip>
               <font-awesome-icon icon="plus" />
             </v-btn>
-            <v-btn
-              class="rounded-1 ma-2"
-              variant="tonal"
-              color="green-darken-1">
-              <v-tooltip activator="parent" location="bottom">
-                分享至聊天室
-              </v-tooltip>
+            <v-btn class="rounded-1 ma-2" variant="tonal" color="green-darken-1">
+              <v-tooltip activator="parent" location="bottom">分享至聊天室</v-tooltip>
               <font-awesome-icon icon="comment" />
             </v-btn>
-            <v-btn
-              class="rounded-1 ma-2"
-              variant="tonal"
-              color="blue-lighten-1">
-              <v-tooltip activator="parent" location="bottom">
-                開啟 Google Maps
-              </v-tooltip>
+            <v-btn class="rounded-1 ma-2" variant="tonal" color="blue-lighten-1">
+              <v-tooltip activator="parent" location="bottom">開啟 Google Maps</v-tooltip>
               <font-awesome-icon icon="up-right-from-square" />
             </v-btn>
           </div>
@@ -54,8 +37,7 @@
               </v-card-item>
             </v-col>
             <v-col cols="4">
-              <v-card-item
-                class="border align-center justify-center rounded h-100">
+              <v-card-item class="border align-center justify-center rounded h-100">
                 <v-rating
                   v-model="spotRating"
                   class="pb-2"
@@ -73,8 +55,7 @@
               </v-card-item>
             </v-col>
             <v-col cols="4">
-              <v-card-item
-                class="border align-center justify-center rounded h-100">
+              <v-card-item class="border align-center justify-center rounded h-100">
                 <v-card-text class="text-center font-weight-bold text-h5 pb-0">
                   {{ spotPrice }}
                 </v-card-text>

@@ -1,7 +1,4 @@
-import {
-  FontAwesomeIcon,
-  type FontAwesomeIconProps,
-} from "@fortawesome/vue-fontawesome";
+import { FontAwesomeIcon, type FontAwesomeIconProps } from "@fortawesome/vue-fontawesome";
 import { h, type FunctionalComponent } from "vue";
 
 //TODO:更改成工廠模式
@@ -34,9 +31,7 @@ const ThreePointsIcon: FunctionalComponent = () => {
   return h(FontAwesomeIcon, { icon: "ellipsis-vertical" });
 };
 
-const createTriangleIcon = (
-  direction: "left" | "right" | "up" | "down",
-): FunctionalComponent => {
+const createTriangleIcon = (direction: "left" | "right" | "up" | "down"): FunctionalComponent => {
   return () =>
     h(FontAwesomeIcon, {
       icon:
@@ -56,12 +51,7 @@ const createStarIcon = (
 ): FunctionalComponent => {
   return () =>
     h(FontAwesomeIcon, {
-      icon:
-        mode === "filled"
-          ? "star"
-          : mode === "empty"
-            ? ["far", "star"]
-            : "star-half",
+      icon: mode === "filled" ? "star" : mode === "empty" ? ["far", "star"] : "star-half",
       size,
     });
 };

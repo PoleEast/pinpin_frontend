@@ -1,8 +1,6 @@
 <template>
   <v-app-bar app color="primary" elevation="2">
-    <router-link
-      :to="{ name: 'home' }"
-      class="d-flex align-center ps-3 text-decoration-none">
+    <router-link :to="{ name: 'home' }" class="d-flex align-center ps-3 text-decoration-none">
       <v-img
         :width="$vuetify.display.mdAndUp ? 150 : 100"
         src="/src/assets/logo.png"
@@ -54,10 +52,7 @@
         </template>
 
         <v-list density="compact">
-          <v-list-item
-            v-for="item in menuItems"
-            :key="item.title"
-            :to="item.path">
+          <v-list-item v-for="item in menuItems" :key="item.title" :to="item.path">
             <v-list-item-title>{{ item.title }}</v-list-item-title>
           </v-list-item>
           <v-divider class="my-2" />

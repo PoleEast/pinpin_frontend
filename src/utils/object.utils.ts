@@ -23,12 +23,11 @@ const objectToOptions = <TMap extends Record<string, Record<string, unknown>>>(
   map: TMap,
 ): ReadonlyArray<Readonly<{ value: keyof TMap } & TMap[keyof TMap]>> => {
   return Object.freeze(
-    (Object.entries(map) as Array<[keyof TMap, TMap[keyof TMap]]>).map(
-      ([key, info]) =>
-        Object.freeze({
-          value: key,
-          ...info,
-        }),
+    (Object.entries(map) as Array<[keyof TMap, TMap[keyof TMap]]>).map(([key, info]) =>
+      Object.freeze({
+        value: key,
+        ...info,
+      }),
     ),
   );
 };

@@ -6,10 +6,7 @@
  * @param map - 來源物件
  * @returns 如果所有元素都是 map 的 Key，則返回 true，否則返回 false
  */
-export function isValidKey<T extends Record<string, unknown>>(
-  value: unknown,
-  map: T,
-): boolean {
+export function isValidKey<T extends Record<string, unknown>>(value: unknown, map: T): boolean {
   if (Array.isArray(value)) {
     return value.every((v) => typeof v === "string" && v in map);
   }
