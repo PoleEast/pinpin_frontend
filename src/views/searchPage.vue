@@ -45,6 +45,7 @@
                 <v-card-item>
                   <v-card-subtitle>訪客評分</v-card-subtitle>
                   <v-card-text class="pa-0">
+                    <!-- TODO: 有跑板問題 -->
                     <v-rating
                       title="訪客評分"
                       v-model="starRating"
@@ -157,11 +158,15 @@
         <!-- 依據使用者興趣內容推薦地點 -->
         <v-card elevation="2">
           <v-card-title class="text-h5 font-weight-bold d-flex justify-space-between align-center">
-            <v-sheet>
+            <v-sheet class="d-flex align-center justify-space-between">
               <span>
                 <font-awesome-icon icon="map-location-dot" size="lg" class="mr-2" />
                 {{ resultkeyword ? resultkeyword + "的" : "" }}搜尋結果
               </span>
+              <img
+                src="\src\assets\google_logo\GoogleMaps_Logo_Gray_1x.png"
+                style="height: 16px; min-height: 16px; max-height: 19px; margin-left: 10px"
+                alt="Google Maps" />
             </v-sheet>
             <!-- TODO:顯示格式實作 -->
             <v-btn-toggle

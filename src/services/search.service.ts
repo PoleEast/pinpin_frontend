@@ -24,7 +24,7 @@ export const searchService = {
       "GetAutoComplete",
       async () => {
         const response: AxiosResponse<ApiResponseDTO<autoCompletResponseeDTO[]>> = await axios.get(
-          `/searchLocation/autoComplete`,
+          `/searchLocation/autoComplete/${keyword}`,
           {
             params: {
               keyword: keyword,

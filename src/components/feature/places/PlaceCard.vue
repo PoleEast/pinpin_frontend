@@ -40,8 +40,8 @@
         <v-col cols="auto" class="py-0">
           <span
             class="text-subtitle-2 text-success"
-            :color="BUSINESS_STATUS_MAP[location.businssStuts].color">
-            {{ BUSINESS_STATUS_MAP[location.businssStuts].label }}
+            :color="BUSINESS_STATUS_MAP[location.businessStatus].color">
+            {{ BUSINESS_STATUS_MAP[location.businessStatus].label }}
           </span>
         </v-col>
       </v-row>

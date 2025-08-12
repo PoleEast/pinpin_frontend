@@ -31,6 +31,10 @@ const ThreePointsIcon: FunctionalComponent = () => {
   return h(FontAwesomeIcon, { icon: "ellipsis-vertical" });
 };
 
+const CloudIcon: FunctionalComponent = () => {
+  return h(FontAwesomeIcon, { icon: "cloud" });
+};
+
 const createTriangleIcon = (direction: "left" | "right" | "up" | "down"): FunctionalComponent => {
   return () =>
     h(FontAwesomeIcon, {
@@ -78,4 +82,5 @@ export {
   createStarIcon,
   createTriangleIcon,
   createNumberIcon,
+  CloudIcon,
 };

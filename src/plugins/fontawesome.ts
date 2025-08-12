@@ -100,6 +100,13 @@ import {
   faStarHalf,
   faComment,
   faUpRightFromSquare,
+  faCloud,
+  faPersonWalking,
+  faTemperatureArrowUp,
+  faTemperatureArrowDown,
+  faCloudRain,
+  faWind,
+  faDroplet,
 } from "@fortawesome/free-solid-svg-icons";
 import { faStar as faSolidStar } from "@fortawesome/free-solid-svg-icons";
 import { faStar as faRegularStar } from "@fortawesome/free-regular-svg-icons";
@@ -200,6 +207,13 @@ library.add(
   faCaretUp,
   faComment,
   faUpRightFromSquare,
+  faCloud,
+  faPersonWalking,
+  faTemperatureArrowUp,
+  faTemperatureArrowDown,
+  faCloudRain,
+  faWind,
+  faDroplet,
   fa1,
   fa2,
   fa3,

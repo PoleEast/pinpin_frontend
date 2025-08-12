@@ -78,7 +78,7 @@ interface ILocationCard {
   price: GoogleMapsPlacePriceLevel;
   primaryType: string;
   address: string;
-  businssStuts: GoogleMapsPlaceBusinessStatus;
+  businessStatus: GoogleMapsPlaceBusinessStatus;
   phone: string;
   Id: string;
   photoURL: string;

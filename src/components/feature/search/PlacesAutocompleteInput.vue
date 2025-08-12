@@ -23,18 +23,21 @@
         @click="searchByText(searchText)"
         class="cursor-pointer mx-1" />
     </template>
-    <template #prepend-inner>
-      <img
-        src="\src\assets\google_logo\desktop\google_on_white.png"
-        alt="search-icon"
-        class="cursor-pointer" />
-    </template>
     <template #item="{ props, item }">
       <v-list-item class="overflow-hidden" v-bind="props" :key="item.raw.placeId">
         <v-list-item-subtitle class="overflow-hidden">
           {{ item.raw.subtitle }}
         </v-list-item-subtitle>
       </v-list-item>
+    </template>
+    <template #append-item>
+      <div class="d-flex justify-end px-3 pb-2 pt-3">
+        <img
+          src="\src\assets\google_logo\GoogleMaps_Logo_Gray_1x.png"
+          max-height="19px"
+          min-height="16px"
+          alt="Google Maps" />
+      </div>
     </template>
   </v-autocomplete>
 </template>

@@ -40,12 +40,7 @@
                         <v-hover>
                           <template v-slot:default="{ isHovering, props }">
                             <v-avatar
-                              :image="
-                                cloudinaryUrl(
-                                  avatar.raw.public_id,
-                                  'f_auto,q_auto,dpr_auto,c_scale,w_150',
-                                )
-                              "
+                              :image="avatar.raw.public_id"
                               :class="[
                                 isHovering ? 'elevation-12 avatar-scale' : 'elevation-4',
                                 selectedAvatar === avatar.raw.id
