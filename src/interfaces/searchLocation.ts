@@ -1,4 +1,4 @@
-interface ITextSearchOption {
+interface TextSearchOption {
   keyword: string;
   priceLevel?: string[];
   primaryType?: string;
@@ -8,7 +8,7 @@ interface ITextSearchOption {
   rating?: number;
 }
 
-interface IOpeningHours {
+interface OpeningHours {
   dayRange: {
     start: string;
     end: string;
@@ -19,30 +19,4 @@ interface IOpeningHours {
   };
 }
 
-interface IWeatherData {
-  unixTimestamp: number;
-  temperature: number;
-  maxTemperature: number;
-  minTemperature: number;
-  feelsLikeTemperature: number;
-  humidity: number;
-  visibility: number;
-  weather: string;
-  cloud: number;
-  windSpeed: number;
-  PoP: number;
-  icon: string;
-}
-
-interface ICurrentWeather extends IWeatherData {
-  country: string;
-  city: string;
-}
-
-interface ILocationWeather {
-  country: string;
-  city: string;
-  weatherList: IWeatherData[];
-}
-
-export type { ITextSearchOption, IOpeningHours, IWeatherData, ILocationWeather, ICurrentWeather };
+export type { TextSearchOption, OpeningHours };

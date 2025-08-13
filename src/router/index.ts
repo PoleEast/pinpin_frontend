@@ -5,7 +5,7 @@ import schedulePage from "@/views/SchedulePage.vue";
 import searchPage from "@/views/searchPage.vue";
 import userProfilesPage from "@/views/settingPage.vue";
 import { useAuthStore } from "@/stores/auth.store";
-import type { Isnackbar } from "@/interfaces/snackbar.interface";
+import type { Snackbar } from "@/interfaces/snackbar.interface";
 import { useSnackbarStore } from "@/stores/snackbar.store";
 
 const router = createRouter({
@@ -42,7 +42,7 @@ router.beforeEach(async (to, from, next) => {
   await authStore.CheckAuthStatus();
 
   if (to.meta.requiresAuth && authStore.UserNickname === "") {
-    const snackbar: Isnackbar = {
+    const snackbar: Snackbar = {
       timeout: 2000,
       message: "請先登入",
       color: "warning",

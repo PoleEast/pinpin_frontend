@@ -20,7 +20,7 @@
                   :rules="input.rule"
                   :readonly="input.readonly"
                   :hint="input.hint"
-                  v-model="accountSettingsFormData[input.model as keyof IAccountSettingFormData]"
+                  v-model="accountSettingsFormData[input.model as keyof AccountSettingFormData]"
                   outlined
                   color="primary">
                   <template v-slot:prepend>
@@ -84,7 +84,7 @@
 
   //types
   import { type UserProfileResponseDTO } from "pinpin_library";
-  import type { IAccountSettingFormData, IFromBlock } from "@/interfaces";
+  import type { AccountSettingFormData, FromBlock } from "@/interfaces";
 
   //#endregion
 
@@ -95,7 +95,7 @@
     userProfile: UserProfileResponseDTO;
   }>();
   const emits = defineEmits<{
-    (e: "update", data: IAccountSettingFormData): void;
+    (e: "update", data: AccountSettingFormData): void;
   }>();
 
   const show = ref(false);
@@ -103,7 +103,7 @@
   const createAt: Ref<Date | null> = ref(null);
   const rules = ValidationService.createRules();
 
-  const accountSettingsFormData = reactive<IAccountSettingFormData>({
+  const accountSettingsFormData = reactive<AccountSettingFormData>({
     account: "",
     email: "",
     password: "",
@@ -113,7 +113,7 @@
   const confirmPasswordRules = [
     (v: string) => v === accountSettingsFormData.password || "密碼不一致",
   ];
-  const inputList: IFromBlock[] = [
+  const inputList: FromBlock[] = [
     {
       title: "帳號資訊",
       textFields: [

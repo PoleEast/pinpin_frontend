@@ -1,4 +1,4 @@
-interface ISettingOption {
+interface SettingOption {
   title: string;
   component: unknown;
   icon: string;
@@ -7,4 +7,4 @@ interface ISettingOption {
   emits: Record<string, unknown>;
 }
 
-export type { ISettingOption };
+export type { SettingOption };

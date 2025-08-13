@@ -1,12 +1,12 @@
-import type { Isnackbar } from "@/interfaces";
+import type { Snackbar } from "@/interfaces";
 import { defineStore } from "pinia";
 
 const useSnackbarStore = defineStore("snackbar", {
   state: () => ({
-    queue: [] as Isnackbar[],
+    queue: [] as Snackbar[],
   }),
   actions: {
-    PushSnackbar(snackbar: Isnackbar) {
+    PushSnackbar(snackbar: Snackbar) {
       this.queue.push({
         timeout: snackbar.timeout ?? 3000,
         message: snackbar.message,

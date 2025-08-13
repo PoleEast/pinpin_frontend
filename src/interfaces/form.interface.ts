@@ -1,20 +1,20 @@
 import type { GoogleMapsPlaceBusinessStatus, GoogleMapsPlacePriceLevel } from "pinpin_library";
 
-interface IRegisterFormData {
+interface RegisterFormData {
   account: string;
   nickname: string;
   password: string;
   confirmPassword: string;
 }
 
-interface IAccountSettingFormData {
+interface AccountSettingFormData {
   account: string;
   email: string;
   password: string;
   confirmPassword: string;
 }
 
-interface IUserProfileSettingFromData {
+interface UserProfileSettingFromData {
   motto?: string;
   bio?: string;
   fullname?: string;
@@ -34,7 +34,7 @@ interface IUserProfileSettingFromData {
   travelStyles?: number[];
 }
 
-interface ITextField {
+interface TextField {
   label?: string;
   model: string;
   required?: boolean;
@@ -47,15 +47,15 @@ interface ITextField {
   errorMessages?: string;
 }
 
-interface IFromBlock {
+interface FromBlock {
   title: string;
-  textFields?: ITextField[];
+  textFields?: TextField[];
 }
 
-interface ILabel {
+interface Label {
   text: string;
 }
-interface IChip {
+interface Chip {
   id?: number;
   text: string;
   color?: string;
@@ -64,15 +64,15 @@ interface IChip {
   value?: string | string[] | number | number[];
 }
 
-interface IInputChips {
+interface InputChips {
   icon: string;
-  label: ILabel;
-  choosechips: IChip[];
-  nochooseData: IChip[];
+  label: Label;
+  choosechips: Chip[];
+  nochooseData: Chip[];
   type: "visitedCountries" | "languages" | "currencies" | "travelInterests" | "travelStyles";
 }
 
-interface ILocationCard {
+interface LocationCard {
   placeName: string;
   rating: number;
   price: GoogleMapsPlacePriceLevel;
@@ -87,13 +87,13 @@ interface ILocationCard {
 }
 
 export type {
-  IRegisterFormData,
-  ITextField,
-  IFromBlock,
-  IAccountSettingFormData,
-  IUserProfileSettingFromData,
-  IInputChips,
-  IChip,
-  ILabel,
-  ILocationCard,
+  RegisterFormData,
+  TextField,
+  FromBlock,
+  AccountSettingFormData,
+  UserProfileSettingFromData,
+  InputChips,
+  Chip,
+  Label,
+  LocationCard,
 };

@@ -59,11 +59,11 @@
 <script lang="ts" setup>
   import { createStarIcon } from "@/utils";
   import { BUSINESS_STATUS_MAP } from "@/constants/index";
-  import type { ILocationCard } from "@/interfaces";
+  import type { LocationCard } from "@/interfaces";
   import { BUSSINESS_PRICE_MAP } from "@/constants/BusinessPrice.constant";
 
   defineProps<{
-    location: ILocationCard;
+    location: LocationCard;
     imageMaxHeight: number;
   }>();
 </script>

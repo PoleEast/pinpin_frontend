@@ -205,8 +205,7 @@
       </v-card>
       <v-card v-if="hasLoadedWeatherForecast" v-show="!showWeatherCard" class="pa-4">
         <v-card-title class="text-h5 font-weight-bold pb-0">天氣資訊</v-card-title>
-        <v-card-subtitle>當地天氣預報，讓你隨時掌握天氣變化</v-card-subtitle>
-        <CurrentWeather />
+        <WeatherForecastChart />
       </v-card>
       <v-fab
         location="bottom right"
@@ -221,9 +220,10 @@
 <script lang="ts" setup>
   import { ref } from "vue";
   import CurrentWeather from "@/components/ui/CurrentWeather.vue";
+  import WeatherForecastChart from "@/components/ui/WeatherForecastChart.vue";
 
   import { createStarIcon, CloudIcon } from "@/utils/functionalComponent.utils";
-  import type { IOpeningHours } from "@/interfaces";
+  import type { OpeningHours } from "@/interfaces";
   import { createTriangleIcon } from "@/utils/index";
 
   const imageMaxHeight = ref(200);
@@ -244,9 +244,9 @@
   const status = "營業中";
   const timezone = "Asia/Taipei";
   const showWeatherCard = ref(false);
-  const hasLoadedWeatherForecast = ref(false);
+  const hasLoadedWeatherForecast = ref(true);
 
-  const openingHours = ref<IOpeningHours[]>([
+  const openingHours = ref<OpeningHours[]>([
     {
       dayRange: {
         start: "星期一",

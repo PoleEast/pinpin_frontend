@@ -85,7 +85,7 @@
   </v-card>
 </template>
 <script setup lang="ts">
-  import type { ICurrentWeather } from "@/interfaces";
+  import type { CurrentWeather } from "@/interfaces";
   import { computed, ref } from "vue";
 
   const weatherIconBaseURL = {
@@ -93,7 +93,7 @@
     size: "@4x.png",
   };
 
-  const currentWeather = ref<ICurrentWeather>({
+  const currentWeather = ref<CurrentWeather>({
     unixTimestamp: Math.floor(Date.now() / 1000),
     temperature: 28,
     maxTemperature: 32,

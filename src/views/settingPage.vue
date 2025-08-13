@@ -89,10 +89,10 @@
     UserProfileResponseDTO,
   } from "pinpin_library";
   import type {
-    IAccountSettingFormData,
-    ISettingOption,
-    Isnackbar,
-    IUserProfileSettingFromData,
+    AccountSettingFormData,
+    SettingOption,
+    Snackbar,
+    UserProfileSettingFromData,
   } from "@/interfaces";
 
   //#endregion
@@ -101,14 +101,14 @@
   const settingData = ref<SettingResponseDTO>();
   const userProfile = ref<UserProfileResponseDTO>();
   const updateLoading = ref(true);
-  const currentOption: Ref<ISettingOption | null> = ref(null);
+  const currentOption: Ref<SettingOption | null> = ref(null);
 
   const snackbarStore = useSnackbarStore();
 
   const initLoading = computed(() => {
     return settingData.value === undefined || userProfile.value === undefined;
   });
-  const settingsOptions = computed((): ISettingOption[] => [
+  const settingsOptions = computed((): SettingOption[] => [
     {
       title: "帳號設定",
       component: markRaw(AccountSettings),
@@ -159,7 +159,7 @@
   };
 
   const updateAccountSetting = async (
-    accountSettingsFormData: IAccountSettingFormData,
+    accountSettingsFormData: AccountSettingFormData,
   ): Promise<AccountRequestDTO> => {
     updateLoading.value = true;
     try {
@@ -169,7 +169,7 @@
       };
 
       const response = await settingService.UpdateAccountSetting(accountRequestDTO);
-      const snackbar: Isnackbar = {
+      const snackbar: Snackbar = {
         timeout: 2000,
         message: "帳號設定更新成功",
         color: "success",
@@ -184,13 +184,13 @@
 
       return response.data?.data || ({} as AccountRequestDTO);
     } catch {
-      return {} as IAccountSettingFormData;
+      return {} as AccountSettingFormData;
     } finally {
       updateLoading.value = false;
     }
   };
 
-  const updateUserProfile = async (userProfileSettingFromData: IUserProfileSettingFromData) => {
+  const updateUserProfile = async (userProfileSettingFromData: UserProfileSettingFromData) => {
     updateLoading.value = true;
     try {
       const userProfileRequestDTO: UserProfileRequestDTO = {
@@ -214,7 +214,7 @@
 
       const response = await settingService.UpdateUserProfileSetting(userProfileRequestDTO);
 
-      const snackbar: Isnackbar = {
+      const snackbar: Snackbar = {
         timeout: 2000,
         message: "個人資料更新成功",
         color: "success",

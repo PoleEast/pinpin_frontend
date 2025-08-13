@@ -250,7 +250,7 @@
     isStringOrStringArray,
     isNumericString,
   } from "@/utils/index";
-  import type { IChip, ILocationCard, ITextSearchOption } from "@/interfaces";
+  import type { Chip, LocationCard, TextSearchOption } from "@/interfaces";
   import {
     GOOGLE_PLACE_TYPE_MAP,
     GOOGLE_PLACE_TYPE_OPTIONS,
@@ -281,7 +281,7 @@
     (type) => type.label,
   );
   const priceRange = ref([0, piriceType.length - 1]);
-  const placeTypes: IChip[] = GOOGLE_PLACE_TYPE_OPTIONS.map((type) => ({
+  const placeTypes: Chip[] = GOOGLE_PLACE_TYPE_OPTIONS.map((type) => ({
     text: type.label,
     value: type.value,
   }));
@@ -293,13 +293,13 @@
   // #region 搜尋結果相關
 
   const viewMode = ref("grid");
-  const locations = ref<ILocationCard[]>([]);
+  const locations = ref<LocationCard[]>([]);
   const placesSort = ref<string[]>([]);
   const resultkeyword = ref("");
 
   const nextPageToken = ref<string>("");
   const isNewNextPageToken = ref(false);
-  const lastTextSearchOption = ref<ITextSearchOption | undefined>();
+  const lastTextSearchOption = ref<TextSearchOption | undefined>();
   const pageSize = 12;
 
   //#endregion
@@ -319,7 +319,7 @@
     locations.value = [];
     nextPageToken.value = "";
 
-    const textSearchOption: ITextSearchOption = {
+    const textSearchOption: TextSearchOption = {
       keyword: placeType.value
         ? keyword + " " + GOOGLE_PLACE_TYPE_MAP[placeType.value].label
         : keyword,
@@ -337,12 +337,12 @@
     triggerSearchByUrl(textSearchOption);
   };
 
-  const loadNextPage = (textSearchOption: ITextSearchOption, nextPageToken: string) => {
+  const loadNextPage = (textSearchOption: TextSearchOption, nextPageToken: string) => {
     textSearchOption.nextPageToken = nextPageToken;
     processTextSearchResult(textSearchOption);
   };
 
-  const triggerSearchByUrl = (textSearchOption: ITextSearchOption) => {
+  const triggerSearchByUrl = (textSearchOption: TextSearchOption) => {
     router.push({
       query: {
         keyword: textSearchOption.keyword,
@@ -353,7 +353,7 @@
     });
   };
 
-  const processTextSearchResult = async (textSearchOption: ITextSearchOption) => {
+  const processTextSearchResult = async (textSearchOption: TextSearchOption) => {
     try {
       console.log(textSearchOption);
       const response = await searchService.GetTextSearchLocation(textSearchOption);
@@ -367,15 +367,15 @@
         return;
       }
 
-      const result: ILocationCard[] =
+      const result: LocationCard[] =
         response.data.data.locations.map(
-          (location): ILocationCard => ({
+          (location): LocationCard => ({
             placeName: location.name,
             rating: location.rating,
             price: location.priceLevel,
             primaryType: location.primaryType,
             address: location.address,
-            businssStuts: location.businessStatus,
+            businessStatus: location.businessStatus,
             phone: location.phoneNumber,
             Id: location.id,
             photoURL: location.photoURL,
@@ -482,7 +482,7 @@
         return;
       }
 
-      const textSearchOption: ITextSearchOption = {
+      const textSearchOption: TextSearchOption = {
         keyword: query.keyword as string,
         priceLevel: query.priceLevel as string[],
         primaryType: query.primaryType as string,

@@ -158,7 +158,7 @@
 
   //types
   import type { VForm } from "vuetify/components";
-  import type { IRegisterFormData, Isnackbar } from "@/interfaces";
+  import type { RegisterFormData, Snackbar } from "@/interfaces";
   import {
     type ApiResponseDTO,
     type LoginRequestDTO,
@@ -178,7 +178,7 @@
 
   const authStore = useAuthStore();
   const showDialog = defineModel<boolean>("showDialog");
-  const emit = defineEmits<{ showSnackbar: [snackbar: Isnackbar] }>();
+  const emit = defineEmits<{ showSnackbar: [snackbar: Snackbar] }>();
 
   defineExpose({
     handleLoginStatus: () => {
@@ -186,7 +186,7 @@
     },
   });
 
-  const registerFormData = reactive<IRegisterFormData>({
+  const registerFormData = reactive<RegisterFormData>({
     account: "",
     nickname: "",
     password: "",

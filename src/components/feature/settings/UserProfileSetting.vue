@@ -302,7 +302,7 @@
     type SettingResponseDTO,
     type UserProfileResponseDTO,
   } from "pinpin_library";
-  import type { IChip, IInputChips, IUserProfileSettingFromData } from "@/interfaces";
+  import type { Chip, InputChips, UserProfileSettingFromData } from "@/interfaces";
 
   //#endregion
 
@@ -315,7 +315,7 @@
   }>();
 
   const emits = defineEmits<{
-    (e: "update", data: IUserProfileSettingFromData): void;
+    (e: "update", data: UserProfileSettingFromData): void;
   }>();
 
   const valid = ref(false);
@@ -325,7 +325,7 @@
   const showDialog = ref(false);
 
   const userProfileSettingFormRef = useTemplateRef<VForm>("userProfileSettingForm");
-  const userProfileSettingFromData = reactive<IUserProfileSettingFromData>({
+  const userProfileSettingFromData = reactive<UserProfileSettingFromData>({
     motto: "",
     bio: "",
     fullname: "",
@@ -423,10 +423,10 @@
 
   //#region 計算屬性
 
-  const visitedCountriesChipsData = computed<IChip[]>(() => {
+  const visitedCountriesChipsData = computed<Chip[]>(() => {
     return props.settingData.country
       .filter((country) => userProfileSettingFromData.visitedCountries?.includes(country.id))
-      .map<IChip>((country) => ({
+      .map<Chip>((country) => ({
         id: country.id,
         text: country.local_name,
         icon: country.icon,
@@ -434,10 +434,10 @@
       }));
   });
 
-  const travelInterestsChipsData = computed<IChip[]>(() => {
+  const travelInterestsChipsData = computed<Chip[]>(() => {
     return props.settingData.travelInterest
       .filter((interest) => userProfileSettingFromData.travelInterests?.includes(interest.id))
-      .map<IChip>((interest) => ({
+      .map<Chip>((interest) => ({
         id: interest.id,
         text: interest.name,
         icon: interest.icon,
@@ -448,10 +448,10 @@
       }));
   });
 
-  const travelStylesChipsData = computed<IChip[]>(() => {
+  const travelStylesChipsData = computed<Chip[]>(() => {
     return props.settingData.travelStyle
       .filter((style) => userProfileSettingFromData.travelStyles?.includes(style.id))
-      .map<IChip>((style) => ({
+      .map<Chip>((style) => ({
         id: style.id,
         text: style.name,
         icon: style.icon,
@@ -459,19 +459,19 @@
       }));
   });
 
-  const languageChipsData = computed<IChip[]>(() => {
+  const languageChipsData = computed<Chip[]>(() => {
     return props.settingData.language
       .filter((language) => userProfileSettingFromData.languages?.includes(language.id))
-      .map<IChip>((language) => ({
+      .map<Chip>((language) => ({
         id: language.id,
         text: language.local_name,
       }));
   });
 
-  const currencyChipsData = computed<IChip[]>(() => {
+  const currencyChipsData = computed<Chip[]>(() => {
     return props.settingData.currency
       .filter((currency) => userProfileSettingFromData.currencies?.includes(currency.id))
-      .map<IChip>((currency) => ({
+      .map<Chip>((currency) => ({
         id: currency.id,
         text: currency.code,
         icon: currency.icon,
@@ -479,10 +479,10 @@
       }));
   });
 
-  const noChooseCountry = computed<IChip[]>(() => {
+  const noChooseCountry = computed<Chip[]>(() => {
     return props.settingData.country
       .filter((country) => !userProfileSettingFromData.visitedCountries?.includes(country.id))
-      .map<IChip>((country) => ({
+      .map<Chip>((country) => ({
         id: country.id,
         text: country.local_name,
         icon: country.icon,
@@ -490,10 +490,10 @@
       }));
   });
 
-  const noChooseTravelInterest = computed<IChip[]>(() => {
+  const noChooseTravelInterest = computed<Chip[]>(() => {
     return props.settingData.travelInterest
       .filter((interest) => !userProfileSettingFromData.travelInterests?.includes(interest.id))
-      .map<IChip>((interest) => ({
+      .map<Chip>((interest) => ({
         id: interest.id,
         text: interest.name,
         icon: interest.icon,
@@ -504,10 +504,10 @@
       }));
   });
 
-  const noChooseTravelStyle = computed<IChip[]>(() => {
+  const noChooseTravelStyle = computed<Chip[]>(() => {
     return props.settingData.travelStyle
       .filter((style) => !userProfileSettingFromData.travelStyles?.includes(style.id))
-      .map<IChip>((style) => ({
+      .map<Chip>((style) => ({
         id: style.id,
         text: style.name,
         icon: style.icon,
@@ -515,19 +515,19 @@
       }));
   });
 
-  const noChooseLanguage = computed<IChip[]>(() => {
+  const noChooseLanguage = computed<Chip[]>(() => {
     return props.settingData.language
       .filter((language) => !userProfileSettingFromData.languages?.includes(language.id))
-      .map<IChip>((language) => ({
+      .map<Chip>((language) => ({
         id: language.id,
         text: language.local_name,
       }));
   });
 
-  const noChooseCurrency = computed<IChip[]>(() => {
+  const noChooseCurrency = computed<Chip[]>(() => {
     return props.settingData.currency
       .filter((currency) => !userProfileSettingFromData.currencies?.includes(currency.id))
-      .map<IChip>((currency) => ({
+      .map<Chip>((currency) => ({
         id: currency.id,
         text: currency.code,
         icon: currency.icon,
@@ -536,7 +536,7 @@
   });
 
   //TODO:新增旅遊風格詳細資料
-  const inputChips = computed((): IInputChips[] => [
+  const inputChips = computed((): InputChips[] => [
     {
       icon: "earth-asia",
       label: {
@@ -632,11 +632,11 @@
   /**
    * 將一個Chip加入IInputChips的choosechips中。
    *
-   * @param {IChip} chip - 要加入的Chip。
-   * @param {IInputChips} inputChipType - IInputChips物件。
+   * @param {Chip} chip - 要加入的Chip。
+   * @param {InputChips} inputChipType - IInputChips物件。
    */
   const addUserProfile = (
-    chip: IChip,
+    chip: Chip,
     inputChipType: keyof Pick<
       typeof userProfileSettingFromData,
       "visitedCountries" | "languages" | "currencies" | "travelInterests" | "travelStyles"
@@ -649,11 +649,11 @@
   /**
    * 刪除用戶個人資料中的一個選擇。
    *
-   * @param {IChip} chip - 要刪除的Chip。
-   * @param {IInputChips} inputChipType - IInputChips物件。
+   * @param {Chip} chip - 要刪除的Chip。
+   * @param {InputChips} inputChipType - IInputChips物件。
    */
   const removeUserProfile = (
-    chip: IChip,
+    chip: Chip,
     inputChipType: keyof Pick<
       typeof userProfileSettingFromData,
       "visitedCountries" | "languages" | "currencies" | "travelInterests" | "travelStyles"

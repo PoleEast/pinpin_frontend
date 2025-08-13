@@ -58,7 +58,7 @@ const GOOGLE_PLACE_TYPE_MAP: Record<
     label: "宵夜",
     autocompleteItems: ["bar", "pub", "night_club", "bar_and_grill"],
   }),
-});
+} as const);
 
 const GOOGLE_PLACE_TYPE_OPTIONS = objectToOptions(GOOGLE_PLACE_TYPE_MAP);
 

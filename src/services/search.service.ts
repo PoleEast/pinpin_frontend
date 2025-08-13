@@ -1,4 +1,4 @@
-import type { ITextSearchOption } from "@/interfaces";
+import type { TextSearchOption } from "@/interfaces";
 import { axiosLockManager } from "@/utils";
 import axios, { type AxiosResponse } from "axios";
 import type {
@@ -40,7 +40,7 @@ export const searchService = {
   },
 
   async GetTextSearchLocation(
-    options: ITextSearchOption,
+    options: TextSearchOption,
   ): Promise<AxiosResponse<ApiResponseDTO<IsearchLocationResponseDTO>>> {
     return await axiosLockManager.withLock(
       "GetTextSearchLocation",

@@ -86,7 +86,7 @@
   import LoginRegisterDialog from "@/components/feature/auth/LoginRegisterDialog.vue";
   import UserButton from "@/components/layout/header/UserButton.vue";
   import { useAuthStore, useSnackbarStore } from "@/stores";
-  import type { Isnackbar } from "@/interfaces";
+  import type { Snackbar } from "@/interfaces";
 
   const authStore = useAuthStore();
   const snackbarStore = useSnackbarStore();
@@ -105,7 +105,7 @@
     webLoginRef.value.handleLoginStatus();
   };
 
-  const pushSnackbar = (snackbar: Isnackbar) => {
+  const pushSnackbar = (snackbar: Snackbar) => {
     snackbarStore.PushSnackbar(snackbar);
   };
 
