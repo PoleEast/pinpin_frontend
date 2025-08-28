@@ -107,9 +107,17 @@ import {
   faCloudRain,
   faWind,
   faDroplet,
+  faFilter,
+  faChartLine,
+  faSnowman,
+  faSmog,
+  faTemperatureEmpty,
+  faCircleDot,
+  faRulerVertical,
+  faSnowflake,
 } from "@fortawesome/free-solid-svg-icons";
 import { faStar as faSolidStar } from "@fortawesome/free-solid-svg-icons";
-import { faStar as faRegularStar } from "@fortawesome/free-regular-svg-icons";
+import { faCircle, faStar as faRegularStar } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon as _FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
 library.add(
@@ -214,6 +222,15 @@ library.add(
   faCloudRain,
   faWind,
   faDroplet,
+  faFilter,
+  faChartLine,
+  faSnowman,
+  faSmog,
+  faTemperatureEmpty,
+  faCircle,
+  faCircleDot,
+  faRulerVertical,
+  faSnowflake,
   fa1,
   fa2,
   fa3,

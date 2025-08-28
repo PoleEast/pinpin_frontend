@@ -13,6 +13,11 @@ interface WeatherData {
   icon: string;
 }
 
+interface WeatherForecastData extends WeatherData {
+  rain?: number;
+  snow?: number;
+}
+
 interface CurrentWeather extends WeatherData {
   country: string;
   city: string;
@@ -24,4 +29,4 @@ interface WeatherForecast {
   weatherList: WeatherData[];
 }
 
-export type { CurrentWeather, WeatherForecast, WeatherData };
+export type { CurrentWeather, WeatherForecast, WeatherData, WeatherForecastData };

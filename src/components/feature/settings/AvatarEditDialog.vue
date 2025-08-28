@@ -74,8 +74,8 @@
                       density="compact"
                       v-model="dataIteratorPage"
                       class="mt-1"
-                      :prev-icon="LeftTriangleIcon"
-                      :next-icon="RightTriangleIcon"
+                      :prev-icon="createTriangleIcon('left')"
+                      :next-icon="createTriangleIcon('right')"
                       rounded="lg"></v-pagination>
                   </template>
                 </v-data-iterator>
@@ -128,12 +128,7 @@
   //services
   import { useAuthStore, useSnackbarStore } from "@/stores";
   import { settingService } from "@/services";
-  import {
-    cloudinaryUrl,
-    calculateDaysDifference,
-    LeftTriangleIcon,
-    RightTriangleIcon,
-  } from "@/utils";
+  import { cloudinaryUrl, calculateDaysDifference, createTriangleIcon } from "@/utils";
 
   //types
   import {

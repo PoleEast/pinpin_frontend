@@ -59,6 +59,7 @@ interface Chip {
   id?: number;
   text: string;
   color?: string;
+  unicodeEmoji?: string;
   icon?: string;
   icon_type?: string;
   value?: string | string[] | number | number[];

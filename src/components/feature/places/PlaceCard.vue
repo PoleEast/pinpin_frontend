@@ -20,8 +20,8 @@
             hover
             readonly
             size="17"
-            :full-icon="createStarIcon('filled', '2xs')"
-            :empty-icon="createStarIcon('empty', '2xs')">
+            :full-icon="createStarIcon('filled', { size: '2xs' })"
+            :empty-icon="createStarIcon('empty', { size: '2xs' })">
             icon
           </v-rating>
           <span class="text-subtitle-2">({{ location.userRatingCount }})</span>

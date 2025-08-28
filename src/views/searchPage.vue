@@ -177,15 +177,15 @@
               mandatory>
               <v-tooltip text="表格" location="bottom">
                 <template v-slot:activator="{ props }">
-                  <v-btn value="grid">
-                    <font-awesome-icon v-bind="props" icon="table" size="lg" />
+                  <v-btn value="grid" v-bind="props">
+                    <font-awesome-icon icon="table" size="lg" />
                   </v-btn>
                 </template>
               </v-tooltip>
               <v-tooltip text="列表" location="bottom">
                 <template v-slot:activator="{ props }">
-                  <v-btn value="list">
-                    <font-awesome-icon v-bind="props" icon="table-list" size="lg" />
+                  <v-btn value="list" v-bind="props">
+                    <font-awesome-icon icon="table-list" size="lg" />
                   </v-btn>
                 </template>
               </v-tooltip>
@@ -255,7 +255,7 @@
     GOOGLE_PLACE_TYPE_MAP,
     GOOGLE_PLACE_TYPE_OPTIONS,
     type GooglePlaceType,
-  } from "@/constants/googlePlaceType.constant";
+  } from "@/constants/GooglePlaceType.constant";
   import { generateUUID } from "@/utils/string.utils";
   import { searchService } from "@/services";
   import { useSnackbarStore } from "@/stores";

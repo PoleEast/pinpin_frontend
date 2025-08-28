@@ -1,5 +1,5 @@
 <template>
-  <v-card class="pa-4" elevation="3" rounded="lg">
+  <v-card class="pa-4" flat>
     <!-- 頭部資訊 -->
     <v-card-title class="d-flex justify-space-between align-center mb-6">
       <div>
@@ -14,10 +14,10 @@
       </div>
       <div>
         <v-card-subtitle class="text-right">
-          {{ new Date(currentWeather.unixTimestamp * 1000).toLocaleTimeString() }}
+          {{ new Date(currentWeather.data.unixTimestamp * 1000).toLocaleTimeString() }}
         </v-card-subtitle>
         <v-card-subtitle class="text-primary text-right text-subtitle-2 opacity-90">
-          {{ currentWeather.weather }}
+          {{ currentWeather.data.weather }}
         </v-card-subtitle>
       </div>
     </v-card-title>
@@ -25,10 +25,10 @@
     <!-- 主要溫度顯示 -->
     <v-card-text class="d-flex align-center justify-center">
       <div class="text-center mr-8">
-        <div class="text-h1 font-weight-light mb-2">{{ currentWeather.temperature }}°</div>
+        <div class="text-h1 font-weight-light mb-2">{{ currentWeather.data.temperature }}°</div>
         <div class="text-body-1 text-medium-emphasis">
           <font-awesome-icon icon="person-walking" class="mr-1" />
-          體感 {{ currentWeather.feelsLikeTemperature }}°C
+          體感 {{ currentWeather.data.feelsLikeTemperature }}°C
         </div>
       </div>
       <v-img :src="weatherIconURL" class="weather-icon" max-height="120px" max-width="120px" />
@@ -38,11 +38,11 @@
     <v-card-text class="d-flex justify-center">
       <v-chip color="error" variant="outlined" class="mr-5">
         <font-awesome-icon icon="temperature-arrow-up" class="mr-1" />
-        {{ currentWeather.maxTemperature }}°C
+        {{ currentWeather.data.maxTemperature }}°C
       </v-chip>
       <v-chip color="blue" variant="outlined">
         <font-awesome-icon icon="temperature-arrow-down" class="mr-1" />
-        {{ currentWeather.minTemperature }}°C
+        {{ currentWeather.data.minTemperature }}°C
       </v-chip>
     </v-card-text>
 
@@ -53,14 +53,18 @@
         <v-card-item class="weather-detail text-center rounded-lg pa-0">
           <font-awesome-icon icon="cloud-rain" />
           <div class="text-caption text-medium-emphasis">降雨機率</div>
-          <div class="text-body-1 font-weight-medium text-primary">{{ currentWeather.PoP }}%</div>
+          <div class="text-body-1 font-weight-medium text-primary">
+            {{ currentWeather.data.rain }}%
+          </div>
         </v-card-item>
       </v-col>
       <v-col cols="6" sm="3">
         <v-card-item class="weather-detail text-center rounded-lg pa-0">
           <font-awesome-icon icon="cloud" />
           <div class="text-caption text-medium-emphasis">雲量</div>
-          <div class="text-body-1 font-weight-medium text-primary">{{ currentWeather.cloud }}%</div>
+          <div class="text-body-1 font-weight-medium text-primary">
+            {{ currentWeather.data.cloud }}%
+          </div>
         </v-card-item>
       </v-col>
       <v-col cols="6" sm="3">
@@ -68,7 +72,7 @@
           <font-awesome-icon icon="wind" />
           <div class="text-caption text-medium-emphasis">風速</div>
           <div class="text-body-1 font-weight-medium text-primary">
-            {{ currentWeather.windSpeed }} m/s
+            {{ currentWeather.data.windSpeed }} m/s
           </div>
         </v-card-item>
       </v-col>
@@ -77,7 +81,7 @@
           <font-awesome-icon icon="droplet" />
           <div class="text-caption text-medium-emphasis">濕度</div>
           <div class="text-body-1 font-weight-medium text-primary">
-            {{ currentWeather.humidity }}%
+            {{ currentWeather.data.humidity }}%
           </div>
         </v-card-item>
       </v-col>
@@ -85,7 +89,9 @@
   </v-card>
 </template>
 <script setup lang="ts">
-  import type { CurrentWeather } from "@/interfaces";
+  //TODO: 需要處理降雨、降雪、雲量的顯示，因為不一定會有這些資料
+
+  import type { CurrentWeatherResponseDTO } from "pinpin_library";
   import { computed, ref } from "vue";
 
   const weatherIconBaseURL = {
@@ -93,25 +99,26 @@
     size: "@4x.png",
   };
 
-  const currentWeather = ref<CurrentWeather>({
-    unixTimestamp: Math.floor(Date.now() / 1000),
-    temperature: 28,
-    maxTemperature: 32,
-    minTemperature: 24,
-    feelsLikeTemperature: 30,
-    humidity: 65,
-    visibility: 10,
-    weather: "多雲",
-    cloud: 40,
-    windSpeed: 8.5,
-    PoP: 20,
+  const currentWeather = ref<CurrentWeatherResponseDTO>({
     country: "Taiwan",
     city: "Taipei",
-    icon: "04d",
+    data: {
+      unixTimestamp: Math.floor(Date.now() / 1000),
+      temperature: 28,
+      maxTemperature: 32,
+      minTemperature: 24,
+      feelsLikeTemperature: 30,
+      humidity: 65,
+      visibility: 10,
+      weather: "多雲",
+      cloud: 40,
+      windSpeed: 8.5,
+      icon: "04d",
+    },
   });
 
   const weatherIconURL = computed(() => {
-    return `${weatherIconBaseURL.base}${currentWeather.value.icon}${weatherIconBaseURL.size}`;
+    return `${weatherIconBaseURL.base}${currentWeather.value.data.icon}${weatherIconBaseURL.size}`;
   });
 </script>
 

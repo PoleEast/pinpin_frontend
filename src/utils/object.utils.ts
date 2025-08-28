@@ -13,11 +13,11 @@
  *   blue: { label: '藍色', hex: '#0000FF' }
  * };
  * const options = objectToOptions(colorMap);
- * // options 為:
- * // [
- * //   { value: 'red', label: '紅色', hex: '#FF0000' },
- * //   { value: 'blue', label: '藍色', hex: '#0000FF' }
- * // ]
+ * options 為:
+ *  [
+ *    { value: 'red', label: '紅色', hex: '#FF0000' },
+ *    { value: 'blue', label: '藍色', hex: '#0000FF' }
+ *  ]
  */
 const objectToOptions = <TMap extends Record<string, Record<string, unknown>>>(
   map: TMap,

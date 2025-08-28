@@ -1,7 +1,7 @@
-<script setup lang="ts">
-  import PlaceDetailCard from "@/components/feature/places/PlaceDetailCard.vue";
-</script>
-
 <template>
-  <PlaceDetailCard></PlaceDetailCard>
+  <PlaceDetailDialog></PlaceDetailDialog>
 </template>
+
+<script setup lang="ts">
+  import PlaceDetailDialog from "@/components/feature/places/PlaceDetailDialog.vue";
+</script>

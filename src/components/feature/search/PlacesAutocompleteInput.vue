@@ -48,7 +48,7 @@
   import {
     GOOGLE_PLACE_TYPE_MAP,
     type GooglePlaceType,
-  } from "@/constants/googlePlaceType.constant";
+  } from "@/constants/GooglePlaceType.constant";
   import { searchService } from "@/services";
 
   //#region variables

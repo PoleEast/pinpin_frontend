@@ -1,67 +1,84 @@
-const TEMPERATURE_RANGE_TYPE = {
-  SUPERCOLD: "SUPERCOLD",
-  COLD: "COLD",
-  COOL: "COOL",
-  COMFORTABLE: "COMFORTABLE",
-  WARM: "WARM",
-  HOT: "HOT",
-  SUPERHOT: "SUPERHOT",
+import type { WeatherForecastData } from "@/interfaces";
+import { objectToOptions } from "@/utils";
+import type { PeriodOfTime } from "pinpin_library";
+
+type WeatherChartOption = keyof Omit<WeatherForecastData, "unixTimestamp" | "weather" | "icon">;
+
+const CHART_GRADIENT_COLORS: Record<WeatherChartOption, Record<PeriodOfTime, string[]>> = {
+  temperature: {
+    Day: ["rgba(255, 87, 34, 0.4)", "rgba(255, 152, 0, 0.2)", "rgba(255, 87, 34, 0.05)"],
+    Night: ["rgba(156, 39, 176, 0.4)", "rgba(103, 58, 183, 0.2)", "rgba(156, 39, 176, 0.05)"],
+  },
+  maxTemperature: {
+    Day: ["rgba(211, 47, 47, 0.4)", "rgba(244, 67, 54, 0.2)", "rgba(211, 47, 47, 0.05)"],
+    Night: ["rgba(136, 14, 79, 0.4)", "rgba(173, 20, 87, 0.2)", "rgba(136, 14, 79, 0.05)"],
+  },
+  minTemperature: {
+    Day: ["rgba(25, 118, 210, 0.4)", "rgba(33, 150, 243, 0.2)", "rgba(25, 118, 210, 0.05)"],
+    Night: ["rgba(13, 71, 161, 0.4)", "rgba(21, 101, 192, 0.2)", "rgba(13, 71, 161, 0.05)"],
+  },
+  feelsLikeTemperature: {
+    Day: ["rgba(255, 152, 0, 0.4)", "rgba(255, 193, 7, 0.2)", "rgba(255, 152, 0, 0.05)"],
+    Night: ["rgba(230, 81, 0, 0.4)", "rgba(245, 124, 0, 0.2)", "rgba(230, 81, 0, 0.05)"],
+  },
+  humidity: {
+    Day: ["rgba(33, 150, 243, 0.4)", "rgba(3, 169, 244, 0.2)", "rgba(33, 150, 243, 0.05)"],
+    Night: ["rgba(13, 71, 161, 0.4)", "rgba(25, 118, 210, 0.2)", "rgba(13, 71, 161, 0.05)"],
+  },
+  visibility: {
+    Day: ["rgba(96, 125, 139, 0.4)", "rgba(120, 144, 156, 0.2)", "rgba(96, 125, 139, 0.05)"],
+    Night: ["rgba(55, 71, 79, 0.4)", "rgba(69, 90, 100, 0.2)", "rgba(55, 71, 79, 0.05)"],
+  },
+  cloud: {
+    Day: ["rgba(158, 158, 158, 0.4)", "rgba(189, 189, 189, 0.2)", "rgba(158, 158, 158, 0.05)"],
+    Night: ["rgba(97, 97, 97, 0.4)", "rgba(117, 117, 117, 0.2)", "rgba(97, 97, 97, 0.05)"],
+  },
+  windSpeed: {
+    Day: ["rgba(0, 188, 212, 0.4)", "rgba(0, 172, 193, 0.2)", "rgba(0, 188, 212, 0.05)"],
+    Night: ["rgba(0, 96, 100, 0.4)", "rgba(0, 131, 143, 0.2)", "rgba(0, 96, 100, 0.05)"],
+  },
+  PoP: {
+    Day: ["rgba(63, 81, 181, 0.4)", "rgba(92, 107, 192, 0.2)", "rgba(63, 81, 181, 0.05)"],
+    Night: ["rgba(40, 53, 147, 0.4)", "rgba(57, 73, 171, 0.2)", "rgba(40, 53, 147, 0.05)"],
+  },
+  rain: {
+    Day: ["rgba(33, 150, 243, 0.4)", "rgba(100, 181, 246, 0.2)", "rgba(33, 150, 243, 0.05)"],
+    Night: ["rgba(21, 101, 192, 0.4)", "rgba(25, 118, 210, 0.2)", "rgba(21, 101, 192, 0.05)"],
+  },
+  snow: {
+    Day: ["rgba(224, 224, 224, 0.4)", "rgba(245, 245, 245, 0.2)", "rgba(224, 224, 224, 0.05)"],
+    Night: ["rgba(189, 189, 189, 0.4)", "rgba(224, 224, 224, 0.2)", "rgba(189, 189, 189, 0.05)"],
+  },
 } as const;
 
-type TemperatureRangeType = (typeof TEMPERATURE_RANGE_TYPE)[keyof typeof TEMPERATURE_RANGE_TYPE];
+const WEATHER_DATA_MAP: Record<WeatherChartOption, { label: string; color: string; icon: string }> =
+  Object.freeze({
+    temperature: Object.freeze({ label: "溫度", color: "#FF5722", icon: "temperature-empty" }),
+    maxTemperature: Object.freeze({
+      label: "最高溫",
+      color: "#D32F2F",
+      icon: "temperature-arrow-up",
+    }),
+    minTemperature: Object.freeze({
+      label: "最低溫",
+      color: "#1976D2",
+      icon: "temperature-arrow-down",
+    }),
+    feelsLikeTemperature: Object.freeze({
+      label: "體感溫度",
+      color: "#FF9800",
+      icon: "person-walking",
+    }),
+    humidity: Object.freeze({ label: "濕度", color: "#2196F3", icon: "droplet" }),
+    visibility: Object.freeze({ label: "能見度", color: "#607D8B", icon: "eye" }),
+    cloud: Object.freeze({ label: "雲量", color: "#9E9E9E", icon: "cloud" }),
+    windSpeed: Object.freeze({ label: "風速", color: "#00BCD4", icon: "wind" }),
+    PoP: Object.freeze({ label: "降雨機率", color: "#3F51B5", icon: "cloud-rain" }),
+    rain: Object.freeze({ label: "降雨量", color: "#2196F3", icon: "ruler-vertical" }),
+    snow: Object.freeze({ label: "降雪量", color: "#E0E0E0", icon: "snowflake" }),
+  });
 
-const TEMPERATURE_RANGE_TYPE_MAP: Record<
-  TemperatureRangeType,
-  {
-    label: string;
-    min: number;
-    max: number;
-    color: string;
-  }
-> = Object.freeze({
-  [TEMPERATURE_RANGE_TYPE.SUPERCOLD]: Object.freeze({
-    label: "結冰",
-    min: -Infinity,
-    max: 0,
-    color: "#E3F2FD",
-  }),
-  [TEMPERATURE_RANGE_TYPE.COLD]: Object.freeze({
-    label: "寒冷",
-    min: 0,
-    max: 15,
-    color: "#4A90E2",
-  }),
-  [TEMPERATURE_RANGE_TYPE.COOL]: Object.freeze({
-    label: "涼爽",
-    min: 15,
-    max: 20,
-    color: "#26C6DA",
-  }),
-  [TEMPERATURE_RANGE_TYPE.COMFORTABLE]: Object.freeze({
-    label: "舒適",
-    min: 20,
-    max: 25,
-    color: "#66BB6A",
-  }),
-  [TEMPERATURE_RANGE_TYPE.WARM]: Object.freeze({
-    label: "溫暖",
-    min: 25,
-    max: 30,
-    color: "#FFA726",
-  }),
-  [TEMPERATURE_RANGE_TYPE.HOT]: Object.freeze({
-    label: "炎熱",
-    min: 30,
-    max: 40,
-    color: "#FF6B35",
-  }),
-  [TEMPERATURE_RANGE_TYPE.SUPERHOT]: Object.freeze({
-    label: "極熱",
-    min: 40,
-    max: Infinity,
-    color: "#FF1744",
-  }),
-} as const);
+const WEATHER_DATA_OPTIONS = objectToOptions(WEATHER_DATA_MAP);
 
-export { TEMPERATURE_RANGE_TYPE, TEMPERATURE_RANGE_TYPE_MAP };
-export type { TemperatureRangeType };
+export { WEATHER_DATA_MAP, WEATHER_DATA_OPTIONS, CHART_GRADIENT_COLORS };
+export type { WeatherChartOption };

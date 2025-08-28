@@ -107,20 +107,20 @@
                 color="blue"
                 :value="0"
                 label="男"
-                :false-icon="RadioFalseIcon"
-                :true-icon="RadioTrueIcon"></v-radio>
+                :false-icon="createRadioIcon('false')"
+                :true-icon="createRadioIcon('true')"></v-radio>
               <v-radio
                 color="pink"
                 :value="1"
                 label="女"
-                :false-icon="RadioFalseIcon"
-                :true-icon="RadioTrueIcon"></v-radio>
+                :false-icon="createRadioIcon('false')"
+                :true-icon="createRadioIcon('true')"></v-radio>
               <v-radio
                 color="green"
                 :value="2"
                 label="不公開"
-                :false-icon="RadioFalseIcon"
-                :true-icon="RadioTrueIcon"></v-radio>
+                :false-icon="createRadioIcon('false')"
+                :true-icon="createRadioIcon('true')"></v-radio>
               <template v-slot:prepend>
                 <font-awesome-icon icon="venus-mars" size="2x" fixed-width class="text-primary" />
               </template>
@@ -139,7 +139,7 @@
               label="你來自哪個國家?"
               placeholder="美國"
               v-model="userProfileSettingFromData.originCountry"
-              :clear-icon="CloseIcon"
+              :clear-icon="createPredefinedIcon('close')"
               :items="props.settingData.country"
               item-value="id"
               item-title="local_name">
@@ -207,7 +207,7 @@
                         :text="chip.text"
                         :key="index"
                         variant="tonal"
-                        :close-icon="CloseIcon"
+                        :close-icon="createPredefinedIcon('close')"
                         closable
                         @click:close="removeUserProfile(chip, inputChip.type)"
                         class="mr-1 mb-1 cursor-default">
@@ -287,10 +287,9 @@
     createDateFieldRules,
     createTextFieldRules,
     validateArrayField,
-    CloseIcon,
-    RadioTrueIcon,
-    RadioFalseIcon,
     createTriangleIcon,
+    createRadioIcon,
+    createPredefinedIcon,
   } from "@/utils";
   import { ValidationService } from "@/services";
   import { useAuthStore } from "@/stores";
