@@ -83,7 +83,7 @@
   import { calculateDaysDifference } from "@/utils";
 
   //types
-  import { type UserProfileResponseDTO } from "pinpin_library";
+  import { type UserProfileResponse } from "pinpin_library";
   import type { AccountSettingFormData, FromBlock } from "@/interfaces";
 
   //#endregion
@@ -92,7 +92,7 @@
 
   const props = defineProps<{
     isLoading: boolean;
-    userProfile: UserProfileResponseDTO;
+    userProfile: UserProfileResponse;
   }>();
   const emits = defineEmits<{
     (e: "update", data: AccountSettingFormData): void;

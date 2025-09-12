@@ -2,31 +2,31 @@ import type { AxiosResponse } from "axios";
 import axios from "axios";
 import { axiosLockManager } from "../utils";
 import type {
-  AccountRequestDTO,
-  ApiResponseDTO,
-  AvatarChangeHistoryResponseDTO,
-  AvatarResponseDTO,
-  SettingResponseDTO,
-  UserProfileRequestDTO,
-  UserProfileResponseDTO,
+  AccountRequest,
+  ApiResponse,
+  AvatarChangeHistoryResponse,
+  AvatarResponse,
+  SettingResponse,
+  UserProfileRequest,
+  UserProfileResponse,
 } from "pinpin_library";
 
 export const settingService = {
   /**
    * 獲取系統設定資料
-   * @returns {Promise<AxiosResponse<ApiResponseDTO<SettingResponseDTO>>>} 設定資料
+   * @returns {Promise<AxiosResponse<ApiResponse<SettingResponse>>>} 設定資料
    */
-  async GetSettingData(): Promise<AxiosResponse<ApiResponseDTO<SettingResponseDTO>>> {
+  async GetSettingData(): Promise<AxiosResponse<ApiResponse<SettingResponse>>> {
     const response = await axios.get("/category/getSettingData");
     return response;
   },
 
   /**
    * 獲取用戶資料
-   * @returns {Promise<AxiosResponse<ApiResponseDTO<UserProfileResponseDTO>>>} 用戶資料
+   * @returns {Promise<AxiosResponse<ApiResponse<UserProfileResponse>>>} 用戶資料
    */
-  async GetUserProfile(): Promise<AxiosResponse<ApiResponseDTO<UserProfileResponseDTO>>> {
-    const response: AxiosResponse<ApiResponseDTO<UserProfileResponseDTO>> = await axios.get(
+  async GetUserProfile(): Promise<AxiosResponse<ApiResponse<UserProfileResponse>>> {
+    const response: AxiosResponse<ApiResponse<UserProfileResponse>> = await axios.get(
       "/userProfile/getUserProfile",
     );
 
@@ -41,15 +41,15 @@ export const settingService = {
 
   /**
    * 獲取預設頭像
-   * @returns {Promise<AxiosResponse<ApiResponseDTO<AvatarResponseDTO[]>>>} 預設頭像資料
+   * @returns {Promise<AxiosResponse<ApiResponse<AvatarResponse[]>>>} 預設頭像資料
    */
 
-  async GetDefaultAvatar(): Promise<AxiosResponse<ApiResponseDTO<AvatarResponseDTO[]>>> {
-    const response: AxiosResponse<ApiResponseDTO<AvatarResponseDTO[]>> = await axios.get(
+  async GetDefaultAvatar(): Promise<AxiosResponse<ApiResponse<AvatarResponse[]>>> {
+    const response: AxiosResponse<ApiResponse<AvatarResponse[]>> = await axios.get(
       "/avatar/getDefaultAvatar",
     );
 
-    response.data.data = response.data.data?.map((avatar: AvatarResponseDTO) => {
+    response.data.data = response.data.data?.map((avatar: AvatarResponse) => {
       avatar.create_at = new Date(avatar.create_at);
       return avatar;
     });
@@ -59,15 +59,15 @@ export const settingService = {
 
   /**
    * 獲取用戶頭像變更歷史
-   * @returns {Promise<AxiosResponse<ApiResponseDTO<AvatarChangeHistoryResponseDTO[]>>>} 用戶頭像變更歷史資料
+   * @returns {Promise<AxiosResponse<ApiResponse<AvatarChangeHistoryResponse[]>>>} 用戶頭像變更歷史資料
    */
 
   async GetChangeHistoryAvatar(): Promise<
-    AxiosResponse<ApiResponseDTO<AvatarChangeHistoryResponseDTO[]>>
+    AxiosResponse<ApiResponse<AvatarChangeHistoryResponse[]>>
   > {
     const response = await axios.get("/userProfile/getChangeHistoryAvatar");
 
-    response.data.data = response.data.data?.map((avatar: AvatarChangeHistoryResponseDTO) => {
+    response.data.data = response.data.data?.map((avatar: AvatarChangeHistoryResponse) => {
       avatar.change_date = new Date(avatar.change_date);
       return avatar;
     });
@@ -77,12 +77,12 @@ export const settingService = {
 
   /**
    * 獲取上傳過的用戶頭像
-   * @returns {Promise<AxiosResponse<ApiResponseDTO<AvatarResponseDTO[]>>>} 用戶頭像資料
+   * @returns {Promise<AxiosResponse<ApiResponse<AvatarResponse[]>>>} 用戶頭像資料
    */
-  async GetUserAvatar(): Promise<AxiosResponse<ApiResponseDTO<AvatarResponseDTO[]>>> {
+  async GetUserAvatar(): Promise<AxiosResponse<ApiResponse<AvatarResponse[]>>> {
     const response = await axios.get("/avatar/getUserAvatar");
 
-    response.data.data = response.data.data?.map((avatar: AvatarResponseDTO) => {
+    response.data.data = response.data.data?.map((avatar: AvatarResponse) => {
       avatar.create_at = new Date(avatar.create_at);
       return avatar;
     });
@@ -92,28 +92,28 @@ export const settingService = {
 
   /**
    * 更新帳號設定
-   * @param {AccountRequestDTO} accountRequestDTO - 帳號設定資料
-   * @returns {Promise<AxiosResponse<ApiResponseDTO<AccountRequestDTO>>>} 更新結果
+   * @param {AccountRequest} accountRequest - 帳號設定資料
+   * @returns {Promise<AxiosResponse<ApiResponse<AccountRequest>>>} 更新結果
    */
   async UpdateAccountSetting(
-    accountRequestDTO: AccountRequestDTO,
-  ): Promise<AxiosResponse<ApiResponseDTO<AccountRequestDTO>>> {
+    accountRequest: AccountRequest,
+  ): Promise<AxiosResponse<ApiResponse<AccountRequest>>> {
     return await axiosLockManager.withLock("UpdateAccountSetting", async () => {
-      const response = await axios.patch("/user/updateUser", accountRequestDTO);
+      const response = await axios.patch("/user/updateUser", accountRequest);
       return response;
     });
   },
 
   /**
    * 更新用戶資料
-   * @param {UserProfileRequestDTO} userProfileRequestDTO - 用戶資料
-   * @returns {Promise<AxiosResponse<ApiResponseDTO<UserProfileResponseDTO>>>} 更新結果
+   * @param {UserProfileRequest} userProfileRequest - 用戶資料
+   * @returns {Promise<AxiosResponse<ApiResponse<UserProfileResponse>>>} 更新結果
    */
   async UpdateUserProfileSetting(
-    userProfileRequestDTO: UserProfileRequestDTO,
-  ): Promise<AxiosResponse<ApiResponseDTO<UserProfileResponseDTO>>> {
+    userProfileRequest: UserProfileRequest,
+  ): Promise<AxiosResponse<ApiResponse<UserProfileResponse>>> {
     return await axiosLockManager.withLock("UpdateUserProfileSetting", async () => {
-      const response = await axios.patch("/userProfile/updateUserProfile", userProfileRequestDTO);
+      const response = await axios.patch("/userProfile/updateUserProfile", userProfileRequest);
       return response;
     });
   },
@@ -121,9 +121,9 @@ export const settingService = {
   /**
    * 上傳用戶頭像
    * @param {FormData} avatar - 帶有頭像檔案的FormData
-   * @returns {Promise<AxiosResponse<ApiResponseDTO<AvatarResponseDTO>>>} 上傳結果
+   * @returns {Promise<AxiosResponse<ApiResponse<AvatarResponse>>>} 上傳結果
    */
-  async UploadAvatar(avatar: FormData): Promise<AxiosResponse<ApiResponseDTO<AvatarResponseDTO>>> {
+  async UploadAvatar(avatar: FormData): Promise<AxiosResponse<ApiResponse<AvatarResponse>>> {
     return await axiosLockManager.withLock("UploadAvatar", async () => {
       const response = await axios.post("/avatar/upload", avatar, {
         headers: { "Content-Type": "multipart/form-data" },
@@ -134,7 +134,7 @@ export const settingService = {
 
   async UpdateUserProfileAvatar(
     avatarId: number,
-  ): Promise<AxiosResponse<ApiResponseDTO<AvatarResponseDTO>>> {
+  ): Promise<AxiosResponse<ApiResponse<AvatarResponse>>> {
     return await axiosLockManager.withLock("UpdateUserProfileAvatar", async () => {
       const response = await axios.patch("/userProfile/updateAvatar", {
         avatar_id: avatarId,

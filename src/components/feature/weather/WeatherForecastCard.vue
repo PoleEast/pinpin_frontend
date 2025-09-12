@@ -92,7 +92,7 @@
           </v-btn>
         </template>
       </v-tooltip>
-      <v-btn-toggle color="primary" border mandatory variant="flat">
+      <v-btn-toggle color="primary" border mandatory variant="flat" v-model="displayMode">
         <v-tooltip text="折線圖" location="bottom">
           <template v-slot:activator="{ props }">
             <v-btn value="chart" :ripple="false" v-bind="props">
@@ -111,8 +111,9 @@
     </v-card-actions>
     <v-card-item>
       <WeatherForecastChart
+        v-if="displayMode === 'chart'"
         :weather-data="weatherForecastData"
-        :selected-metrics="selectedMetrics[0]" />
+        :selected-metrics="selectedMetrics" />
     </v-card-item>
   </v-card>
 </template>
@@ -120,20 +121,17 @@
   import WeatherForecastChart from "@/components/feature/weather/WeatherForecastChart.vue";
   import weatherForecastDataJSON from "@/assets/testData/weatherForecastData.json";
   import currentWeatherDataJSON from "@/assets/testData/currentWeatherData.json";
-  import type { CurrentWeatherResponseDTO, WeatherForecastData } from "pinpin_library";
-  import { computed, shallowRef, watch } from "vue";
+  import type { CurrentWeatherResponse, WeatherForecastData } from "pinpin_library";
+  import { computed, shallowRef } from "vue";
   import type { Chip } from "@/interfaces";
   import { OPEN_WEATHER_URL } from "@/constants/index";
   import { WEATHER_DATA_OPTIONS, type WeatherChartOption } from "@/constants/Weather.constants";
   import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
-  const weatherData = currentWeatherDataJSON.data as CurrentWeatherResponseDTO;
+  const weatherData = currentWeatherDataJSON.data as CurrentWeatherResponse;
   const weatherForecastData = weatherForecastDataJSON.data.data as WeatherForecastData[];
-  const selectedMetrics = shallowRef<WeatherChartOption[]>(["temperature"]);
-
-  watch(selectedMetrics, (newVal) => {
-    console.log("Selected Metrics changed to:", newVal);
-  });
+  const selectedMetrics = shallowRef<WeatherChartOption>("temperature");
+  const displayMode = shallowRef<"chart" | "table">("chart");
 
   const weatherIconBaseURL = computed<string>(() => {
     return OPEN_WEATHER_URL.ICON.BASE + weatherData.data.icon + OPEN_WEATHER_URL.ICON.SUFFIX;

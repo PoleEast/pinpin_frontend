@@ -133,8 +133,8 @@
   //types
   import {
     USERPROFILE_AVATAR,
-    type AvatarChangeHistoryResponseDTO,
-    type AvatarResponseDTO,
+    type AvatarChangeHistoryResponse,
+    type AvatarResponse,
   } from "pinpin_library";
 
   //#endregion
@@ -153,9 +153,9 @@
   const showCutImageView = ref(true);
   const imageUrl = ref<string>("");
 
-  const recentAvatars = ref<AvatarResponseDTO[]>([]);
-  const defaultAvatars = ref<AvatarResponseDTO[]>([]);
-  const userAvatars = ref<AvatarResponseDTO[]>([]);
+  const recentAvatars = ref<AvatarResponse[]>([]);
+  const defaultAvatars = ref<AvatarResponse[]>([]);
+  const userAvatars = ref<AvatarResponse[]>([]);
   const updateLoading = ref(false);
 
   const tabData = computed(() => [
@@ -310,14 +310,14 @@
 
     //獲取所有頭像
     const defaultAvatarResponse = (await settingService.GetDefaultAvatar()).data.data;
-    const defaultAvatarResult = defaultAvatarResponse?.map((item: AvatarResponseDTO) => ({
+    const defaultAvatarResult = defaultAvatarResponse?.map((item: AvatarResponse) => ({
       ...item,
       public_id: cloudinaryUrl(item.public_id, "f_auto,q_auto,dpr_auto,c_scale,w_150"),
     }));
     //歷史投像需要轉換
     const changeHistoryAvatarResponse = await settingService.GetChangeHistoryAvatar();
-    const changeHistoryAvatarResult: AvatarResponseDTO[] =
-      changeHistoryAvatarResponse?.data?.data?.map((item: AvatarChangeHistoryResponseDTO) => {
+    const changeHistoryAvatarResult: AvatarResponse[] =
+      changeHistoryAvatarResponse?.data?.data?.map((item: AvatarChangeHistoryResponse) => {
         return {
           id: item.avatar.id,
           public_id: cloudinaryUrl(item.avatar.public_id),
@@ -327,7 +327,7 @@
       }) ?? [];
 
     const userAvatarResponse = (await settingService.GetUserAvatar()).data.data;
-    const userAvatarResult = userAvatarResponse?.map((item: AvatarResponseDTO) => {
+    const userAvatarResult = userAvatarResponse?.map((item: AvatarResponse) => {
       return {
         ...item,
         public_id: cloudinaryUrl(item.public_id),

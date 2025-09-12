@@ -55,8 +55,8 @@
                       half-increments
                       size="55"
                       clearable
-                      :full-icon="createStarIcon('filled', 'lg')"
-                      :empty-icon="createStarIcon('empty', 'lg')"></v-rating>
+                      :full-icon="createStarIcon('filled', { size: 'lg' })"
+                      :empty-icon="createStarIcon('empty', { size: 'lg' })"></v-rating>
                   </v-card-text>
                 </v-card-item>
                 <!-- 放棄實作營業時段功能，google api 不支援，要實作複雜度與成本過高 -->
@@ -143,7 +143,7 @@
                         text-color="white"
                         :prepend-icon="
                           placesSort.includes(category)
-                            ? createNumberIcon(placesSort.indexOf(category) + 1)
+                            ? createNumberIcon((placesSort.indexOf(category) + 1) as NumberMode)
                             : ''
                         "></v-chip>
                     </v-chip-group>
@@ -235,11 +235,13 @@
       </v-col>
     </v-row>
   </v-container>
+  <PlaceDetailDialog :model-value="isShowPlaceDetailDialog"></PlaceDetailDialog>
 </template>
 <script lang="ts" setup>
   import { onMounted, onUnmounted, ref, watch, type Ref } from "vue";
   import PlacesAutocompleteInput from "@/components/feature/search/PlacesAutocompleteInput.vue";
   import PlaceCard from "@/components/feature/places/PlaceCard.vue";
+  import PlaceDetailDialog from "@/components/feature/places/PlaceDetailDialog.vue";
 
   import {
     createNumberIcon,
@@ -249,6 +251,7 @@
     isValidKey,
     isStringOrStringArray,
     isNumericString,
+    type NumberMode,
   } from "@/utils/index";
   import type { Chip, LocationCard, TextSearchOption } from "@/interfaces";
   import {
@@ -273,9 +276,6 @@
 
   // #region 搜尋相關
 
-  // const businesstimeSelect = ref<BusinessTimes>("UNLIMITED");
-  // const businessTimeSpecificDays = ref([0, 4]);
-  // const BusinessTimeSpecificTimeRange = ref([0, 24]);
   const starRating = ref<number>(0);
   const piriceType = BUSSINESS_PRICE_OPTIONS.filter((type) => type.index !== undefined).map(
     (type) => type.label,
@@ -287,6 +287,7 @@
   }));
   const placeType = ref<GooglePlaceType | undefined>();
   const route = useRoute();
+  const isShowPlaceDetailDialog = ref(false);
 
   // #endregion
 

@@ -1,7 +1,7 @@
 import { authService } from "@/services";
 import { type AxiosResponse } from "axios";
 import { defineStore } from "pinia";
-import type { ApiErrorResponseDTO, ApiResponseDTO } from "pinpin_library";
+import type { ApiErrorResponse, ApiResponse } from "pinpin_library";
 import router from "@/router";
 
 const useAuthStore = defineStore("auth", {
@@ -19,12 +19,12 @@ const useAuthStore = defineStore("auth", {
 
     /**
      * 登出會員
-     * @returns {Promise<ApiResponseDTO>} - 登出結果
+     * @returns {Promise<ApiResponse>} - 登出結果
      * @throws {ApiError} - 登出失敗的錯誤訊息
      */
-    async Logout(): Promise<ApiResponseDTO> {
+    async Logout(): Promise<ApiResponse> {
       try {
-        const response: AxiosResponse<ApiResponseDTO> = await authService.Logout();
+        const response: AxiosResponse<ApiResponse> = await authService.Logout();
         this.UserNickname = "";
         this.AvatarPublicId = "";
         router.push({ name: "home" });
@@ -33,7 +33,14 @@ const useAuthStore = defineStore("auth", {
           statusCode: response.status,
         };
       } catch (error) {
-        return error as ApiErrorResponseDTO;
+        if (error && typeof error === "object" && "response" in error) {
+          const apiError = error as { response: { data: ApiErrorResponse } };
+          return apiError.response.data;
+        }
+        return {
+          message: "登出時發生未知錯誤",
+          statusCode: 500,
+        };
       }
     },
 

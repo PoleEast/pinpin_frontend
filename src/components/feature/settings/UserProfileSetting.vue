@@ -278,7 +278,7 @@
   import { computed, onMounted, reactive, ref, unref, useTemplateRef, watch } from "vue";
 
   //components
-  import AppIconWrapper from "@/components/ui/AppIconWrapper .vue";
+  import AppIconWrapper from "@/components/ui/AppIconWrapper.vue";
   import AvatarEditDialog from "./AvatarEditDialog.vue";
 
   //services
@@ -298,8 +298,8 @@
   import type { VForm } from "vuetify/components";
   import {
     USERPROFILE_REQUSER_VALIDATION,
-    type SettingResponseDTO,
-    type UserProfileResponseDTO,
+    type SettingResponse,
+    type UserProfileResponse,
   } from "pinpin_library";
   import type { Chip, InputChips, UserProfileSettingFromData } from "@/interfaces";
 
@@ -308,8 +308,8 @@
   //#region 變數
 
   const props = defineProps<{
-    userProfile: UserProfileResponseDTO;
-    settingData: SettingResponseDTO;
+    userProfile: UserProfileResponse;
+    settingData: SettingResponse;
     isLoading: boolean;
   }>();
 

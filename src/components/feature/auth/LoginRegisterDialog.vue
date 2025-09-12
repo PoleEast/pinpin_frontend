@@ -159,11 +159,7 @@
   //types
   import type { VForm } from "vuetify/components";
   import type { RegisterFormData, Snackbar } from "@/interfaces";
-  import {
-    type ApiResponseDTO,
-    type LoginRequestDTO,
-    type RegisterRequestDTO,
-  } from "pinpin_library";
+  import { type ApiResponse, type LoginRequest, type RegisterRequest } from "pinpin_library";
   //#endregion;
 
   //#region variable
@@ -193,7 +189,7 @@
     confirmPassword: "",
   });
 
-  const loginFormData = reactive<LoginRequestDTO>({
+  const loginFormData = reactive<LoginRequest>({
     account: "",
     password: "",
   });
@@ -221,7 +217,7 @@
     if (!isValid?.valid) return;
     loading.value = true;
     try {
-      const loginRequest: LoginRequestDTO = {
+      const loginRequest: LoginRequest = {
         account: loginFormData.account,
         password: loginFormData.password,
       };
@@ -240,7 +236,7 @@
       clearFromData();
       showDialog.value = false;
     } catch (error) {
-      const apiError = error as AxiosError<ApiResponseDTO>;
+      const apiError = error as AxiosError<ApiResponse>;
       loginErrorMessage.value =
         apiError.status == HttpStatusCode.Unauthorized
           ? (apiError.response?.data.message ?? "")
@@ -273,7 +269,7 @@
     loading.value = true;
 
     try {
-      const registerRequest: RegisterRequestDTO = {
+      const registerRequest: RegisterRequest = {
         account: registerFormData.account,
         nickname: registerFormData.nickname,
         password: registerFormData.password,
@@ -293,8 +289,8 @@
       emit("showSnackbar", snackbar);
       showDialog.value = false;
     } catch (error) {
-      const apiError = error as AxiosError<ApiResponseDTO>;
-      loginErrorMessage.value =
+      const apiError = error as AxiosError<ApiResponse>;
+      registerErrorMessage.value =
         apiError.status == HttpStatusCode.Unauthorized
           ? (apiError.response?.data.message ?? "")
           : "";

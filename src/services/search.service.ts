@@ -1,11 +1,7 @@
 import type { TextSearchOption } from "@/interfaces";
 import { axiosLockManager } from "@/utils";
 import axios, { type AxiosResponse } from "axios";
-import type {
-  ApiResponseDTO,
-  autoCompletResponseeDTO,
-  IsearchLocationResponseDTO,
-} from "pinpin_library";
+import type { ApiResponse, AutoCompletResponse, SearchLocationResponse } from "pinpin_library";
 
 export const searchService = {
   /**
@@ -19,11 +15,11 @@ export const searchService = {
     keyword: string,
     sessionToken?: string,
     primaryTypes?: string[],
-  ): Promise<AxiosResponse<ApiResponseDTO<autoCompletResponseeDTO[]>>> {
+  ): Promise<AxiosResponse<ApiResponse<AutoCompletResponse[]>>> {
     return await axiosLockManager.withLock(
       "GetAutoComplete",
       async () => {
-        const response: AxiosResponse<ApiResponseDTO<autoCompletResponseeDTO[]>> = await axios.get(
+        const response: AxiosResponse<ApiResponse<AutoCompletResponse[]>> = await axios.get(
           `/searchLocation/autoComplete/${keyword}`,
           {
             params: {
@@ -41,11 +37,11 @@ export const searchService = {
 
   async GetTextSearchLocation(
     options: TextSearchOption,
-  ): Promise<AxiosResponse<ApiResponseDTO<IsearchLocationResponseDTO>>> {
+  ): Promise<AxiosResponse<ApiResponse<SearchLocationResponse>>> {
     return await axiosLockManager.withLock(
       "GetTextSearchLocation",
       async () => {
-        const response: AxiosResponse<ApiResponseDTO<IsearchLocationResponseDTO>> = await axios.get(
+        const response: AxiosResponse<ApiResponse<SearchLocationResponse>> = await axios.get(
           `/searchLocation/textSearchLocation/${options.keyword}`,
           {
             params: {

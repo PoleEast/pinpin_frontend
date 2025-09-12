@@ -91,7 +91,7 @@
 <script setup lang="ts">
   //TODO: 需要處理降雨、降雪、雲量的顯示，因為不一定會有這些資料
 
-  import type { CurrentWeatherResponseDTO } from "pinpin_library";
+  import type { CurrentWeatherResponse } from "pinpin_library";
   import { computed, ref } from "vue";
 
   const weatherIconBaseURL = {
@@ -99,7 +99,7 @@
     size: "@4x.png",
   };
 
-  const currentWeather = ref<CurrentWeatherResponseDTO>({
+  const currentWeather = ref<CurrentWeatherResponse>({
     country: "Taiwan",
     city: "Taipei",
     data: {

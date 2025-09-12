@@ -83,10 +83,10 @@
 
   //types
   import type {
-    AccountRequestDTO,
-    SettingResponseDTO,
-    UserProfileRequestDTO,
-    UserProfileResponseDTO,
+    AccountRequest,
+    SettingResponse,
+    UserProfileRequest,
+    UserProfileResponse,
   } from "pinpin_library";
   import type {
     AccountSettingFormData,
@@ -98,8 +98,8 @@
   //#endregion
 
   //#region variable
-  const settingData = ref<SettingResponseDTO>();
-  const userProfile = ref<UserProfileResponseDTO>();
+  const settingData = ref<SettingResponse>();
+  const userProfile = ref<UserProfileResponse>();
   const updateLoading = ref(true);
   const currentOption: Ref<SettingOption | null> = ref(null);
 
@@ -142,28 +142,28 @@
   //#endregion
 
   //#region function
-  const getSettingData = async (): Promise<SettingResponseDTO> => {
+  const getSettingData = async (): Promise<SettingResponse> => {
     try {
-      return (await settingService.GetSettingData()).data?.data || ({} as SettingResponseDTO);
+      return (await settingService.GetSettingData()).data?.data || ({} as SettingResponse);
     } catch {
-      return {} as SettingResponseDTO;
+      return {} as SettingResponse;
     }
   };
 
-  const getUserProfile = async (): Promise<UserProfileResponseDTO> => {
+  const getUserProfile = async (): Promise<UserProfileResponse> => {
     try {
-      return (await settingService.GetUserProfile()).data?.data || ({} as UserProfileResponseDTO);
+      return (await settingService.GetUserProfile()).data?.data || ({} as UserProfileResponse);
     } catch {
-      return {} as UserProfileResponseDTO;
+      return {} as UserProfileResponse;
     }
   };
 
   const updateAccountSetting = async (
     accountSettingsFormData: AccountSettingFormData,
-  ): Promise<AccountRequestDTO> => {
+  ): Promise<AccountRequest> => {
     updateLoading.value = true;
     try {
-      const accountRequestDTO: AccountRequestDTO = {
+      const accountRequestDTO: AccountRequest = {
         email: accountSettingsFormData.email,
         password: accountSettingsFormData.password,
       };
@@ -182,7 +182,7 @@
 
       //TODO : 收集全局意料外錯誤處理
 
-      return response.data?.data || ({} as AccountRequestDTO);
+      return response.data?.data || ({} as AccountRequest);
     } catch {
       return {} as AccountSettingFormData;
     } finally {
@@ -193,7 +193,7 @@
   const updateUserProfile = async (userProfileSettingFromData: UserProfileSettingFromData) => {
     updateLoading.value = true;
     try {
-      const userProfileRequestDTO: UserProfileRequestDTO = {
+      const userProfileRequestDTO: UserProfileRequest = {
         nickname: userProfileSettingFromData.nickname,
         fullname: userProfileSettingFromData.fullname,
         motto: userProfileSettingFromData.motto,
@@ -225,7 +225,7 @@
         userProfile.value = response.data?.data;
       }
     } catch {
-      return {} as UserProfileResponseDTO;
+      return {} as UserProfileResponse;
     } finally {
       updateLoading.value = false;
     }

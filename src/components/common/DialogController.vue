@@ -11,7 +11,7 @@
       v-if="isExactlyTwoComponents"
       location="bottom right"
       app
-      :icon="components[currentComponentIndex].icon"
+      :icon="nextComponentIcon"
       :color="components[currentComponentIndex].color ?? 'info'"
       size="large"
       @click="switchDialog()"></v-fab>
@@ -44,17 +44,21 @@
   import { createPredefinedIcon } from "@/utils";
   import type { DialogComponent } from "@/interfaces";
 
-  const props = defineProps<{
-    components: DialogComponent[];
-  }>();
-
-  const isShowDialog = defineModel<boolean>({ required: true });
-
   const currentComponentIndex = ref(0);
 
   const isExactlyTwoComponents = computed(() => {
     return props.components.length === 2;
   });
+
+  const nextComponentIcon = computed(
+    () => props.components[(currentComponentIndex.value + 1) % props.components.length].icon,
+  );
+
+  const props = defineProps<{
+    components: DialogComponent[];
+  }>();
+
+  const isShowDialog = defineModel<boolean>({ required: true });
 
   // 切換組件：可指定索引或循環切換
   const switchDialog = (index?: number) => {

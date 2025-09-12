@@ -1,5 +1,5 @@
 <template>
-  <PlaceDetailDialog></PlaceDetailDialog>
+  <PlaceDetailDialog :model-value="true"></PlaceDetailDialog>
 </template>
 
 <script setup lang="ts">

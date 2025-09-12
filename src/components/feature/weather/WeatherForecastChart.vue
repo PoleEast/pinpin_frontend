@@ -2,7 +2,6 @@
   <div class="d-flex justify-center align-center">
     <Line :data="chartData" :options="chartOption" class="w-100"></Line>
   </div>
-  <DataTable :items="weatherForecastChart.flatMap((chart) => chart.WeatherForecastData)" />
 </template>
 <script setup lang="ts">
   import chart, {
@@ -13,9 +12,8 @@
     type DefaultDataPoint,
   } from "chart.js/auto";
   import { Line } from "vue-chartjs";
-  import DataTable from "@/components/ui/DataTable.vue";
   import type { WeatherForecastData, PeriodOfTime } from "pinpin_library";
-  import { computed, watch, ref } from "vue";
+  import { computed, watch, ref, onUnmounted } from "vue";
   import { groupBy, calculateAverage, type NumberKeys } from "@/utils/index";
   import { CHART_GRADIENT_COLORS, WEATHER_DATA_MAP, type WeatherChartOption } from "@/constants";
 
@@ -127,6 +125,7 @@
       pointHoverRadius: 8,
       fill: true,
       tension: 0.4,
+      stack: "Day",
     },
     {
       label: "🌙 夜晚" + WEATHER_DATA_MAP[props.selectedMetrics].label,
@@ -151,6 +150,7 @@
       pointStyle: "rectRounded",
       fill: true,
       tension: 0.4,
+      stack: "Night",
     },
   ];
 
@@ -170,6 +170,10 @@
     },
   );
 
+  onUnmounted(() => {
+    gradientCacheMap.clear();
+  });
+
   const chartOption: ChartOptions<"line"> = {
     animation: {
       duration: 1000,
@@ -177,14 +181,35 @@
     },
     interaction: {
       intersect: false,
-      mode: "nearest",
-      axis: "x",
     },
     plugins: {
       tooltip: {
         callbacks: {
-          label: (ctx) => {
-            return ctx.label;
+          afterLabel: (context) => {
+            const result: string[] = [];
+            const stack = context.dataset.stack;
+            const date = context.label;
+            const data = weatherForecastChart.value
+              .find((data) => data.label === date)
+              ?.WeatherForecastData.find((d) => d.periodOfTime === stack);
+
+            if (data) {
+              Object.entries(data).forEach(([key, val]) => {
+                if (
+                  key !== "periodOfTime" &&
+                  val !== undefined &&
+                  key !== props.selectedMetrics &&
+                  typeof val !== "string"
+                ) {
+                  const entryLabel = WEATHER_DATA_MAP[key as WeatherChartOption]?.label;
+                  if (entryLabel) {
+                    result.push(`${entryLabel}: ${val.toFixed(2)}`);
+                  }
+                }
+              });
+            }
+
+            return result;
           },
         },
       },
