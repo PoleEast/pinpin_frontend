@@ -92,7 +92,8 @@
           </v-btn>
         </template>
       </v-tooltip>
-      <v-btn-toggle color="primary" border mandatory variant="flat" v-model="displayMode">
+      <!-- TODO:表格切換功能 -->
+      <!-- <v-btn-toggle color="primary" border mandatory variant="flat" v-model="displayMode">
         <v-tooltip text="折線圖" location="bottom">
           <template v-slot:activator="{ props }">
             <v-btn value="chart" :ripple="false" v-bind="props">
@@ -107,11 +108,10 @@
             </v-btn>
           </template>
         </v-tooltip>
-      </v-btn-toggle>
+      </v-btn-toggle> -->
     </v-card-actions>
     <v-card-item>
       <WeatherForecastChart
-        v-if="displayMode === 'chart'"
         :weather-data="weatherForecastData"
         :selected-metrics="selectedMetrics" />
     </v-card-item>
@@ -131,7 +131,7 @@
   const weatherData = currentWeatherDataJSON.data as CurrentWeatherResponse;
   const weatherForecastData = weatherForecastDataJSON.data.data as WeatherForecastData[];
   const selectedMetrics = shallowRef<WeatherChartOption>("temperature");
-  const displayMode = shallowRef<"chart" | "table">("chart");
+  // const displayMode = shallowRef<"chart" | "table">("chart");
 
   const weatherIconBaseURL = computed<string>(() => {
     return OPEN_WEATHER_URL.ICON.BASE + weatherData.data.icon + OPEN_WEATHER_URL.ICON.SUFFIX;

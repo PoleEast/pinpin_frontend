@@ -38,7 +38,7 @@
     visibility: calculateAverage(data, "visibility"),
     cloud: calculateAverage(data, "cloud"),
     windSpeed: calculateAverage(data, "windSpeed"),
-    PoP: calculateAverage(data, "PoP"),
+    PoP: calculateAverage(data, "PoP") * 100,
     rain: calculateAverage(
       data.map((d) => ({ ...d, rain: d.rain ?? 0 })),
       "rain",
@@ -108,7 +108,7 @@
 
   const createChartDataSets = (): ChartDataset<"line", DefaultDataPoint<"line">>[] => [
     {
-      label: "☀️ 白天" + WEATHER_DATA_MAP[props.selectedMetrics].label,
+      label: `☀️ 白天${WEATHER_DATA_MAP[props.selectedMetrics].label}(${WEATHER_DATA_MAP[props.selectedMetrics].unit})`,
       data: createChartDataSetData("Day", props.selectedMetrics),
       borderColor: "#FF6B35",
       backgroundColor: (context) => {
@@ -128,7 +128,7 @@
       stack: "Day",
     },
     {
-      label: "🌙 夜晚" + WEATHER_DATA_MAP[props.selectedMetrics].label,
+      label: `🌙 夜晚${WEATHER_DATA_MAP[props.selectedMetrics].label}(${WEATHER_DATA_MAP[props.selectedMetrics].unit})`,
       data: createChartDataSetData("Night", props.selectedMetrics),
       borderColor: "#4A90E2",
       backgroundColor: (context) => {

@@ -51,32 +51,42 @@ const CHART_GRADIENT_COLORS: Record<WeatherChartOption, Record<PeriodOfTime, str
   },
 } as const;
 
-const WEATHER_DATA_MAP: Record<WeatherChartOption, { label: string; color: string; icon: string }> =
-  Object.freeze({
-    temperature: Object.freeze({ label: "溫度", color: "#FF5722", icon: "temperature-empty" }),
-    maxTemperature: Object.freeze({
-      label: "最高溫",
-      color: "#D32F2F",
-      icon: "temperature-arrow-up",
-    }),
-    minTemperature: Object.freeze({
-      label: "最低溫",
-      color: "#1976D2",
-      icon: "temperature-arrow-down",
-    }),
-    feelsLikeTemperature: Object.freeze({
-      label: "體感溫度",
-      color: "#FF9800",
-      icon: "person-walking",
-    }),
-    humidity: Object.freeze({ label: "濕度", color: "#2196F3", icon: "droplet" }),
-    visibility: Object.freeze({ label: "能見度", color: "#607D8B", icon: "eye" }),
-    cloud: Object.freeze({ label: "雲量", color: "#9E9E9E", icon: "cloud" }),
-    windSpeed: Object.freeze({ label: "風速", color: "#00BCD4", icon: "wind" }),
-    PoP: Object.freeze({ label: "降雨機率", color: "#3F51B5", icon: "cloud-rain" }),
-    rain: Object.freeze({ label: "降雨量", color: "#2196F3", icon: "ruler-vertical" }),
-    snow: Object.freeze({ label: "降雪量", color: "#E0E0E0", icon: "snowflake" }),
-  });
+const WEATHER_DATA_MAP: Record<
+  WeatherChartOption,
+  { label: string; color: string; unit: string; icon: string }
+> = Object.freeze({
+  temperature: Object.freeze({
+    label: "溫度",
+    color: "#FF5722",
+    unit: "°C",
+    icon: "temperature-empty",
+  }),
+  maxTemperature: Object.freeze({
+    label: "最高溫",
+    unit: "°C",
+    color: "#D32F2F",
+    icon: "temperature-arrow-up",
+  }),
+  minTemperature: Object.freeze({
+    label: "最低溫",
+    color: "#1976D2",
+    unit: "°C",
+    icon: "temperature-arrow-down",
+  }),
+  feelsLikeTemperature: Object.freeze({
+    label: "體感溫度",
+    unit: "°C",
+    color: "#FF9800",
+    icon: "person-walking",
+  }),
+  humidity: Object.freeze({ label: "濕度", color: "#2196F3", unit: "%", icon: "droplet" }),
+  visibility: Object.freeze({ label: "能見度", color: "#607D8B", unit: "m", icon: "eye" }),
+  cloud: Object.freeze({ label: "雲量", color: "#9E9E9E", unit: "%", icon: "cloud" }),
+  windSpeed: Object.freeze({ label: "風速", color: "#00BCD4", unit: "m/s", icon: "wind" }),
+  PoP: Object.freeze({ label: "降雨機率", color: "#3F51B5", unit: "%", icon: "cloud-rain" }),
+  rain: Object.freeze({ label: "降雨量", color: "#2196F3", unit: "mm", icon: "ruler-vertical" }),
+  snow: Object.freeze({ label: "降雪量", color: "#E0E0E0", unit: "mm", icon: "snowflake" }),
+});
 
 const WEATHER_DATA_OPTIONS = objectToOptions(WEATHER_DATA_MAP);
 

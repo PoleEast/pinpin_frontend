@@ -12,7 +12,7 @@
     </tbody>
   </v-table>
 </template>
-<script setup lang="ts" generic="T extends Record<string, string | number>">
+<script setup lang="ts" generic="T extends Record<string, string | number | undefined>">
   import { computed } from "vue";
 
   const props = defineProps<{
