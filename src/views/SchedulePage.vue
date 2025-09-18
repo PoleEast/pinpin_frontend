@@ -1,7 +1,7 @@
 <template>
-  <PlaceDetailDialog :model-value="true"></PlaceDetailDialog>
+  <LocationDetailDialog :model-value="true"></LocationDetailDialog>
 </template>
 
 <script setup lang="ts">
-  import PlaceDetailDialog from "@/components/feature/places/PlaceDetailDialog.vue";
+  import LocationDetailDialog from "@/components/feature/location/LocationDetailDialog.vue";
 </script>

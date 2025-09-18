@@ -20,7 +20,7 @@
               :custom-filter="() => true"
               :search-text-rule="searchTextRule"
               validate-on="input"
-              @search-by-place-id="searchByPlaceId"
+              @search-by-place-id="openLocationDetailDialog"
               @search-by-text="searchByText"></PlacesAutocompleteInput>
           </v-card-item>
           <v-card-item class="pt-0">
@@ -195,12 +195,12 @@
             滑動瀏覽、點擊收藏，把喜歡的地方都加進你的旅遊口袋名單~
           </v-card-subtitle>
           <v-card-item>
-            <!-- TODO:實作無限滾動 -->
             <v-row>
               <v-col cols="12" md="4" v-for="location in locations" :key="location.Id">
                 <PlaceCard
                   :location="location"
-                  :image-max-height="locationCardImageMaxHeight"></PlaceCard>
+                  :image-max-height="locationCardImageMaxHeight"
+                  @click="openLocationDetailDialog(location.Id)"></PlaceCard>
               </v-col>
             </v-row>
           </v-card-item>
@@ -235,13 +235,16 @@
       </v-col>
     </v-row>
   </v-container>
-  <PlaceDetailDialog :model-value="isShowPlaceDetailDialog"></PlaceDetailDialog>
+  <LocationDetailDialog
+    v-model="isShowLocationDetailDialog"
+    :session-token="sessionToken"
+    :location-id="locationID"></LocationDetailDialog>
 </template>
 <script lang="ts" setup>
   import { onMounted, onUnmounted, ref, watch, type Ref } from "vue";
   import PlacesAutocompleteInput from "@/components/feature/search/PlacesAutocompleteInput.vue";
-  import PlaceCard from "@/components/feature/places/PlaceCard.vue";
-  import PlaceDetailDialog from "@/components/feature/places/PlaceDetailDialog.vue";
+  import PlaceCard from "@/components/feature/location/LocationCard.vue";
+  import LocationDetailDialog from "@/components/feature/location/LocationDetailDialog.vue";
 
   import {
     createNumberIcon,
@@ -287,7 +290,7 @@
   }));
   const placeType = ref<GooglePlaceType | undefined>();
   const route = useRoute();
-  const isShowPlaceDetailDialog = ref(false);
+  const isShowLocationDetailDialog = ref(false);
 
   // #endregion
 
@@ -295,6 +298,7 @@
 
   const viewMode = ref("grid");
   const locations = ref<LocationCard[]>([]);
+  const locationID = ref<string>();
   const placesSort = ref<string[]>([]);
   const resultkeyword = ref("");
 
@@ -356,7 +360,6 @@
 
   const processTextSearchResult = async (textSearchOption: TextSearchOption) => {
     try {
-      console.log(textSearchOption);
       const response = await searchService.GetTextSearchLocation(textSearchOption);
 
       if (!response.data.data) {
@@ -396,10 +399,6 @@
     }
   };
 
-  const searchByPlaceId = (PlaceId: string) => {
-    console.log("Searching for:", PlaceId);
-  };
-
   const validatePrimaryType = (primaryType: unknown, required: boolean = false) => {
     if (!required && !primaryType) return true;
 
@@ -429,6 +428,11 @@
     if (!isValidKey(priceLevel, GOOGLE_MAPS_PLACE_PRICE_LEVEL)) return false;
 
     return true;
+  };
+
+  const openLocationDetailDialog = async (id: string) => {
+    isShowLocationDetailDialog.value = true;
+    locationID.value = id;
   };
 
   onMounted(() => {

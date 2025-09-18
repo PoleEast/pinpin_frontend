@@ -1,10 +1,10 @@
 import type { Component, FunctionalComponent } from "vue";
 
-interface DialogComponent<T = Record<string, unknown>> {
+interface DialogComponent {
   component: Component;
   icon: FunctionalComponent;
   color?: string;
-  props?: Record<string, T>;
+  props?: Record<string, unknown>;
 }
 
 export type { DialogComponent };

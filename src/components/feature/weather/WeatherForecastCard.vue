@@ -14,22 +14,22 @@
         <v-card-item class="text-center">
           <v-card-title class="d-flex align-center mb-1 text-h4 font-weight-bold">
             <font-awesome-icon icon="city" class="text-primary mr-2" />
-            {{ weatherData.city }}
+            {{ weatherData?.city }}
           </v-card-title>
           <v-card-subtitle>
             <font-awesome-icon icon="earth-asia" class="mr-2" />
-            {{ weatherData.country }}
+            {{ weatherData?.country }}
           </v-card-subtitle>
         </v-card-item>
 
         <!-- 溫度資訊區域 -->
         <v-card-item class="text-center">
           <v-card-title class="text-h2 font-weight-bold text-primary">
-            {{ weatherData.data.temperature.toFixed(1) }}°C
+            {{ weatherData?.data.temperature.toFixed(1) }}°C
           </v-card-title>
           <v-card-subtitle class="mb-1">
             <font-awesome-icon icon="person-walking" class="mr-1" />
-            體感 {{ weatherData.data.feelsLikeTemperature }}°C
+            體感 {{ weatherData?.data.feelsLikeTemperature }}°C
           </v-card-subtitle>
 
           <v-chip
@@ -112,15 +112,13 @@
     </v-card-actions>
     <v-card-item>
       <WeatherForecastChart
-        :weather-data="weatherForecastData"
+        :weather-data="weatherForecastData ?? []"
         :selected-metrics="selectedMetrics" />
     </v-card-item>
   </v-card>
 </template>
 <script lang="ts" setup>
   import WeatherForecastChart from "@/components/feature/weather/WeatherForecastChart.vue";
-  import weatherForecastDataJSON from "@/assets/testData/weatherForecastData.json";
-  import currentWeatherDataJSON from "@/assets/testData/currentWeatherData.json";
   import type { CurrentWeatherResponse, WeatherForecastData } from "pinpin_library";
   import { computed, shallowRef } from "vue";
   import type { Chip } from "@/interfaces";
@@ -128,27 +126,30 @@
   import { WEATHER_DATA_OPTIONS, type WeatherChartOption } from "@/constants/Weather.constants";
   import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
-  const weatherData = currentWeatherDataJSON.data as CurrentWeatherResponse;
-  const weatherForecastData = weatherForecastDataJSON.data.data as WeatherForecastData[];
+  const props = defineProps<{
+    weatherData?: CurrentWeatherResponse;
+    weatherForecastData?: WeatherForecastData[];
+  }>();
+
   const selectedMetrics = shallowRef<WeatherChartOption>("temperature");
   // const displayMode = shallowRef<"chart" | "table">("chart");
 
   const weatherIconBaseURL = computed<string>(() => {
-    return OPEN_WEATHER_URL.ICON.BASE + weatherData.data.icon + OPEN_WEATHER_URL.ICON.SUFFIX;
+    return OPEN_WEATHER_URL.ICON.BASE + props.weatherData?.data.icon + OPEN_WEATHER_URL.ICON.SUFFIX;
   });
 
   const weatherChips = computed<Chip[]>(() => {
-    const hasSnow = Boolean(weatherData.data.snow);
-    const hasRain = Boolean(weatherData.data.rain);
+    const hasSnow = Boolean(props.weatherData?.data.snow);
+    const hasRain = Boolean(props.weatherData?.data.rain);
 
     const cloudSnowChip = {
       icon: hasSnow ? "snowman" : "cloud",
-      text: hasSnow ? `${weatherData.data.snow}mm` : `${weatherData.data.cloud}%`,
+      text: hasSnow ? `${props.weatherData?.data.snow}mm` : `${props.weatherData?.data.cloud}%`,
       color: "silver",
     };
     const windRainChip = {
       icon: hasRain ? "cloud-rain" : "wind",
-      text: hasRain ? `${weatherData.data.rain}mm` : `${weatherData.data.windSpeed}m`,
+      text: hasRain ? `${props.weatherData?.data.rain}mm` : `${props.weatherData?.data.windSpeed}m`,
       color: "blue",
     };
 

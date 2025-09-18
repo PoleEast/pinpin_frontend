@@ -1,7 +1,12 @@
 import type { TextSearchOption } from "@/interfaces";
 import { axiosLockManager } from "@/utils";
 import axios, { type AxiosResponse } from "axios";
-import type { ApiResponse, AutoCompletResponse, SearchLocationResponse } from "pinpin_library";
+import type {
+  ApiResponse,
+  AutoCompletResponse,
+  GetLocationByIdResponse,
+  SearchLocationResponse,
+} from "pinpin_library";
 
 export const searchService = {
   /**
@@ -51,6 +56,28 @@ export const searchService = {
               nextPageToken: options?.nextPageToken || "",
               pageSize: options?.pageSize || 12,
               maxImageHeight: options?.maxImageHeight || 200,
+            },
+          },
+        );
+        return response;
+      },
+      false,
+    );
+  },
+
+  async GetLocationById(
+    id: string,
+    sessionToken: string,
+  ): Promise<AxiosResponse<ApiResponse<GetLocationByIdResponse>>> {
+    return await axiosLockManager.withLock(
+      "GetLocationById",
+      async () => {
+        const response: AxiosResponse<ApiResponse<GetLocationByIdResponse>> = await axios.get(
+          `/searchLocation/${id}`,
+          {
+            params: {
+              placeID: id,
+              sessionToken: sessionToken,
             },
           },
         );

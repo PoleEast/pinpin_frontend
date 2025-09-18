@@ -164,10 +164,11 @@
   });
 
   watch(
-    () => props.selectedMetrics,
-    () => {
+    [() => props.selectedMetrics, () => props.weatherData],
+    async () => {
       chartDataSet.value = createChartDataSets();
     },
+    { immediate: true },
   );
 
   onUnmounted(() => {

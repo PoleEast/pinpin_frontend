@@ -1,3 +1,5 @@
+import type { TimeOfDay } from "pinpin_library";
+
 interface TextSearchOption {
   keyword: string;
   priceLevel?: string[];
@@ -9,14 +11,9 @@ interface TextSearchOption {
 }
 
 interface OpeningHours {
-  dayRange: {
-    start: string;
-    end: string;
-  };
-  openingTime: {
-    start: string;
-    end: string;
-  };
+  open: TimeOfDay;
+  close: TimeOfDay;
+  day: string[];
 }
 
 export type { TextSearchOption, OpeningHours };

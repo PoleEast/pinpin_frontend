@@ -28,19 +28,21 @@
           size="large"></v-fab>
       </template>
 
-      <!-- 每個組件對應的按鈕 -->
-      <v-btn
-        v-for="(component, index) in components"
-        :key="index"
-        :icon="component.icon"
-        :color="component.color ?? 'info'"
-        @click="switchDialog(index)"></v-btn>
+      <template #default>
+        <!-- 每個組件對應的按鈕 -->
+        <v-btn
+          v-for="(component, index) in components"
+          :key="index"
+          :icon="component.icon"
+          :color="component.color ?? 'info'"
+          @click="switchDialog(index)"></v-btn>
+      </template>
     </v-speed-dial>
   </v-dialog>
 </template>
 
 <script lang="ts" setup>
-  import { computed, ref, watchEffect } from "vue";
+  import { computed, ref, watch, watchEffect } from "vue";
   import { createPredefinedIcon } from "@/utils";
   import type { DialogComponent } from "@/interfaces";
 
@@ -69,6 +71,12 @@
   watchEffect(() => {
     if (props.components.length < 1) {
       console.warn("DialogSwitcher: 至少需要一個組件");
+    }
+  });
+
+  watch(isShowDialog, () => {
+    if (isShowDialog.value) {
+      currentComponentIndex.value = 0;
     }
   });
 </script>
