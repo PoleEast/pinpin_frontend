@@ -26,9 +26,7 @@
   .app-bg {
     background-image: url("/src/assets/pattern.svg") !important;
     background-repeat: repeat !important;
-  }
-
-  #app {
-    height: 100vh;
+    min-height: 100vh !important;
+    height: auto !important;
   }
 </style>
