@@ -65,12 +65,13 @@ interface Chip {
   value?: string | string[] | number | number[];
 }
 
-interface InputChips {
+interface InputChips<T extends string> {
   icon: string;
   label: Label;
   choosechips: Chip[];
   nochooseData: Chip[];
-  type: "visitedCountries" | "languages" | "currencies" | "travelInterests" | "travelStyles";
+  type: T;
+  errorMessage: string | undefined;
 }
 
 interface LocationCard {

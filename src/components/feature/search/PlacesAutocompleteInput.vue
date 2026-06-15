@@ -45,10 +45,7 @@
 <script setup lang="ts">
   import { computed, ref } from "vue";
   import { debounce } from "perfect-debounce";
-  import {
-    GOOGLE_PLACE_TYPE_MAP,
-    type GooglePlaceType,
-  } from "@/constants/GooglePlaceType.constant";
+  import { GOOGLE_PLACE_TYPE_MAP, type GooglePlaceType } from "@/constants/index";
   import { searchService } from "@/services";
 
   //#region variables

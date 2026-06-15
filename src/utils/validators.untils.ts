@@ -56,7 +56,7 @@ export const createDateFieldRules = (
  * - 陣列長度必須至少為指定的 `minLength`。
  * - 陣列中的所有元素必須存在於 `souceArray` 中。
  */
-const createArrayFieldRules = <T>(
+export const createArrayFieldRules = <T>(
   fieldName: string,
   minLength: number = 0,
   maxLength: number,
@@ -73,16 +73,41 @@ const createArrayFieldRules = <T>(
 };
 
 /**
- * 根據指定的規則驗證陣列欄位，若驗證失敗則返回錯誤訊息。
+ * 根據預定義的規則陣列驗證陣列欄位，若驗證失敗則返回錯誤訊息。
+ *
+ * @template T - 陣列中元素的類型。
+ * @param data - 要驗證的陣列。
+ * @param rules - 驗證規則陣列，每個規則函數接受陣列並返回 `true`（通過）或錯誤訊息字串（失敗）。
+ * @returns 如果驗證失敗，返回第一個失敗規則的錯誤訊息字串；如果所有規則都通過，返回 `undefined`。
+ *
+ * @example
+ * ```typescript
+ * const rules = [(arr: string[]) => arr.length > 0 ? true : "陣列不能為空"];
+ * const result = validateArrayWithRules(['a', 'b'], rules); // undefined
+ * ```
+ */
+export const validateArrayWithRules = <T>(data: T[], rules: ((v: T[]) => string | true)[]) => {
+  const error = rules.map((rule) => rule(data)).find((result) => typeof result === "string");
+  return typeof error === "string" ? error : undefined;
+};
+
+/**
+ * 根據指定的配置參數驗證陣列欄位，若驗證失敗則返回錯誤訊息。
+ * 此函數會內部調用 `createArrayFieldRules` 生成驗證規則，然後使用 `validateArrayWithRules` 進行驗證。
  *
  * @template T - 陣列中元素的類型。
  * @param value - 要驗證的陣列。
- * @param fieldName - 欄位名稱，用於錯誤訊息。
+ * @param fieldName - 欄位名稱，用於生成錯誤訊息。
  * @param minLength - 陣列的最小長度。
  * @param maxLength - 陣列的最大長度。
- * @param source - 可選的有效值陣列，預設為空陣列。
+ * @param source - 可選的有效值陣列，用於驗證陣列元素是否在允許的範圍內，預設為空陣列。
  * @param required - 是否為必填欄位，預設為 `false`。
  * @returns 如果驗證失敗，返回包含錯誤訊息的字串；如果驗證通過，返回 `undefined`。
+ *
+ * @example
+ * ```typescript
+ * const result = validateArrayField(['apple'], '水果', 1, 5, ['apple', 'banana'], true);
+ * ```
  */
 export const validateArrayField = <T>(
   value: T[],
@@ -93,8 +118,5 @@ export const validateArrayField = <T>(
   required = false,
 ) => {
   const rules = createArrayFieldRules(fieldName, minLength, maxLength, source, required);
-
-  const error = rules.map((rule) => rule(value)).find((result) => typeof result === "string");
-
-  return typeof error === "string" ? error : undefined;
+  return validateArrayWithRules(value, rules);
 };

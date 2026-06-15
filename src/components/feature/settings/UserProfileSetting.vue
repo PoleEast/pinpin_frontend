@@ -9,62 +9,16 @@
             <!-- TODO: 這裡要有上傳背景 -->
             <!-- TODO: 點擊卡片後可以觀看名片 -->
             <!-- TODO: 實作名片功能 -->
-            <v-card
-              class="text-white"
-              hover
-              image="https://cdn.vuetifyjs.com/images/cards/docks.jpg">
-              <template v-slot:prepend>
-                <v-hover v-slot="{ isHovering, props: hoverProps }">
-                  <div v-bind="hoverProps" class="position-relative mr-1">
-                    <v-avatar size="100" :image="imageUrl"></v-avatar>
-                    <v-overlay
-                      :model-value="!!isHovering"
-                      class="align-center justify-center rounded-circle"
-                      scrim="#000000"
-                      contained
-                      @click="openAvatarEditDialog">
-                      <font-awesome-icon icon="pen" size="lg" fixed-width class="text-white" />
-                    </v-overlay>
-                  </div>
-                </v-hover>
-              </template>
-              <template v-slot:title>
-                <v-text-field
-                  :variant="nicknameTextIsFocus ? 'filled' : 'plain'"
-                  type="title"
-                  class="text-no-wrap pa-0 mb-1 user-card-title-input"
-                  density="compact"
-                  base-color="transparent"
-                  :rules="rules.nickname"
-                  :hide-details="true"
-                  @update:focused="nicknameTextIsFocus = $event"
-                  v-model="userProfileSettingFromData.nickname"
-                  placeholder="你的暱稱"></v-text-field>
-              </template>
-              <template v-slot:subtitle>
-                <v-text-field
-                  base-color="transparent"
-                  :variant="bioTextIsFocus ? 'filled' : 'plain'"
-                  class="text-no-wrap user-card-subtitle-input zero-padding-input"
-                  :label="bioTextIsFocus ? '' : '寫下你的人生信條'"
-                  auto-grow
-                  :rules="mottoRules"
-                  density="compact"
-                  @update:focused="bioTextIsFocus = $event"
-                  v-model="userProfileSettingFromData.motto"></v-text-field>
-              </template>
-              <v-card-text>
-                <v-textarea
-                  label="讓大家更了解你~"
-                  class="text-white"
-                  variant="filled"
-                  base-color="transparent"
-                  counter="200"
-                  auto-grow
-                  @update:focused="mottoTextIsFocus = $event"
-                  v-model="userProfileSettingFromData.bio"></v-textarea>
-              </v-card-text>
-            </v-card>
+            <TravelerBusinessCard
+              :image-url="imageUrl"
+              v-model:nickname="userProfileSettingFromData.nickname"
+              v-model:motto="userProfileSettingFromData.motto"
+              v-model:bio="userProfileSettingFromData.bio"
+              :nickname-rules="nicknameRules"
+              :motto-rules="mottoRules"
+              :bio-rules="bioRules"
+              v-model:valid="TravelerBusinessCardValid"
+              @avatarClick="openAvatarEditDialog" />
           </v-card-text>
           <!-- 暱稱、頭像、背景、簡介、座右銘 -->
         </v-card-item>
@@ -104,21 +58,11 @@
               label="性別"
               inline>
               <v-radio
-                color="blue"
-                :value="0"
-                label="男"
-                :false-icon="createRadioIcon('false')"
-                :true-icon="createRadioIcon('true')"></v-radio>
-              <v-radio
-                color="pink"
-                :value="1"
-                label="女"
-                :false-icon="createRadioIcon('false')"
-                :true-icon="createRadioIcon('true')"></v-radio>
-              <v-radio
-                color="green"
-                :value="2"
-                label="不公開"
+                v-for="option in genderOptions"
+                :key="option.value"
+                :color="option.color"
+                :value="option.value"
+                :label="option.label"
                 :false-icon="createRadioIcon('false')"
                 :true-icon="createRadioIcon('true')"></v-radio>
               <template v-slot:prepend>
@@ -175,86 +119,17 @@
           <v-card-title>你的旅行DNA</v-card-title>
           <v-card-subtitle>旅途中的獨特色彩</v-card-subtitle>
           <v-card-text>
-            <v-input v-for="(inputChip, index) in inputChips" :key="index">
-              <template v-slot:prepend>
-                <font-awesome-icon
-                  :icon="inputChip.icon"
-                  fixed-width
-                  size="2x"
-                  class="text-primary mr-4" />
-              </template>
-              <template v-slot:default>
-                <div>
-                  <v-label
-                    :text="inputChip.label.text"
-                    class="mb-2 d-block"
-                    :class="
-                      chipGroupErrorMessages[inputChip.type] ? 'text-error font-weight-bold' : ''
-                    " />
-                  <div
-                    v-if="chipGroupErrorMessages[inputChip.type]"
-                    class="mt-1 d-flex align-center">
-                    <font-awesome-icon icon="xmark" class="text-error mr-1" />
-                    <span class="text-error text-body-2">
-                      {{ chipGroupErrorMessages[inputChip.type] }}
-                    </span>
-                  </div>
-                  <div class="d-flex flex-wrap gap-2">
-                    <v-chip-group column>
-                      <v-chip
-                        v-for="(chip, index) in inputChip.choosechips"
-                        v-ripple
-                        :text="chip.text"
-                        :key="index"
-                        variant="tonal"
-                        :close-icon="createPredefinedIcon('close')"
-                        closable
-                        @click:close="removeUserProfile(chip, inputChip.type)"
-                        class="mr-1 mb-1 cursor-default">
-                        <template v-slot:prepend>
-                          <AppIconWrapper
-                            v-if="chip.icon"
-                            :icons="chip"
-                            class="mr-1"
-                            :class="chip.color ? 'text-' + chip.color : 'text-primary'" />
-                        </template>
-                      </v-chip>
-                      <v-chip variant="plain" class="mr-1" v-if="inputChip.nochooseData.length > 0">
-                        <template v-slot:append>
-                          <font-awesome-icon icon="plus" class="text-primary mr-1" />
-                        </template>
-                        <v-menu
-                          activator="parent"
-                          transition="scale-transition"
-                          offset-y
-                          location="right"
-                          max-height="400px"
-                          min-height="100px">
-                          <v-list density="compact" rounded>
-                            <v-list-item
-                              v-for="(chip, index) in inputChip.nochooseData"
-                              :key="index"
-                              v-ripple
-                              @click="addUserProfile(chip, inputChip.type)">
-                              <template v-slot:prepend>
-                                <AppIconWrapper
-                                  v-if="chip.icon"
-                                  :icons="chip"
-                                  class="mr-1"
-                                  :class="chip.color ? 'text-' + chip.color : 'text-primary'" />
-                              </template>
-                              <v-list-item-title>
-                                {{ chip.text }}
-                              </v-list-item-title>
-                            </v-list-item>
-                          </v-list>
-                        </v-menu>
-                      </v-chip>
-                    </v-chip-group>
-                  </div>
-                </div>
-              </template>
-            </v-input>
+            <ChipSelector
+              v-for="chipSelector in ChipSelectors"
+              :key="chipSelector.type"
+              :chip-group-key="chipSelector.type"
+              :icon="chipSelector.icon"
+              :label="chipSelector.label.text"
+              :selected-chips="chipSelector.choosechips"
+              :available-chips="chipSelector.nochooseData"
+              :error-message="chipSelector.errorMessage"
+              @add="addUserProfile"
+              @remove="removeUserProfile"></ChipSelector>
           </v-card-text>
         </v-card-item>
       </v-card>
@@ -275,24 +150,27 @@
 <script lang="ts" setup>
   //#region import
 
-  import { computed, onMounted, reactive, ref, unref, useTemplateRef, watch } from "vue";
+  import { computed, onMounted, reactive, ref, toRef, useTemplateRef, watch } from "vue";
 
   //components
   import AppIconWrapper from "@/components/ui/AppIconWrapper.vue";
   import AvatarEditDialog from "./AvatarEditDialog.vue";
+  import ChipSelector from "@/components/ui/ChipSelector.vue";
+  import TravelerBusinessCard from "./TravelerBusinessCard.vue";
+
+  //validation
+  import { profileValidationRules } from "./profileValidationRules.js";
 
   //services
   import {
     cloudinaryUrl,
-    createDateFieldRules,
-    createTextFieldRules,
-    validateArrayField,
     createTriangleIcon,
     createRadioIcon,
     createPredefinedIcon,
+    validateArrayField,
   } from "@/utils";
-  import { ValidationService } from "@/services";
   import { useAuthStore } from "@/stores";
+  import { useChipSelection } from "@/composables/useChipSelection.js";
 
   //types
   import type { VForm } from "vuetify/components";
@@ -317,10 +195,13 @@
     (e: "update", data: UserProfileSettingFromData): void;
   }>();
 
+  type chipGroupKey = keyof Pick<
+    typeof userProfileSettingFromData,
+    "visitedCountries" | "languages" | "currencies" | "travelInterests" | "travelStyles"
+  >;
+
   const valid = ref(false);
-  const mottoTextIsFocus = ref(false);
-  const nicknameTextIsFocus = ref(false);
-  const bioTextIsFocus = ref(false);
+  const TravelerBusinessCardValid = ref(false);
   const showDialog = ref(false);
 
   const userProfileSettingFormRef = useTemplateRef<VForm>("userProfileSettingForm");
@@ -344,9 +225,15 @@
     travelStyles: [],
   });
 
+  const genderOptions = [
+    { value: 0, label: "男", color: "blue" },
+    { value: 1, label: "女", color: "pink" },
+    { value: 2, label: "不公開", color: "green" },
+  ];
+
   //#region 驗證
 
-  const chipGroupErrorMessages = computed(() => ({
+  const inputChipErrorMessage = computed(() => ({
     visitedCountries: validateArrayField(
       userProfileSettingFromData.visitedCountries ?? [],
       "走過的國家",
@@ -384,59 +271,35 @@
     ),
   }));
 
-  const rules = ValidationService.createRules();
-
-  const mottoRules = createTextFieldRules(
-    "座右銘",
-    USERPROFILE_REQUSER_VALIDATION.MOTTO.MIN_LENGTH,
-    USERPROFILE_REQUSER_VALIDATION.MOTTO.MAX_LENGTH,
-  );
-
-  const reallNameRules = createTextFieldRules(
-    "真實身份",
-    USERPROFILE_REQUSER_VALIDATION.FULLNAME.MIN_LENGTH,
-    USERPROFILE_REQUSER_VALIDATION.FULLNAME.MAX_LENGTH,
-  );
-
-  const birthdayRules = createDateFieldRules("降臨日", true);
-
-  const genderRules = [
-    (v: number) => USERPROFILE_REQUSER_VALIDATION.GENDER.VALUES.includes(v) || "請選擇性別",
-  ];
-
-  const phoneRules = createTextFieldRules(
-    "電話",
-    USERPROFILE_REQUSER_VALIDATION.PHONE.MIN_LENGTH,
-    USERPROFILE_REQUSER_VALIDATION.PHONE.MAX_LENGTH,
-  );
-
-  const addressRules = createTextFieldRules(
-    "地址",
-    USERPROFILE_REQUSER_VALIDATION.ADDRESS.MIN_LENGTH,
-    USERPROFILE_REQUSER_VALIDATION.ADDRESS.MAX_LENGTH,
-  );
-
-  //#endregion
+  const mottoRules = profileValidationRules.motto;
+  const reallNameRules = profileValidationRules.realName;
+  const birthdayRules = profileValidationRules.birthday;
+  const genderRules = profileValidationRules.gender;
+  const phoneRules = profileValidationRules.phone;
+  const addressRules = profileValidationRules.address;
+  const nicknameRules = profileValidationRules.nickname;
+  const bioRules = profileValidationRules.bio;
 
   //#endregion
 
   //#region 計算屬性
 
-  const visitedCountriesChipsData = computed<Chip[]>(() => {
-    return props.settingData.country
-      .filter((country) => userProfileSettingFromData.visitedCountries?.includes(country.id))
-      .map<Chip>((country) => ({
-        id: country.id,
-        text: country.local_name,
-        icon: country.icon,
-        icon_type: country.icon_type,
-      }));
-  });
+  const { selected: visitedCountriesChipsData, available: noChooseCountry } = useChipSelection(
+    props.settingData.country,
+    toRef(() => userProfileSettingFromData.visitedCountries ?? []),
+    (country) => ({
+      id: country.id,
+      text: country.local_name,
+      icon: country.icon,
+      icon_type: country.icon_type,
+    }),
+  );
 
-  const travelInterestsChipsData = computed<Chip[]>(() => {
-    return props.settingData.travelInterest
-      .filter((interest) => userProfileSettingFromData.travelInterests?.includes(interest.id))
-      .map<Chip>((interest) => ({
+  const { selected: travelInterestsChipsData, available: noChooseTravelInterest } =
+    useChipSelection(
+      props.settingData.travelInterest,
+      toRef(() => userProfileSettingFromData.travelInterests ?? []),
+      (interest) => ({
         id: interest.id,
         text: interest.name,
         icon: interest.icon,
@@ -444,142 +307,91 @@
         color: props.settingData.travelInterestType.find((type) =>
           type.travel_interests.some((i) => i === interest.id),
         )?.color,
-      }));
-  });
+      }),
+    );
 
-  const travelStylesChipsData = computed<Chip[]>(() => {
-    return props.settingData.travelStyle
-      .filter((style) => userProfileSettingFromData.travelStyles?.includes(style.id))
-      .map<Chip>((style) => ({
-        id: style.id,
-        text: style.name,
-        icon: style.icon,
-        icon_type: style.icon_type,
-      }));
-  });
+  const { selected: travelStylesChipsData, available: noChooseTravelStyle } = useChipSelection(
+    props.settingData.travelStyle,
+    toRef(() => userProfileSettingFromData.travelStyles ?? []),
+    (style) => ({
+      id: style.id,
+      text: style.name,
+      icon: style.icon,
+      icon_type: style.icon_type,
+    }),
+  );
 
-  const languageChipsData = computed<Chip[]>(() => {
-    return props.settingData.language
-      .filter((language) => userProfileSettingFromData.languages?.includes(language.id))
-      .map<Chip>((language) => ({
-        id: language.id,
-        text: language.local_name,
-      }));
-  });
+  const { selected: languageChipsData, available: noChooseLanguage } = useChipSelection(
+    props.settingData.language,
+    toRef(() => userProfileSettingFromData.languages ?? []),
+    (language) => ({
+      id: language.id,
+      text: language.local_name,
+    }),
+  );
 
-  const currencyChipsData = computed<Chip[]>(() => {
-    return props.settingData.currency
-      .filter((currency) => userProfileSettingFromData.currencies?.includes(currency.id))
-      .map<Chip>((currency) => ({
-        id: currency.id,
-        text: currency.code,
-        icon: currency.icon,
-        icon_type: currency.icon_type,
-      }));
-  });
-
-  const noChooseCountry = computed<Chip[]>(() => {
-    return props.settingData.country
-      .filter((country) => !userProfileSettingFromData.visitedCountries?.includes(country.id))
-      .map<Chip>((country) => ({
-        id: country.id,
-        text: country.local_name,
-        icon: country.icon,
-        icon_type: country.icon_type,
-      }));
-  });
-
-  const noChooseTravelInterest = computed<Chip[]>(() => {
-    return props.settingData.travelInterest
-      .filter((interest) => !userProfileSettingFromData.travelInterests?.includes(interest.id))
-      .map<Chip>((interest) => ({
-        id: interest.id,
-        text: interest.name,
-        icon: interest.icon,
-        icon_type: interest.icon_type,
-        color: props.settingData.travelInterestType.find((type) =>
-          type.travel_interests.some((i) => i === interest.id),
-        )?.color,
-      }));
-  });
-
-  const noChooseTravelStyle = computed<Chip[]>(() => {
-    return props.settingData.travelStyle
-      .filter((style) => !userProfileSettingFromData.travelStyles?.includes(style.id))
-      .map<Chip>((style) => ({
-        id: style.id,
-        text: style.name,
-        icon: style.icon,
-        icon_type: style.icon_type,
-      }));
-  });
-
-  const noChooseLanguage = computed<Chip[]>(() => {
-    return props.settingData.language
-      .filter((language) => !userProfileSettingFromData.languages?.includes(language.id))
-      .map<Chip>((language) => ({
-        id: language.id,
-        text: language.local_name,
-      }));
-  });
-
-  const noChooseCurrency = computed<Chip[]>(() => {
-    return props.settingData.currency
-      .filter((currency) => !userProfileSettingFromData.currencies?.includes(currency.id))
-      .map<Chip>((currency) => ({
-        id: currency.id,
-        text: currency.code,
-        icon: currency.icon,
-        icon_type: currency.icon_type,
-      }));
-  });
+  const { selected: currencyChipsData, available: noChooseCurrency } = useChipSelection(
+    props.settingData.currency,
+    toRef(() => userProfileSettingFromData.currencies ?? []),
+    (currency) => ({
+      id: currency.id,
+      text: currency.code,
+      icon: currency.icon,
+      icon_type: currency.icon_type,
+    }),
+  );
 
   //TODO:新增旅遊風格詳細資料
-  const inputChips = computed((): InputChips[] => [
+  const ChipSelectors = computed((): InputChips<chipGroupKey>[] => [
     {
       icon: "earth-asia",
       label: {
         text: "走過的國家",
       },
-      choosechips: unref(visitedCountriesChipsData),
-      nochooseData: unref(noChooseCountry),
+      choosechips: visitedCountriesChipsData.value,
+      nochooseData: noChooseCountry.value,
       type: "visitedCountries",
+      errorMessage: inputChipErrorMessage.value.visitedCountries,
     },
     {
       icon: "heart",
       label: {
         text: "偏好的旅遊方式",
       },
-      choosechips: unref(travelInterestsChipsData),
-      nochooseData: unref(noChooseTravelInterest),
+      choosechips: travelInterestsChipsData.value,
+      nochooseData: noChooseTravelInterest.value,
       type: "travelInterests",
+      errorMessage: inputChipErrorMessage.value.travelInterests,
     },
     {
       icon: "suitcase",
       label: {
         text: "旅行的風格",
       },
-      choosechips: unref(travelStylesChipsData),
-      nochooseData: unref(noChooseTravelStyle),
+      choosechips: travelStylesChipsData.value,
+      nochooseData: noChooseTravelStyle.value,
       type: "travelStyles",
+      errorMessage: inputChipErrorMessage.value.travelStyles,
     },
     {
       icon: "language",
       label: {
         text: "使用的語言",
       },
-      choosechips: unref(languageChipsData),
-      nochooseData: unref(noChooseLanguage),
+      choosechips: languageChipsData.value,
+      nochooseData: noChooseLanguage.value,
       type: "languages",
+      errorMessage: inputChipErrorMessage.value.languages,
     },
     {
       icon: "coins",
       label: {
         text: "使用的貨幣",
       },
-      choosechips: unref(currencyChipsData),
-      nochooseData: unref(noChooseCurrency),
+      choosechips: currencyChipsData.value,
+      nochooseData: noChooseCurrency.value,
       type: "currencies",
+      errorMessage: inputChipErrorMessage.value.currencies,
     },
   ]);
 
@@ -609,23 +421,9 @@
    */
 
   const resetForm = () => {
-    userProfileSettingFromData.motto = props.userProfile.motto;
-    userProfileSettingFromData.bio = props.userProfile.bio;
-    userProfileSettingFromData.fullname = props.userProfile.fullname;
-    userProfileSettingFromData.nickname = props.userProfile.nickname;
-    userProfileSettingFromData.isFullNameVisible = props.userProfile.isFullNameVisible;
-    userProfileSettingFromData.avatar_public_id = props.userProfile.avatar?.public_id;
-    userProfileSettingFromData.coverPhoto = props.userProfile.coverPhoto;
-    userProfileSettingFromData.birthday = props.userProfile.birthday;
-    userProfileSettingFromData.gender = props.userProfile.gender;
-    userProfileSettingFromData.phone = props.userProfile.phone;
-    userProfileSettingFromData.address = props.userProfile.address;
-    userProfileSettingFromData.originCountry = props.userProfile.originCountry;
-    userProfileSettingFromData.visitedCountries = props.userProfile.visitedCountries;
-    userProfileSettingFromData.travelInterests = props.userProfile.travelInterests;
-    userProfileSettingFromData.travelStyles = props.userProfile.travelStyles;
-    userProfileSettingFromData.languages = props.userProfile.languages;
-    userProfileSettingFromData.currencies = props.userProfile.currencies;
+    const { avatar, ...profileData } = props.userProfile;
+    Object.assign(userProfileSettingFromData, profileData);
+    userProfileSettingFromData.avatar_public_id = avatar?.public_id;
   };
 
   /**
@@ -634,13 +432,7 @@
    * @param {Chip} chip - 要加入的Chip。
    * @param {InputChips} inputChipType - IInputChips物件。
    */
-  const addUserProfile = (
-    chip: Chip,
-    inputChipType: keyof Pick<
-      typeof userProfileSettingFromData,
-      "visitedCountries" | "languages" | "currencies" | "travelInterests" | "travelStyles"
-    >,
-  ) => {
+  const addUserProfile = (chip: Chip, inputChipType: chipGroupKey) => {
     if (chip.id === undefined || !userProfileSettingFromData[inputChipType]) return;
     userProfileSettingFromData[inputChipType]?.push(chip.id);
   };
@@ -651,13 +443,7 @@
    * @param {Chip} chip - 要刪除的Chip。
    * @param {InputChips} inputChipType - IInputChips物件。
    */
-  const removeUserProfile = (
-    chip: Chip,
-    inputChipType: keyof Pick<
-      typeof userProfileSettingFromData,
-      "visitedCountries" | "languages" | "currencies" | "travelInterests" | "travelStyles"
-    >,
-  ) => {
+  const removeUserProfile = (chip: Chip, inputChipType: chipGroupKey) => {
     if (chip.id === undefined || !userProfileSettingFromData[inputChipType]) return;
     userProfileSettingFromData[inputChipType] = userProfileSettingFromData[inputChipType]?.filter(
       (id) => id !== chip.id,
@@ -672,10 +458,11 @@
    */
   const save = () => {
     userProfileSettingFormRef.value?.validate();
-    const chipValidation = Object.values(chipGroupErrorMessages.value).every(
-      (error) => error === undefined,
+    const chipValidation = Object.values(inputChipErrorMessage.value).every(
+      (msg) => msg === undefined,
     );
-    if (!valid.value || !chipValidation) return;
+
+    if (!valid.value || !chipValidation || !TravelerBusinessCardValid.value) return;
 
     emits("update", userProfileSettingFromData);
   };
@@ -693,19 +480,3 @@
     resetForm();
   });
 </script>
-
-<style scoped>
-  .user-card-title-input :deep(input) {
-    font-size: 1.5rem;
-    font-weight: bold;
-    padding: 0;
-  }
-
-  .user-card-subtitle-input :deep(input) {
-    font-style: italic;
-  }
-
-  .zero-padding-input :deep(input) {
-    padding: 0;
-  }
-</style>

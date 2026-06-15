@@ -4,3 +4,4 @@ export * from "./Weekday.constant";
 export * from "./Temperature.constants";
 export * from "./Weather.constants";
 export * from "./Api.constants";
+export * from "./GooglePlaceType.constant";
